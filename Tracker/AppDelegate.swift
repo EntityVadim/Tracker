@@ -19,7 +19,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             window?.rootViewController = launchViewController
             window?.makeKeyAndVisible()
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                let rootViewController = ViewController()
+                let rootViewController = MainTabBarController()
                 self.window?.rootViewController = rootViewController
             }
             return true

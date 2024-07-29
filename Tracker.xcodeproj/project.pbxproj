@@ -9,21 +9,25 @@
 /* Begin PBXBuildFile section */
 		DD0D6E7B2C5780EE0036B9E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0D6E7A2C5780EE0036B9E0 /* AppDelegate.swift */; };
 		DD0D6E7D2C5780EE0036B9E0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0D6E7C2C5780EE0036B9E0 /* SceneDelegate.swift */; };
-		DD0D6E7F2C5780EE0036B9E0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0D6E7E2C5780EE0036B9E0 /* ViewController.swift */; };
+		DD0D6E7F2C5780EE0036B9E0 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0D6E7E2C5780EE0036B9E0 /* MainTabBarController.swift */; };
 		DD0D6E842C5780F00036B9E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD0D6E832C5780F00036B9E0 /* Assets.xcassets */; };
 		DD0D6E8F2C57A2B30036B9E0 /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0D6E8E2C57A2B30036B9E0 /* LaunchScreenViewController.swift */; };
 		DD0D6E912C57A7EC0036B9E0 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0D6E902C57A7EC0036B9E0 /* OnboardingViewController.swift */; };
+		DD0D6E932C57B4170036B9E0 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0D6E922C57B4170036B9E0 /* StatisticsViewController.swift */; };
+		DD0D6E952C57B7380036B9E0 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0D6E942C57B7380036B9E0 /* TrackersViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		DD0D6E772C5780EE0036B9E0 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD0D6E7A2C5780EE0036B9E0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DD0D6E7C2C5780EE0036B9E0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		DD0D6E7E2C5780EE0036B9E0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		DD0D6E7E2C5780EE0036B9E0 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		DD0D6E832C5780F00036B9E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DD0D6E882C5780F00036B9E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DD0D6E8E2C57A2B30036B9E0 /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
 		DD0D6E902C57A7EC0036B9E0 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		DD0D6E922C57B4170036B9E0 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
+		DD0D6E942C57B7380036B9E0 /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,7 +64,9 @@
 				DD0D6E7C2C5780EE0036B9E0 /* SceneDelegate.swift */,
 				DD0D6E8E2C57A2B30036B9E0 /* LaunchScreenViewController.swift */,
 				DD0D6E902C57A7EC0036B9E0 /* OnboardingViewController.swift */,
-				DD0D6E7E2C5780EE0036B9E0 /* ViewController.swift */,
+				DD0D6E7E2C5780EE0036B9E0 /* MainTabBarController.swift */,
+				DD0D6E942C57B7380036B9E0 /* TrackersViewController.swift */,
+				DD0D6E922C57B4170036B9E0 /* StatisticsViewController.swift */,
 				DD0D6E832C5780F00036B9E0 /* Assets.xcassets */,
 				DD0D6E882C5780F00036B9E0 /* Info.plist */,
 			);
@@ -137,8 +143,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD0D6E8F2C57A2B30036B9E0 /* LaunchScreenViewController.swift in Sources */,
-				DD0D6E7F2C5780EE0036B9E0 /* ViewController.swift in Sources */,
+				DD0D6E7F2C5780EE0036B9E0 /* MainTabBarController.swift in Sources */,
+				DD0D6E952C57B7380036B9E0 /* TrackersViewController.swift in Sources */,
 				DD0D6E912C57A7EC0036B9E0 /* OnboardingViewController.swift in Sources */,
+				DD0D6E932C57B4170036B9E0 /* StatisticsViewController.swift in Sources */,
 				DD0D6E7B2C5780EE0036B9E0 /* AppDelegate.swift in Sources */,
 				DD0D6E7D2C5780EE0036B9E0 /* SceneDelegate.swift in Sources */,
 			);

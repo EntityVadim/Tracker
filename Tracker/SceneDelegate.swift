@@ -21,7 +21,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = launchViewController
         window?.makeKeyAndVisible()
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            let rootViewController = ViewController()
+            let rootViewController = MainTabBarController()
             self.window?.rootViewController = rootViewController
         }
     }
