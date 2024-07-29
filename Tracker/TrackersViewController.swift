@@ -69,63 +69,61 @@ final class TrackersViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
         setupUI()
     }
     
     // MARK: - Private Methods
     
+    private func setupDateLabel() {
+        dateContainer.addSubview(dateLabel)
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yy"
+        dateLabel.text = dateFormatter.string(from: Date())
+    }
+    
     private func setupUI() {
-        view.backgroundColor = .white
+        [addButton,
+         dateContainer,
+         titleLabel,
+         searchBar,
+         errorImageView,
+         trackingLabel].forEach { view in
+            self.view.addSubview(view)
+            view.translatesAutoresizingMaskIntoConstraints = false
+        }
+        setupDateLabel()
         
-        view.addSubview(addButton)
         NSLayoutConstraint.activate([
             addButton.widthAnchor.constraint(equalToConstant: 42),
             addButton.heightAnchor.constraint(equalToConstant: 42),
             addButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 45),
-            addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 6)
-        ])
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yy"
-        let currentDate = dateFormatter.string(from: Date())
-        dateLabel.text = currentDate
-        view.addSubview(dateContainer)
-        dateContainer.addSubview(dateLabel)
-        NSLayoutConstraint.activate([
+            addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 6),
+            
             dateContainer.widthAnchor.constraint(equalToConstant: 77),
             dateContainer.heightAnchor.constraint(equalToConstant: 34),
             dateContainer.topAnchor.constraint(equalTo: view.topAnchor, constant: 49),
             dateContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            
             dateLabel.widthAnchor.constraint(equalToConstant: 66),
             dateLabel.heightAnchor.constraint(equalToConstant: 22),
             dateLabel.centerYAnchor.constraint(equalTo: dateContainer.centerYAnchor),
-            dateLabel.trailingAnchor.constraint(equalTo: dateContainer.trailingAnchor, constant: -5)
-        ])
-        
-        view.addSubview(titleLabel)
-        NSLayoutConstraint.activate([
+            dateLabel.trailingAnchor.constraint(equalTo: dateContainer.trailingAnchor, constant: -5),
+            
             titleLabel.topAnchor.constraint(equalTo: addButton.bottomAnchor, constant: 1),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
-        ])
-        
-        view.addSubview(searchBar)
-        NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            
             searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 7),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            searchBar.heightAnchor.constraint(equalToConstant: 36)
-        ])
-        
-        view.addSubview(errorImageView)
-        NSLayoutConstraint.activate([
+            searchBar.heightAnchor.constraint(equalToConstant: 36),
+            
             errorImageView.widthAnchor.constraint(equalToConstant: 80),
             errorImageView.heightAnchor.constraint(equalToConstant: 80),
             errorImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 402),
-            errorImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 147)
-        ])
-        
-        view.addSubview(trackingLabel)
-        NSLayoutConstraint.activate([
+            errorImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 147),
+            
             trackingLabel.topAnchor.constraint(equalTo: errorImageView.bottomAnchor, constant: 8),
             trackingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             trackingLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
