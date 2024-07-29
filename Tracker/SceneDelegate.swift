@@ -15,7 +15,15 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
-        guard let _ = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        window = UIWindow(windowScene: windowScene)
+        let launchViewController = LaunchScreenViewController()
+        window?.rootViewController = launchViewController
+        window?.makeKeyAndVisible()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            let rootViewController = ViewController()
+            self.window?.rootViewController = rootViewController
+        }
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {}
