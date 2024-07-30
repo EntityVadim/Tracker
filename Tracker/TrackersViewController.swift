@@ -114,9 +114,10 @@ final class TrackersViewController: UIViewController {
             errorImageView.widthAnchor.constraint(equalToConstant: 80),
             errorImageView.heightAnchor.constraint(equalToConstant: 80),
             errorImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 402),
-            errorImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 147),
+            errorImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             trackingLabel.topAnchor.constraint(equalTo: errorImageView.bottomAnchor, constant: 8),
+            trackingLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             trackingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             trackingLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             trackingLabel.heightAnchor.constraint(equalToConstant: 18)

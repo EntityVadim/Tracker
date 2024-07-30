@@ -5,7 +5,6 @@
 //  Created by Вадим on 29.07.2024.
 //
 
-import Foundation
 import UIKit
 
 final class StatisticsViewController: UIViewController {
@@ -22,8 +21,6 @@ final class StatisticsViewController: UIViewController {
     private let errorImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "ErrorStat"))
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
         return imageView
     }()
     
@@ -57,10 +54,13 @@ final class StatisticsViewController: UIViewController {
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 88),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             
+            errorImageView.widthAnchor.constraint(equalToConstant: 80),
+            errorImageView.heightAnchor.constraint(equalToConstant: 80),
             errorImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 375),
-            errorImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 147),
+            errorImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             placeholderLabel.topAnchor.constraint(equalTo: errorImageView.bottomAnchor, constant: 8),
+            placeholderLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             placeholderLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             placeholderLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             placeholderLabel.heightAnchor.constraint(equalToConstant: 18)
