@@ -51,8 +51,7 @@ final class OnboardingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupViews()
-        setupConstraints()
+        setupUI()
     }
     
     override func viewDidLayoutSubviews() {
@@ -63,7 +62,7 @@ final class OnboardingViewController: UIViewController {
     
     // MARK: - Private Methods
     
-    private func setupViews() {
+    private func setupUI() {
         view.backgroundColor = .white
         scrollView.frame = view.bounds
         view.addSubview(scrollView)
@@ -73,14 +72,11 @@ final class OnboardingViewController: UIViewController {
          firstLabel,
          secondLabel,
          firstActionButton,
-         secondActionButton
-        ].forEach { view in
+         secondActionButton].forEach { view in
             contentView.addSubview(view)
             view.translatesAutoresizingMaskIntoConstraints = false
         }
-    }
-    
-    private func setupConstraints() {
+        
         NSLayoutConstraint.activate([
             firstScreenView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             firstScreenView.topAnchor.constraint(equalTo: contentView.topAnchor),
