@@ -14,21 +14,36 @@ final class TrackersViewController: UIViewController {
     private let addButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(named: "Plus"), for: .normal)
+        button.addTarget(
+            TrackersViewController.self,
+            action: #selector(addTracker),
+            for: .touchUpInside)
         return button
     }()
     
-    private let dateLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        label.textAlignment = .right
-        return label
+    private let dateButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .ypLightGray
+        button.layer.cornerRadius = 4
+        button.addTarget(
+            TrackersViewController.self,
+            action: #selector(dateButtonTapped),
+            for: .touchUpInside)
+        button.setTitle(currentDateString(), for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        button.setTitleColor(.black, for: .normal)
+        return button
     }()
     
-    private let dateContainer: UIView = {
-        let view = UIView()
-        view.backgroundColor = .ypLightGray
-        view.layer.cornerRadius = 4
-        return view
+    private let datePicker: UIDatePicker = {
+        let datePicker = UIDatePicker()
+        datePicker.datePickerMode = .date
+        datePicker.addTarget(
+            TrackersViewController.self,
+            action: #selector(datePickerValueChanged(_:)),
+            for: .valueChanged)
+        datePicker.isHidden = true
+        return datePicker
     }()
     
     private let titleLabel: UILabel = {
@@ -67,25 +82,17 @@ final class TrackersViewController: UIViewController {
     
     // MARK: - Private Methods
     
-    private func setupDateLabel() {
-        dateContainer.addSubview(dateLabel)
-        dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yy"
-        dateLabel.text = dateFormatter.string(from: Date())
-    }
-    
     private func setupUI() {
         [addButton,
-         dateContainer,
+         dateButton,
          titleLabel,
          searchBar,
          errorImageView,
-         trackingLabel].forEach { view in
+         trackingLabel,
+         datePicker].forEach { view in
             self.view.addSubview(view)
             view.translatesAutoresizingMaskIntoConstraints = false
         }
-        setupDateLabel()
         
         NSLayoutConstraint.activate([
             addButton.widthAnchor.constraint(equalToConstant: 42),
@@ -93,15 +100,10 @@ final class TrackersViewController: UIViewController {
             addButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 45),
             addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 6),
             
-            dateContainer.widthAnchor.constraint(equalToConstant: 77),
-            dateContainer.heightAnchor.constraint(equalToConstant: 34),
-            dateContainer.topAnchor.constraint(equalTo: view.topAnchor, constant: 49),
-            dateContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            
-            dateLabel.widthAnchor.constraint(equalToConstant: 66),
-            dateLabel.heightAnchor.constraint(equalToConstant: 22),
-            dateLabel.centerYAnchor.constraint(equalTo: dateContainer.centerYAnchor),
-            dateLabel.trailingAnchor.constraint(equalTo: dateContainer.trailingAnchor, constant: -5),
+            dateButton.widthAnchor.constraint(equalToConstant: 77),
+            dateButton.heightAnchor.constraint(equalToConstant: 34),
+            dateButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 49),
+            dateButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             titleLabel.topAnchor.constraint(equalTo: addButton.bottomAnchor, constant: 1),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -120,13 +122,33 @@ final class TrackersViewController: UIViewController {
             trackingLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             trackingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             trackingLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            trackingLabel.heightAnchor.constraint(equalToConstant: 18)
+            trackingLabel.heightAnchor.constraint(equalToConstant: 18),
+            
+            datePicker.topAnchor.constraint(equalTo: dateButton.bottomAnchor, constant: 8),
+            datePicker.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            datePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
+    }
+    
+    private static func currentDateString() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yy"
+        return dateFormatter.string(from: Date())
     }
     
     // MARK: - Actions
     
     @objc private func addTracker() {
         // Действие для добавления трекера
+    }
+    
+    @objc private func dateButtonTapped() {
+        datePicker.isHidden.toggle()
+    }
+    
+    @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yy"
+        dateButton.setTitle(dateFormatter.string(from: sender.date), for: .normal)
     }
 }
