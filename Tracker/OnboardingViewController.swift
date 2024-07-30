@@ -68,22 +68,19 @@ final class OnboardingViewController: UIViewController {
         scrollView.frame = view.bounds
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        contentView.addSubview(firstScreenView)
-        contentView.addSubview(secondScreenView)
-        firstScreenView.addSubview(firstLabel)
-        secondScreenView.addSubview(secondLabel)
-        firstScreenView.addSubview(firstActionButton)
-        secondScreenView.addSubview(secondActionButton)
+        [firstScreenView,
+         secondScreenView,
+         firstLabel,
+         secondLabel,
+         firstActionButton,
+         secondActionButton
+        ].forEach { view in
+            contentView.addSubview(view)
+            view.translatesAutoresizingMaskIntoConstraints = false
+        }
     }
     
     private func setupConstraints() {
-        firstScreenView.translatesAutoresizingMaskIntoConstraints = false
-        secondScreenView.translatesAutoresizingMaskIntoConstraints = false
-        firstLabel.translatesAutoresizingMaskIntoConstraints = false
-        secondLabel.translatesAutoresizingMaskIntoConstraints = false
-        firstActionButton.translatesAutoresizingMaskIntoConstraints = false
-        secondActionButton.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             firstScreenView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             firstScreenView.topAnchor.constraint(equalTo: contentView.topAnchor),
