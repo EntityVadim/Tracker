@@ -5,64 +5,46 @@
 //  Created by Вадим on 29.07.2024.
 //
 
-import Foundation
 import UIKit
 
 final class OnboardingViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private let scrollView: UIScrollView = {
+    private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.isPagingEnabled = true
         scrollView.showsHorizontalScrollIndicator = false
         return scrollView
     }()
     
-    private let contentView: UIView = {
+    private lazy var contentView: UIView = {
         let view = UIView()
         return view
     }()
     
-    private let firstLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Отслеживайте только то, что хотите"
-        label.font = UIFont(name: "YP-Bold", size: 32)
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        return label
+    private lazy var firstLabel: UILabel = {
+        return makeLabel(withText: "Отслеживайте только то, что хотите")
     }()
     
-    private let secondLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Даже если это не литры воды и йога"
-        label.font = UIFont(name: "YP-Bold", size: 32)
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        return label
+    private lazy var secondLabel: UILabel = {
+        return makeLabel(withText: "Даже если это не литры воды и йога")
     }()
     
-    private let actionButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Вот это технологии!", for: .normal)
-        button.titleLabel?.font = UIFont(name: "YP-Medium", size: 16)
-        button.backgroundColor = .black
-        button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 30
-        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        return button
+    private lazy var firstActionButton: UIButton = {
+        return makeActionButton(withTitle: "Вот это технологии!")
     }()
     
-    private let firstScreenView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor(patternImage: UIImage(named: "OnboardingBlue")!)
-        return view
+    private lazy var secondActionButton: UIButton = {
+        return makeActionButton(withTitle: "Вот это технологии!")
     }()
     
-    private let secondScreenView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor(patternImage: UIImage(named: "OnboardingRed")!)
-        return view
+    private lazy var firstScreenView: UIImageView = {
+        return makeImageView(withImageNamed: "OnboardingBlue")
+    }()
+    
+    private lazy var secondScreenView: UIImageView = {
+        return makeImageView(withImageNamed: "OnboardingRed")
     }()
     
     // MARK: - Lifecycle
@@ -90,52 +72,89 @@ final class OnboardingViewController: UIViewController {
         contentView.addSubview(secondScreenView)
         firstScreenView.addSubview(firstLabel)
         secondScreenView.addSubview(secondLabel)
-        contentView.addSubview(actionButton)
+        firstScreenView.addSubview(firstActionButton)
+        secondScreenView.addSubview(secondActionButton)
     }
     
     private func setupConstraints() {
-        let padding: CGFloat = 16
-        let buttonHeight: CGFloat = 60
-        let labelHeight: CGFloat = 76
-        
         firstScreenView.translatesAutoresizingMaskIntoConstraints = false
+        secondScreenView.translatesAutoresizingMaskIntoConstraints = false
+        firstLabel.translatesAutoresizingMaskIntoConstraints = false
+        secondLabel.translatesAutoresizingMaskIntoConstraints = false
+        firstActionButton.translatesAutoresizingMaskIntoConstraints = false
+        secondActionButton.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             firstScreenView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             firstScreenView.topAnchor.constraint(equalTo: contentView.topAnchor),
             firstScreenView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            firstScreenView.heightAnchor.constraint(equalTo: contentView.heightAnchor)
-        ])
-        
-        secondScreenView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
+            firstScreenView.heightAnchor.constraint(equalTo: contentView.heightAnchor),
+            
             secondScreenView.leadingAnchor.constraint(equalTo: firstScreenView.trailingAnchor),
             secondScreenView.topAnchor.constraint(equalTo: contentView.topAnchor),
             secondScreenView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            secondScreenView.heightAnchor.constraint(equalTo: contentView.heightAnchor)
+            secondScreenView.heightAnchor.constraint(equalTo: contentView.heightAnchor),
+            
+            firstLabel.leadingAnchor.constraint(equalTo: firstScreenView.leadingAnchor, constant: 16),
+            firstLabel.trailingAnchor.constraint(equalTo: firstScreenView.trailingAnchor, constant: -16),
+            firstLabel.bottomAnchor.constraint(equalTo: firstActionButton.topAnchor, constant: -160),
+            
+            secondLabel.leadingAnchor.constraint(equalTo: secondScreenView.leadingAnchor, constant: 16),
+            secondLabel.trailingAnchor.constraint(equalTo: secondScreenView.trailingAnchor, constant: -16),
+            secondLabel.bottomAnchor.constraint(equalTo: secondActionButton.topAnchor, constant: -160),
+            
+            firstActionButton.leadingAnchor.constraint(equalTo: firstScreenView.leadingAnchor, constant: 20),
+            firstActionButton.trailingAnchor.constraint(equalTo: firstScreenView.trailingAnchor, constant: -20),
+            firstActionButton.bottomAnchor.constraint(equalTo: firstScreenView.bottomAnchor, constant: -84),
+            firstActionButton.heightAnchor.constraint(equalToConstant: 60),
+            
+            secondActionButton.leadingAnchor.constraint(equalTo: secondScreenView.leadingAnchor, constant: 20),
+            secondActionButton.trailingAnchor.constraint(equalTo: secondScreenView.trailingAnchor, constant: -20),
+            secondActionButton.bottomAnchor.constraint(equalTo: secondScreenView.bottomAnchor, constant: -84),
+            secondActionButton.heightAnchor.constraint(equalToConstant: 60)
         ])
-        
-        firstLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            firstLabel.leadingAnchor.constraint(equalTo: firstScreenView.leadingAnchor, constant: padding),
-            firstLabel.trailingAnchor.constraint(equalTo: firstScreenView.trailingAnchor, constant: -padding),
-            firstLabel.bottomAnchor.constraint(equalTo: actionButton.topAnchor, constant: -160),
-            firstLabel.heightAnchor.constraint(equalToConstant: labelHeight)
-        ])
-        
-        secondLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            secondLabel.leadingAnchor.constraint(equalTo: secondScreenView.leadingAnchor, constant: padding),
-            secondLabel.trailingAnchor.constraint(equalTo: secondScreenView.trailingAnchor, constant: -padding),
-            secondLabel.bottomAnchor.constraint(equalTo: actionButton.topAnchor, constant: -160),
-            secondLabel.heightAnchor.constraint(equalToConstant: labelHeight)
-        ])
-        
-        actionButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            actionButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            actionButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            actionButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -84),
-            actionButton.heightAnchor.constraint(equalToConstant: buttonHeight)
-        ])
+    }
+    
+    private func makeLabel(withText text: String) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }
+    
+    private func makeActionButton(withTitle title: String) -> UIButton {
+        let button = UIButton()
+        button.setTitle(title, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.backgroundColor = .black
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 16
+        button.layer.masksToBounds = true
+        button.addTarget(self, action: #selector(didTapActionButton), for: .touchUpInside)
+        return button
+    }
+    
+    private func makeImageView(withImageNamed name: String) -> UIImageView {
+        let imageView = UIImageView(image: UIImage(named: name))
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }
+    
+    @objc private func didTapActionButton() {
+        UserDefaults.standard.set(true, forKey: "isOnboardingCompleted")
+        let mainTabBarController = MainTabBarController()
+        if let window = UIApplication.shared.windows.first {
+            window.rootViewController = mainTabBarController
+            UIView.transition(
+                with: window,
+                duration: 0.5,
+                options: .transitionCrossDissolve,
+                animations: nil,
+                completion: nil)
+        }
     }
 }

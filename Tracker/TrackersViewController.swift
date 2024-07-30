@@ -15,7 +15,6 @@ final class TrackersViewController: UIViewController {
     private let addButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(named: "Plus"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -23,7 +22,6 @@ final class TrackersViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.textAlignment = .right
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -31,7 +29,6 @@ final class TrackersViewController: UIViewController {
         let view = UIView()
         view.backgroundColor = .ypLightGray
         view.layer.cornerRadius = 4
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -39,20 +36,17 @@ final class TrackersViewController: UIViewController {
         let label = UILabel()
         label.text = "Трекеры"
         label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Поиск"
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
         return searchBar
     }()
     
     private let errorImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "Error"))
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
@@ -61,7 +55,6 @@ final class TrackersViewController: UIViewController {
         label.text = "Что будем отслеживать?"
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     

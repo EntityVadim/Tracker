@@ -14,14 +14,16 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-            window = UIWindow(frame: UIScreen.main.bounds)
-            let launchViewController = LaunchScreenViewController()
-            window?.rootViewController = launchViewController
-            window?.makeKeyAndVisible()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            let onboardingCompleted = UserDefaults.standard.bool(forKey: "isOnboardingCompleted")
+            if !onboardingCompleted {
+                window = UIWindow(frame: UIScreen.main.bounds)
+                let onboardingViewController = OnboardingViewController()
+                window?.rootViewController = onboardingViewController
+            } else {
                 let rootViewController = MainTabBarController()
-                self.window?.rootViewController = rootViewController
+                window?.rootViewController = rootViewController
             }
+            window?.makeKeyAndVisible()
             return true
         }
     
@@ -36,6 +38,5 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(
         _ application: UIApplication,
-        didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        }
+        didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {}
 }
