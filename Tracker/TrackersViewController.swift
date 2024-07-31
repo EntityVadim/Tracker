@@ -11,60 +11,60 @@ final class TrackersViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private let addButton: UIButton = {
+    private lazy var addButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(named: "Plus"), for: .normal)
         button.addTarget(
-            TrackersViewController.self,
+            self,
             action: #selector(addTracker),
             for: .touchUpInside)
         return button
     }()
     
-    private let dateButton: UIButton = {
+    private lazy var dateButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .ypLightGray
         button.layer.cornerRadius = 4
         button.addTarget(
-            TrackersViewController.self,
+            self,
             action: #selector(dateButtonTapped),
             for: .touchUpInside)
-        button.setTitle(currentDateString(), for: .normal)
+        button.setTitle(TrackersViewController.currentDateString(), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         button.setTitleColor(.black, for: .normal)
         return button
     }()
     
-    private let datePicker: UIDatePicker = {
+    private lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
         datePicker.addTarget(
-            TrackersViewController.self,
+            self,
             action: #selector(datePickerValueChanged(_:)),
             for: .valueChanged)
         datePicker.isHidden = true
         return datePicker
     }()
     
-    private let titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Трекеры"
         label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         return label
     }()
     
-    private let searchBar: UISearchBar = {
+    private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Поиск"
         return searchBar
     }()
     
-    private let errorImageView: UIImageView = {
+    private lazy var errorImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "Error"))
         return imageView
     }()
     
-    private let trackingLabel: UILabel = {
+    private lazy var trackingLabel: UILabel = {
         let label = UILabel()
         label.text = "Что будем отслеживать?"
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
@@ -85,11 +85,12 @@ final class TrackersViewController: UIViewController {
     private func setupUI() {
         [addButton,
          dateButton,
+         datePicker,
          titleLabel,
          searchBar,
          errorImageView,
-         trackingLabel,
-         datePicker].forEach { view in
+         trackingLabel].forEach { [weak self] view in
+            guard let self = self else { return }
             self.view.addSubview(view)
             view.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -104,6 +105,10 @@ final class TrackersViewController: UIViewController {
             dateButton.heightAnchor.constraint(equalToConstant: 34),
             dateButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 49),
             dateButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            
+            datePicker.topAnchor.constraint(equalTo: dateButton.bottomAnchor, constant: 8),
+            datePicker.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            datePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             titleLabel.topAnchor.constraint(equalTo: addButton.bottomAnchor, constant: 1),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -122,12 +127,8 @@ final class TrackersViewController: UIViewController {
             trackingLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             trackingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             trackingLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            trackingLabel.heightAnchor.constraint(equalToConstant: 18),
-            
-            datePicker.topAnchor.constraint(equalTo: dateButton.bottomAnchor, constant: 8),
-            datePicker.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            datePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
-        ])
+            trackingLabel.heightAnchor.constraint(equalToConstant: 18)
+            ])
     }
     
     private static func currentDateString() -> String {
