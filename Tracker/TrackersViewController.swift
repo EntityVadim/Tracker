@@ -22,12 +22,12 @@ final class TrackersViewController: UIViewController {
     }()
     
     private lazy var dateButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = UIButton(type: .custom)
         button.backgroundColor = .ypLightGray
         button.layer.cornerRadius = 4
         button.addTarget(
             self,
-            action: #selector(dateButtonTapped),
+            action: #selector(dateButtonTapped(_:)),
             for: .touchUpInside)
         button.setTitle(TrackersViewController.currentDateString(), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
@@ -46,25 +46,25 @@ final class TrackersViewController: UIViewController {
         return datePicker
     }()
     
-    private lazy var titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Трекеры"
         label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         return label
     }()
     
-    private lazy var searchBar: UISearchBar = {
+    private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Поиск"
         return searchBar
     }()
     
-    private lazy var errorImageView: UIImageView = {
+    private let errorImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "Error"))
         return imageView
     }()
     
-    private lazy var trackingLabel: UILabel = {
+    private let trackingLabel: UILabel = {
         let label = UILabel()
         label.text = "Что будем отслеживать?"
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
@@ -128,7 +128,7 @@ final class TrackersViewController: UIViewController {
             trackingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             trackingLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             trackingLabel.heightAnchor.constraint(equalToConstant: 18)
-            ])
+        ])
     }
     
     private static func currentDateString() -> String {
@@ -140,16 +140,19 @@ final class TrackersViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func addTracker() {
-        // Действие для добавления трекера
+        print("Добавить трекер")
     }
     
-    @objc private func dateButtonTapped() {
+    @objc private func dateButtonTapped(_ sender: UIButton) {
+        print("Кнопка даты нажата")
         datePicker.isHidden.toggle()
     }
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yy"
-        dateButton.setTitle(dateFormatter.string(from: sender.date), for: .normal)
+        let dateString = dateFormatter.string(from: sender.date)
+        print("Дата изменена на \(dateString)")
+        dateButton.setTitle(dateString, for: .normal)
     }
 }
