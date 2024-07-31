@@ -66,10 +66,6 @@ final class TrackersViewController: UIViewController {
         setupUI()
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .darkContent
-    }
-    
     // MARK: - Private Methods
     
     private func setupNavigationBar() {
@@ -117,9 +113,9 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
-        let datePicker = DateFormatter()
-        datePicker.dateFormat = "dd.MM.yy"
-//        let dateString = datePicker.string(from: sender.date)
-//        print("Дата изменена на \(dateString)")
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yy"
+        let dateString = dateFormatter.string(from: sender.date)
+        print("Дата изменена на \(dateString)")
     }
 }
