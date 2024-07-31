@@ -8,9 +8,9 @@
 import UIKit
 
 //final class TrackersViewController: UIViewController {
-//    
+//
 //    // MARK: - Private Properties
-//    
+//
 //    private lazy var addButton: UIButton = {
 //        let button = UIButton(type: .custom)
 //        button.setImage(UIImage(named: "Plus"), for: .normal)
@@ -20,7 +20,7 @@ import UIKit
 //            for: .touchUpInside)
 //        return button
 //    }()
-//    
+//
 //    private lazy var datePicker: UIDatePicker = {
 //        let datePicker = UIDatePicker()
 //        datePicker.datePickerMode = .date
@@ -31,25 +31,25 @@ import UIKit
 //        datePicker.isHidden = true
 //        return datePicker
 //    }()
-//    
+//
 //    private let titleLabel: UILabel = {
 //        let label = UILabel()
 //        label.text = "Трекеры"
 //        label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
 //        return label
 //    }()
-//    
+//
 //    private let searchBar: UISearchBar = {
 //        let searchBar = UISearchBar()
 //        searchBar.placeholder = "Поиск"
 //        return searchBar
 //    }()
-//    
+//
 //    private let errorImageView: UIImageView = {
 //        let imageView = UIImageView(image: UIImage(named: "Error"))
 //        return imageView
 //    }()
-//    
+//
 //    private let trackingLabel: UILabel = {
 //        let label = UILabel()
 //        label.text = "Что будем отслеживать?"
@@ -57,17 +57,17 @@ import UIKit
 //        label.textAlignment = .center
 //        return label
 //    }()
-//    
+//
 //    // MARK: - Lifecycle
-//    
+//
 //    override func viewDidLoad() {
 //        super.viewDidLoad()
 //        view.backgroundColor = .white
 //        setupUI()
 //    }
-//    
+//
 //    // MARK: - Private Methods
-//    
+//
 //    private func setupUI() {
 //        [addButton,
 //         datePicker,
@@ -79,31 +79,31 @@ import UIKit
 //            self.view.addSubview(view)
 //            view.translatesAutoresizingMaskIntoConstraints = false
 //        }
-//        
+//
 //        NSLayoutConstraint.activate([
 //            addButton.widthAnchor.constraint(equalToConstant: 42),
 //            addButton.heightAnchor.constraint(equalToConstant: 42),
 //            addButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 45),
 //            addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 6),
-//            
+//
 //            datePicker.widthAnchor.constraint(equalToConstant: 77),
 //            datePicker.heightAnchor.constraint(equalToConstant: 34),
 //            datePicker.topAnchor.constraint(equalTo: view.topAnchor, constant: 49),
 //            datePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-//            
+//
 //            titleLabel.topAnchor.constraint(equalTo: addButton.bottomAnchor, constant: 1),
 //            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-//            
+//
 //            searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 7),
 //            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
 //            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
 //            searchBar.heightAnchor.constraint(equalToConstant: 36),
-//            
+//
 //            errorImageView.widthAnchor.constraint(equalToConstant: 80),
 //            errorImageView.heightAnchor.constraint(equalToConstant: 80),
 //            errorImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 402),
 //            errorImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            
+//
 //            trackingLabel.topAnchor.constraint(equalTo: errorImageView.bottomAnchor, constant: 8),
 //            trackingLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 //            trackingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -111,13 +111,13 @@ import UIKit
 //            trackingLabel.heightAnchor.constraint(equalToConstant: 18)
 //        ])
 //    }
-//    
+//
 //    // MARK: - Actions
-//    
+//
 //    @objc private func addTracker() {
 //        print("Добавить трекер")
 //    }
-//    
+//
 //    @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
 //        let dateFormatter = DateFormatter()
 //        dateFormatter.dateFormat = "dd.MM.yy"
@@ -163,18 +163,18 @@ final class TrackersViewController: UIViewController {
         return searchBar
     }()
     
-        private let errorImageView: UIImageView = {
-            let imageView = UIImageView(image: UIImage(named: "Error"))
-            return imageView
-        }()
+    private let errorImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "Error"))
+        return imageView
+    }()
     
-        private let trackingLabel: UILabel = {
-            let label = UILabel()
-            label.text = "Что будем отслеживать?"
-            label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-            label.textAlignment = .center
-            return label
-        }()
+    private let trackingLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Что будем отслеживать?"
+        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        label.textAlignment = .center
+        return label
+    }()
     
     // MARK: - Lifecycle
     
@@ -194,7 +194,7 @@ final class TrackersViewController: UIViewController {
     private func setupNavigationBar() {
         navigationItem.leftBarButtonItems = [addButton]
         navigationItem.rightBarButtonItems = [datePicker]
-
+        
         let titleView = UIView()
         titleView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -217,28 +217,28 @@ final class TrackersViewController: UIViewController {
         let appearance = UINavigationBarAppearance()
         appearance.shadowColor = .clear
     }
-
-        private func setupUI() {
-            [errorImageView,
-             trackingLabel].forEach { [weak self] view in
-                guard let self else { return }
-                self.view.addSubview(view)
-                view.translatesAutoresizingMaskIntoConstraints = false
-            }
     
-            NSLayoutConstraint.activate([
-                errorImageView.widthAnchor.constraint(equalToConstant: 80),
-                errorImageView.heightAnchor.constraint(equalToConstant: 80),
-                errorImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 402),
-                errorImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-    
-                trackingLabel.topAnchor.constraint(equalTo: errorImageView.bottomAnchor, constant: 8),
-                trackingLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                trackingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-                trackingLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-                trackingLabel.heightAnchor.constraint(equalToConstant: 18)
-            ])
+    private func setupUI() {
+        [errorImageView,
+         trackingLabel].forEach { [weak self] view in
+            guard let self else { return }
+            self.view.addSubview(view)
+            view.translatesAutoresizingMaskIntoConstraints = false
         }
+        
+        NSLayoutConstraint.activate([
+            errorImageView.widthAnchor.constraint(equalToConstant: 80),
+            errorImageView.heightAnchor.constraint(equalToConstant: 80),
+            errorImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 402),
+            errorImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            trackingLabel.topAnchor.constraint(equalTo: errorImageView.bottomAnchor, constant: 8),
+            trackingLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            trackingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            trackingLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            trackingLabel.heightAnchor.constraint(equalToConstant: 18)
+        ])
+    }
     
     // MARK: - Actions
     
