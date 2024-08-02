@@ -11,6 +11,9 @@ final class TrackersViewController: UIViewController {
     
     // MARK: - Private Properties
     
+    private var categories: [TrackerCategory] = []
+    private var completedTrackers: [TrackerRecord] = []
+    
     private lazy var addButton: UIBarButtonItem = {
         let button = UIBarButtonItem(
             image: UIImage(named: "Plus"),
@@ -106,10 +109,46 @@ final class TrackersViewController: UIViewController {
         ])
     }
     
+    private func markTrackerAsCompleted(trackerId: UUID, date: String) {
+        let record = TrackerRecord(trackerId: trackerId, date: date)
+        completedTrackers.append(record)
+        print("Трекер отмечен как выполненный на дату \(date)")
+    }
+    
+    private func unmarkTrackerAsCompleted(trackerId: UUID, date: String) {
+        completedTrackers.removeAll { $0.trackerId == trackerId && $0.date == date }
+        print("Трекер отмечен как невыполненный на дату \(date)")
+    }
+    
+    private func addNewTracker(to categoryTitle: String, tracker: Tracker) {
+        var newCategories: [TrackerCategory] = []
+        for category in categories {
+            if category.title == categoryTitle {
+                var updatedTrackers = category.trackers
+                updatedTrackers.append(tracker)
+                let updatedCategory = TrackerCategory(
+                    title: category.title,
+                    trackers: updatedTrackers)
+                newCategories.append(updatedCategory)
+            } else {
+                newCategories.append(category)
+            }
+        }
+        categories = newCategories
+    }
+    
     // MARK: - Actions
     
     @objc private func addTracker() {
-        print("Добавить трекер")
+        let newTracker = Tracker(
+            id: UUID(),
+            name: "New Tracker",
+            color: "#FFFFFF",
+            emoji: "⭐️",
+            schedule: ["Monday"])
+        let categoryTitle = "Existing Category"
+        addNewTracker(to: categoryTitle, tracker: newTracker)
+        print("Трекер добавлен в категорию \(categoryTitle)")
     }
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
