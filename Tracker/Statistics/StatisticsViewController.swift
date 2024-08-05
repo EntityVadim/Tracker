@@ -36,18 +36,27 @@ final class StatisticsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         setupUI()
+        setupAppearance()
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        setupAppearance()
     }
     
     // MARK: - Private Methods
     
     private func setupUI() {
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
         [titleLabel,
          errorImageView,
-         placeholderLabel].forEach { view in
-            self.view.addSubview(view)
-            view.translatesAutoresizingMaskIntoConstraints = false
+         placeholderLabel].forEach {
+            view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         NSLayoutConstraint.activate([
@@ -65,5 +74,12 @@ final class StatisticsViewController: UIViewController {
             placeholderLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             placeholderLabel.heightAnchor.constraint(equalToConstant: 18)
         ])
+    }
+    
+    private func setupAppearance() {
+        let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        view.backgroundColor = isDarkMode ? .ypBlack : .ypWhite
+        titleLabel.textColor = isDarkMode ? .ypWhite : .ypBlack
+        placeholderLabel.textColor = isDarkMode ? .ypWhite : .ypBlack
     }
 }

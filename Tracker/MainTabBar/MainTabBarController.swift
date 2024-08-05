@@ -11,7 +11,16 @@ final class MainTabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setupViewControllers()
+        setupAppearance()
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        setupAppearance()
+    }
+    
+    private func setupViewControllers() {
         let trackersViewController = UINavigationController(rootViewController: TrackersViewController())
         trackersViewController.tabBarItem = UITabBarItem(
             title: "Трекеры",
@@ -25,5 +34,11 @@ final class MainTabBarController: UITabBarController {
             selectedImage: nil)
         
         viewControllers = [trackersViewController, statisticsViewController]
+    }
+    
+    private func setupAppearance() {
+        let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        tabBar.tintColor = isDarkMode ? .ypWhite : .ypBlack
+        tabBar.barTintColor = isDarkMode ? .ypBlack : .ypBlack
     }
 }

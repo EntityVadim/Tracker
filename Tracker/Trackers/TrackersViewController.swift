@@ -64,26 +64,34 @@ final class TrackersViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        setupNavigationBar()
         setupUI()
+        setupAppearance()
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        setupAppearance()
     }
     
     // MARK: - Private Methods
+    
+    private func setupUI() {
+        setupNavigationBar()
+        setupConstraints()
+    }
     
     private func setupNavigationBar() {
         navigationItem.leftBarButtonItems = [addButton]
         navigationItem.rightBarButtonItems = [datePicker]
     }
     
-    private func setupUI() {
+    private func setupConstraints() {
         [titleLabel,
          searchBar,
          errorImageView,
-         trackingLabel].forEach { [weak self] view in
-            guard let self else { return }
-            self.view.addSubview(view)
-            view.translatesAutoresizingMaskIntoConstraints = false
+         trackingLabel].forEach {
+            view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         NSLayoutConstraint.activate([
@@ -107,6 +115,15 @@ final class TrackersViewController: UIViewController {
             trackingLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             trackingLabel.heightAnchor.constraint(equalToConstant: 18)
         ])
+    }
+    
+    private func setupAppearance() {
+        let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        view.backgroundColor = isDarkMode ? .ypBlack : .ypWhite
+        titleLabel.textColor = isDarkMode ? .ypWhite : .ypBlack
+        trackingLabel.textColor = isDarkMode ? .ypWhite : .ypBlack
+        searchBar.barTintColor = isDarkMode ? .ypBlack : .ypWhite
+        addButton.tintColor = isDarkMode ? .ypWhite : .ypBlack
     }
     
     private func markTrackerAsCompleted(trackerId: UUID, date: String) {
