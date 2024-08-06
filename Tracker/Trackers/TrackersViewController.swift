@@ -7,7 +7,7 @@
 import UIKit
 
 final class TrackersViewController: UIViewController {
-
+    
     // MARK: - Private Properties
     
     private var categories: [TrackerCategory] = []
@@ -26,6 +26,7 @@ final class TrackersViewController: UIViewController {
     private lazy var datePicker: UIBarButtonItem = {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
+        datePicker.locale = Locale(identifier: "ru_RU")
         datePicker.preferredDatePickerStyle = .compact
         datePicker.addTarget(
             self,
@@ -154,13 +155,19 @@ final class TrackersViewController: UIViewController {
     }
     
     private func addNewTracker(to categoryTitle: String, tracker: Tracker) {
-        if let index = categories.firstIndex(where: { $0.title == categoryTitle }) {
-            var updatedCategory = categories[index]
-            updatedCategory.trackers.append(tracker)
-            categories[index] = updatedCategory
-        } else {
-            let newCategory = TrackerCategory(title: categoryTitle, trackers: [tracker])
-            categories.append(newCategory)
+        var newCategories: [TrackerCategory] = []
+        for category in categories {
+            if category.title == categoryTitle {
+                var updatedTrackers = category.trackers
+                updatedTrackers.append(tracker)
+                let updatedCategory = TrackerCategory(
+                    title: category.title,
+                    trackers: updatedTrackers)
+                newCategories.append(updatedCategory)
+            } else {
+                newCategories.append(category)
+            }
+            categories = newCategories
         }
         print("Всего категорий: \(categories.count)")
     }
@@ -171,13 +178,12 @@ final class TrackersViewController: UIViewController {
         let newTracker = Tracker(
             id: UUID(),
             name: "New Tracker",
-            color: UIColor(red: 47/255, green: 208/255, blue: 88/255, alpha: 1),
-            emoji: "⭐️",
-            schedule: ["Monday"]
+            color: .ypSelection4,
+            emoji: "❤️",
+            schedule: ["Понедельник"]
         )
         let categoryTitle = "Existing Category"
         if !categories.contains(where: { $0.title == categoryTitle }) {
-            print("Категория \(categoryTitle) не существует. Создаем новую категорию.")
             let newCategory = TrackerCategory(title: categoryTitle, trackers: [])
             categories.append(newCategory)
         }
@@ -186,7 +192,6 @@ final class TrackersViewController: UIViewController {
         for category in categories {
             print("Категория: \(category.title), количество трекеров: \(category.trackers.count)")
         }
-        print("Перезагрузка данных коллекции")
         collectionView.reloadData()
     }
     
@@ -220,7 +225,7 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
         print("Количество трекеров: \(trackers.count)")
         return trackers.count
     }
-
+    
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
@@ -239,15 +244,19 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: (collectionView.frame.width / 2) - 20, height: 100)
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        return CGSize(width: 167, height: 148)
     }
 }
 
 // MARK: - TrackerCellDelegate
 
 extension TrackersViewController: TrackerCellDelegate {
-    func trackerCellDidToggleCompletion(_ cell: TrackerCell, for tracker: Tracker) {
+    func trackerCellDidToggleCompletion(
+        _ cell: TrackerCell,
+        for tracker: Tracker
+    ) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yy"
         let dateString = dateFormatter.string(from: UIDatePicker().date)
