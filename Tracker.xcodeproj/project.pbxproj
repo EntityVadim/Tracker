@@ -16,6 +16,7 @@
 		DD0D6E932C57B4170036B9E0 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0D6E922C57B4170036B9E0 /* StatisticsViewController.swift */; };
 		DD0D6E952C57B7380036B9E0 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0D6E942C57B7380036B9E0 /* TrackersViewController.swift */; };
 		DD8B146D2C5CF5A20053819C /* TrackerModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8B146C2C5CF5A20053819C /* TrackerModels.swift */; };
+		DDB316AD2C6212A100D59A77 /* TrackerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB316AC2C6212A100D59A77 /* TrackerCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		DD0D6E922C57B4170036B9E0 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		DD0D6E942C57B7380036B9E0 /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
 		DD8B146C2C5CF5A20053819C /* TrackerModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerModels.swift; sourceTree = "<group>"; };
+		DDB316AC2C6212A100D59A77 /* TrackerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,8 +104,9 @@
 		DD6291BA2C5A95BA00E683F4 /* Trackers */ = {
 			isa = PBXGroup;
 			children = (
-				DD0D6E942C57B7380036B9E0 /* TrackersViewController.swift */,
 				DD8B146C2C5CF5A20053819C /* TrackerModels.swift */,
+				DD0D6E942C57B7380036B9E0 /* TrackersViewController.swift */,
+				DDB316AC2C6212A100D59A77 /* TrackerCell.swift */,
 			);
 			path = Trackers;
 			sourceTree = "<group>";
@@ -186,6 +189,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD0D6E8F2C57A2B30036B9E0 /* LaunchScreenViewController.swift in Sources */,
+				DDB316AD2C6212A100D59A77 /* TrackerCell.swift in Sources */,
 				DD0D6E7F2C5780EE0036B9E0 /* MainTabBarController.swift in Sources */,
 				DD8B146D2C5CF5A20053819C /* TrackerModels.swift in Sources */,
 				DD0D6E952C57B7380036B9E0 /* TrackersViewController.swift in Sources */,
