@@ -96,13 +96,20 @@ final class TrackerTypeSelectionViewController: UIViewController {
         irregularEventButton.setTitleColor(isDarkMode ? .ypBlack : .ypWhite, for: .normal)
     }
     
+    private func showCreateTrackerScreen(with type: TrackerType) {
+        let createTrackerVC = TrackerCreationViewController()
+        createTrackerVC.trackerType = type
+        createTrackerVC.modalPresentationStyle = .fullScreen
+        present(createTrackerVC, animated: true, completion: nil)
+    }
+    
     @objc private func habitButtonTapped() {
         delegate?.didSelectTrackerType(.habit)
-        dismiss(animated: true, completion: nil)
+        showCreateTrackerScreen(with: .habit)
     }
     
     @objc private func irregularEventButtonTapped() {
         delegate?.didSelectTrackerType(.irregularEvent)
-        dismiss(animated: true, completion: nil)
+        showCreateTrackerScreen(with: .irregularEvent)
     }
 }
