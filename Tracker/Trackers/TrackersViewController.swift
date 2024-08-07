@@ -136,11 +136,11 @@ final class TrackersViewController: UIViewController {
     
     private func setupAppearance() {
         let isDarkMode = traitCollection.userInterfaceStyle == .dark
-        view.backgroundColor = isDarkMode ? .black : .white
-        titleLabel.textColor = isDarkMode ? .white : .black
-        trackingLabel.textColor = isDarkMode ? .white : .black
-        searchBar.barTintColor = isDarkMode ? .black : .white
-        addButton.tintColor = isDarkMode ? .white : .black
+        view.backgroundColor = isDarkMode ? .ypBlack : .ypWhite
+        titleLabel.textColor = isDarkMode ? .ypWhite : .ypBlack
+        trackingLabel.textColor = isDarkMode ? .ypWhite : .ypBlack
+        searchBar.barTintColor = isDarkMode ? .ypBlack : .ypWhite
+        addButton.tintColor = isDarkMode ? .ypWhite : .ypBlack
     }
     
     private func markTrackerAsCompleted(trackerId: UUID, date: String) {

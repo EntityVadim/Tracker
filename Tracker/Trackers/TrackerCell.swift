@@ -19,18 +19,12 @@ final class TrackerCell: UICollectionViewCell {
     private var completedTrackers: [TrackerRecord] = []
     private var date: String = ""
     
+    // UI Elements
     private let cardView: UIView = {
         let view = UIView()
-        view.backgroundColor = .purple
+        view.backgroundColor = .ypSelection4
         view.layer.cornerRadius = 16
         return view
-    }()
-    
-    private let nameLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        label.textColor = .white
-        return label
     }()
     
     private let emojiLabel: UILabel = {
@@ -40,49 +34,52 @@ final class TrackerCell: UICollectionViewCell {
         return label
     }()
     
-    private lazy var completionButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "plus"), for: .normal)
-        button.tintColor = .white
-        button.backgroundColor = cardView.backgroundColor // используем цвет фона cardView
-        button.layer.cornerRadius = 17
-        button.addTarget(
-            self,
-            action: #selector(completionButtonTapped),
-            for: .touchUpInside)
-        return button
-    }()
-    
-    private let countLabel: UILabel = {
+    private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.textColor = .white
         return label
-    }()
-    
-    private let kvuAleteView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.clear
-        return view
     }()
     
     private let heartIcon: UILabel = {
         let label = UILabel()
-        label.text = "❤️"
         label.font = UIFont.systemFont(ofSize: 24)
-        label.textAlignment = .left
         label.textColor = .red
         return label
     }()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "New Tracker"
         label.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
-        label.textColor = .white
-        label.textAlignment = .left
+        label.textColor = .ypBlack
         label.numberOfLines = 2
         return label
     }()
+    
+    private lazy var completionButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "plus"), for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = cardView.backgroundColor
+        button.layer.cornerRadius = 17
+        button.addTarget(self, action: #selector(completionButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private let countLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        label.textColor = .white
+        return label
+    }()
+    
+    private let kvuAleteView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    // MARK: - Initialization
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -94,37 +91,34 @@ final class TrackerCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - UI Setup
+    
     private func setupUI() {
         contentView.addSubview(cardView)
-        contentView.addSubview(kvuAleteView)
-        cardView.addSubview(nameLabel)
         cardView.addSubview(emojiLabel)
-        kvuAleteView.addSubview(completionButton)
-        kvuAleteView.addSubview(countLabel)
+        cardView.addSubview(nameLabel)
         cardView.addSubview(heartIcon)
         cardView.addSubview(titleLabel)
+        contentView.addSubview(kvuAleteView)
+        kvuAleteView.addSubview(completionButton)
+        kvuAleteView.addSubview(countLabel)
     }
     
     private func setupConstraints() {
         cardView.translatesAutoresizingMaskIntoConstraints = false
-        kvuAleteView.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
         emojiLabel.translatesAutoresizingMaskIntoConstraints = false
-        completionButton.translatesAutoresizingMaskIntoConstraints = false
-        countLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
         heartIcon.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        kvuAleteView.translatesAutoresizingMaskIntoConstraints = false
+        completionButton.translatesAutoresizingMaskIntoConstraints = false
+        countLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
             cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             cardView.heightAnchor.constraint(equalToConstant: 90),
-            
-            kvuAleteView.topAnchor.constraint(equalTo: cardView.bottomAnchor),
-            kvuAleteView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            kvuAleteView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            kvuAleteView.heightAnchor.constraint(equalToConstant: 58),
             
             emojiLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 8),
             emojiLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 8),
@@ -142,17 +136,24 @@ final class TrackerCell: UICollectionViewCell {
             titleLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 44),
             titleLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
             
+            kvuAleteView.topAnchor.constraint(equalTo: cardView.bottomAnchor),
+            kvuAleteView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            kvuAleteView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            kvuAleteView.heightAnchor.constraint(equalToConstant: 58),
+            
             completionButton.widthAnchor.constraint(equalToConstant: 34),
             completionButton.heightAnchor.constraint(equalToConstant: 34),
             completionButton.topAnchor.constraint(equalTo: kvuAleteView.topAnchor, constant: 8),
-            completionButton.leadingAnchor.constraint(equalTo: kvuAleteView.leadingAnchor, constant: 121)
+            completionButton.leadingAnchor.constraint(equalTo: kvuAleteView.leadingAnchor, constant: 121),
+            
+            countLabel.topAnchor.constraint(equalTo: completionButton.bottomAnchor, constant: 8),
+            countLabel.centerXAnchor.constraint(equalTo: completionButton.centerXAnchor)
         ])
     }
     
-    func configure(
-        with tracker: Tracker,
-        completedTrackers: [TrackerRecord]
-    ) {
+    // MARK: - Configuration
+    
+    func configure(with tracker: Tracker, completedTrackers: [TrackerRecord]) {
         self.tracker = tracker
         self.completedTrackers = completedTrackers
         nameLabel.text = tracker.name
@@ -169,11 +170,15 @@ final class TrackerCell: UICollectionViewCell {
         }
     }
     
+    // MARK: - Helper Methods
+    
     func isCompletedForToday() -> Bool {
         return completedTrackers.contains { $0.trackerId == tracker?.id && $0.date == date }
     }
     
-    @objc private func completionButtonTapped() {
+    // MARK: - Button Action
+    
+    @objc func completionButtonTapped() {
         guard let tracker = tracker else { return }
         delegate?.trackerCellDidToggleCompletion(self, for: tracker)
     }
