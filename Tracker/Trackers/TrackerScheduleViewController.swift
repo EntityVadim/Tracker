@@ -46,7 +46,7 @@ final class TrackerScheduleViewController: UIViewController {
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypBlack
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.ypWhite, for: .normal)
         button.addTarget(
             self,
             action: #selector(saveButtonTapped),
@@ -57,7 +57,7 @@ final class TrackerScheduleViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhite
     }
     
     private func setupUI() {
@@ -79,9 +79,9 @@ final class TrackerScheduleViewController: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             saveButton.heightAnchor.constraint(equalToConstant: 60),
-            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
+            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50)
         ])
     }
     

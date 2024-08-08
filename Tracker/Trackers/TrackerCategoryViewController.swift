@@ -25,13 +25,18 @@ final class TrackerCategoryViewController: UIViewController {
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypBlack
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.ypWhite, for: .normal)
         button.addTarget(
             self,
             action: #selector(addCategoryButtonTapped),
             for: .touchUpInside)
         return button
     }()
+    
+    private var categories: [String] = [] {
+        didSet {
+        }
+    }
     
     // MARK: - Lifecycle
     
@@ -55,14 +60,19 @@ final class TrackerCategoryViewController: UIViewController {
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
             
             addCategoryButton.heightAnchor.constraint(equalToConstant: 60),
-            addCategoryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            addCategoryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            addCategoryButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
+            addCategoryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            addCategoryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            addCategoryButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50)
         ])
     }
     
     // MARK: - Actions
     
     @objc private func addCategoryButtonTapped() {
+        let newCategoryVC = TrackerNewCategoryViewController()
+        newCategoryVC.onCategorySave = { [weak self] categoryName in
+            self?.categories.append(categoryName)
+        }
+        present(newCategoryVC, animated: true, completion: nil)
     }
 }
