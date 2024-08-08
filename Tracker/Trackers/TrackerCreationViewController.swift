@@ -17,6 +17,8 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     // MARK: - Private Properties
     
+    private var selectedDays: [WeekDay] = []
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Новая привычка"
@@ -195,5 +197,11 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     }
     
     @objc private func scheduleButtonTapped() {
+        let scheduleVC = TrackerScheduleViewController()
+        scheduleVC.selectedDays = selectedDays
+        scheduleVC.daySelectionHandler = { [weak self] selectedDays in
+            self?.selectedDays = selectedDays
+        }
+        present(scheduleVC, animated: true, completion: nil)
     }
 }
