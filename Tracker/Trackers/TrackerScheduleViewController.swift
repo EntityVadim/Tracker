@@ -67,10 +67,10 @@ final class TrackerScheduleViewController: UIViewController {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-
+        
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
             
             tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             tableView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -81,18 +81,9 @@ final class TrackerScheduleViewController: UIViewController {
             saveButton.heightAnchor.constraint(equalToConstant: 60),
             saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
+            saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
         ])
     }
-    
-//    @objc private func saveButtonTapped() {
-//        daySelectionHandler?(selectedDays)
-//        if let navigationController = navigationController {
-//            navigationController.popViewController(animated: true)
-//        } else {
-//            dismiss(animated: true, completion: nil)
-//        }
-//    }
     
     @objc private func saveButtonTapped() {
         daySelectionHandler?(selectedDays)
@@ -101,26 +92,32 @@ final class TrackerScheduleViewController: UIViewController {
 }
 
 extension TrackerScheduleViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return WeekDay.allCases.count
-    }
+    func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int) -> Int {
+            return WeekDay.allCases.count
+        }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        let day = WeekDay.allCases[indexPath.row]
-        cell.textLabel?.text = day.rawValue
-        let switchView = UISwitch()
-        switchView.isOn = selectedDays.contains(day)
-        switchView.addTarget(self, action: #selector(switchChanged(sender:)), for: .valueChanged)
-        cell.backgroundColor = UIColor.ypLightGray
-        cell.accessoryView = switchView
-        cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        return cell
-    }
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+            let day = WeekDay.allCases[indexPath.row]
+            cell.textLabel?.text = day.rawValue
+            let switchView = UISwitch()
+            switchView.isOn = selectedDays.contains(day)
+            switchView.addTarget(self, action: #selector(switchChanged(sender:)), for: .valueChanged)
+            cell.backgroundColor = UIColor.ypLightGray
+            cell.accessoryView = switchView
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+            return cell
+        }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
-    }
+    func tableView(
+        _ tableView: UITableView,
+        heightForRowAt indexPath: IndexPath) -> CGFloat {
+            return 75
+        }
     
     @objc func switchChanged(sender: UISwitch) {
         guard let cell = sender.superview as? UITableViewCell,

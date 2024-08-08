@@ -145,13 +145,13 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             
             cancelButton.heightAnchor.constraint(equalToConstant: 60),
             cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            cancelButton.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             cancelButton.trailingAnchor.constraint(equalTo: saveButton.leadingAnchor, constant: -8),
             cancelButton.widthAnchor.constraint(equalTo: saveButton.widthAnchor),
             
             saveButton.heightAnchor.constraint(equalToConstant: 60),
             saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
@@ -194,6 +194,8 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     }
     
     @objc private func categoriesButtonTapped() {
+        let categorySelectionVC = TrackerCategoryViewController()
+        present(categorySelectionVC, animated: true, completion: nil)
     }
     
     @objc private func scheduleButtonTapped() {
