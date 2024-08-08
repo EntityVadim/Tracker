@@ -7,16 +7,24 @@
 
 import UIKit
 
+// MARK: - Protocol
+
 protocol TrackerTypeSelectionDelegate: AnyObject {
     func didSelectTrackerType(_ type: TrackerType)
 }
+
+// MARK: - Enums
 
 enum TrackerType {
     case habit
     case irregularEvent
 }
 
+// MARK: - TrackerTypeSelection
+
 final class TrackerTypeSelectionViewController: UIViewController {
+    
+    // MARK: - Private Properties
     
     weak var delegate: TrackerTypeSelectionDelegate?
     
@@ -52,6 +60,8 @@ final class TrackerTypeSelectionViewController: UIViewController {
         return button
     }()
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -61,6 +71,8 @@ final class TrackerTypeSelectionViewController: UIViewController {
         super.traitCollectionDidChange(previousTraitCollection)
         setupAppearance()
     }
+    
+    // MARK: - Setup Methods
     
     private func setupUI() {
         [titleLabel,
@@ -96,12 +108,16 @@ final class TrackerTypeSelectionViewController: UIViewController {
         irregularEventButton.setTitleColor(isDarkMode ? .ypBlack : .ypWhite, for: .normal)
     }
     
+    // MARK: - Private Methods
+    
     private func showCreateTrackerScreen(with type: TrackerType) {
         let createTrackerVC = TrackerCreationViewController()
         createTrackerVC.trackerType = type
         createTrackerVC.modalPresentationStyle = .fullScreen
         present(createTrackerVC, animated: true, completion: nil)
     }
+    
+    // MARK: - Actions
     
     @objc private func habitButtonTapped() {
         delegate?.didSelectTrackerType(.habit)

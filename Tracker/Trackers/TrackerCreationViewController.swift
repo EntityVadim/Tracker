@@ -62,6 +62,27 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         return button
     }()
     
+    private lazy var categoriesButton: UIButton = createCustomButton(
+        title: "Категория",
+        action: #selector(categoriesButtonTapped))
+    
+    private lazy var scheduleButton: UIButton = createCustomButton(
+        title: "Расписание",
+        action: #selector(scheduleButtonTapped))
+    
+    private let buttonsContainerView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 16
+        view.backgroundColor = .ypLightGray
+        return view
+    }()
+    
+    private let separatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .ypGrey
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -72,7 +93,11 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         [titleLabel,
          nameTextField,
          cancelButton,
-         saveButton].forEach {
+         saveButton,
+         buttonsContainerView,
+         categoriesButton,
+         separatorView,
+         scheduleButton].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -86,6 +111,26 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
+            buttonsContainerView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 16),
+            buttonsContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            buttonsContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            
+            categoriesButton.topAnchor.constraint(equalTo: buttonsContainerView.topAnchor, constant: 16),
+            categoriesButton.leadingAnchor.constraint(equalTo: buttonsContainerView.leadingAnchor, constant: 16),
+            categoriesButton.trailingAnchor.constraint(equalTo: buttonsContainerView.trailingAnchor, constant: -16),
+            categoriesButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            separatorView.topAnchor.constraint(equalTo: categoriesButton.bottomAnchor, constant: 8),
+            separatorView.leadingAnchor.constraint(equalTo: buttonsContainerView.leadingAnchor, constant: 16),
+            separatorView.trailingAnchor.constraint(equalTo: buttonsContainerView.trailingAnchor, constant: -16),
+            separatorView.heightAnchor.constraint(equalToConstant: 1),
+            
+            scheduleButton.topAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: 8),
+            scheduleButton.leadingAnchor.constraint(equalTo: buttonsContainerView.leadingAnchor, constant: 16),
+            scheduleButton.trailingAnchor.constraint(equalTo: buttonsContainerView.trailingAnchor, constant: -16),
+            scheduleButton.heightAnchor.constraint(equalToConstant: 50),
+            scheduleButton.bottomAnchor.constraint(equalTo: buttonsContainerView.bottomAnchor, constant: -16),
+            
             cancelButton.heightAnchor.constraint(equalToConstant: 60),
             cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -98,10 +143,29 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         ])
     }
     
-    // MARK: - UITextFieldDelegate
+    private func createCustomButton(title: String, action: Selector) -> UIButton {
+        let button = UIButton(type: .system)
+        button.setTitle(title, for: .normal)
+        button.layer.cornerRadius = 16
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        button.backgroundColor = .ypLightGray
+        button.setTitleColor(.ypBlack, for: .normal)
+        button.contentHorizontalAlignment = .left
+        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+        button.addTarget(self, action: action, for: .touchUpInside)
+        let arrowImageView = UIImageView(image: UIImage(systemName: "chevron.right"))
+        arrowImageView.tintColor = .ypBlack
+        button.addSubview(arrowImageView)
+        arrowImageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            arrowImageView.centerYAnchor.constraint(equalTo: button.centerYAnchor),
+            arrowImageView.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -16)
+        ])
+        return button
+    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder() // Hide keyboard
+        textField.resignFirstResponder()
         return true
     }
     
@@ -110,7 +174,12 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     }
     
     @objc private func saveButtonTapped() {
-        // Logic to save tracker
         dismiss(animated: true, completion: nil)
+    }
+    
+    @objc private func categoriesButtonTapped() {
+    }
+    
+    @objc private func scheduleButtonTapped() {
     }
 }
