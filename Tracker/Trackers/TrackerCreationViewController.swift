@@ -7,9 +7,15 @@
 
 import UIKit
 
+// MARK: - TrackerCreation
+
 final class TrackerCreationViewController: UIViewController, UITextFieldDelegate {
     
+    // MARK: - Public Properties
+    
     var trackerType: TrackerType?
+    
+    // MARK: - Private Properties
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -83,11 +89,15 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         return view
     }()
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         view.backgroundColor = .ypWhite
     }
+    
+    // MARK: - Setup Methods
     
     private func setupUI() {
         [titleLabel,
@@ -111,25 +121,25 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
-            buttonsContainerView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 16),
+            buttonsContainerView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 24),
             buttonsContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             buttonsContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            buttonsContainerView.heightAnchor.constraint(equalToConstant: 150),
             
-            categoriesButton.topAnchor.constraint(equalTo: buttonsContainerView.topAnchor, constant: 16),
-            categoriesButton.leadingAnchor.constraint(equalTo: buttonsContainerView.leadingAnchor, constant: 16),
-            categoriesButton.trailingAnchor.constraint(equalTo: buttonsContainerView.trailingAnchor, constant: -16),
-            categoriesButton.heightAnchor.constraint(equalToConstant: 50),
+            categoriesButton.topAnchor.constraint(equalTo: buttonsContainerView.topAnchor),
+            categoriesButton.leadingAnchor.constraint(equalTo: buttonsContainerView.leadingAnchor),
+            categoriesButton.trailingAnchor.constraint(equalTo: buttonsContainerView.trailingAnchor),
+            categoriesButton.heightAnchor.constraint(equalToConstant: 75),
             
-            separatorView.topAnchor.constraint(equalTo: categoriesButton.bottomAnchor, constant: 8),
+            separatorView.topAnchor.constraint(equalTo: categoriesButton.bottomAnchor),
             separatorView.leadingAnchor.constraint(equalTo: buttonsContainerView.leadingAnchor, constant: 16),
             separatorView.trailingAnchor.constraint(equalTo: buttonsContainerView.trailingAnchor, constant: -16),
             separatorView.heightAnchor.constraint(equalToConstant: 1),
             
-            scheduleButton.topAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: 8),
-            scheduleButton.leadingAnchor.constraint(equalTo: buttonsContainerView.leadingAnchor, constant: 16),
-            scheduleButton.trailingAnchor.constraint(equalTo: buttonsContainerView.trailingAnchor, constant: -16),
-            scheduleButton.heightAnchor.constraint(equalToConstant: 50),
-            scheduleButton.bottomAnchor.constraint(equalTo: buttonsContainerView.bottomAnchor, constant: -16),
+            scheduleButton.topAnchor.constraint(equalTo: separatorView.bottomAnchor),
+            scheduleButton.leadingAnchor.constraint(equalTo: buttonsContainerView.leadingAnchor),
+            scheduleButton.trailingAnchor.constraint(equalTo: buttonsContainerView.trailingAnchor),
+            scheduleButton.heightAnchor.constraint(equalToConstant: 75),
             
             cancelButton.heightAnchor.constraint(equalToConstant: 60),
             cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -164,10 +174,14 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         return button
     }
     
+    // MARK: - UITextFieldDelegate
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
+    
+    // MARK: - Actions
     
     @objc private func cancelButtonTapped() {
         dismiss(animated: true, completion: nil)

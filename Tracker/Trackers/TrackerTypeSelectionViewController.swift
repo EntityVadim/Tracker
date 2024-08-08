@@ -24,9 +24,11 @@ enum TrackerType {
 
 final class TrackerTypeSelectionViewController: UIViewController {
     
-    // MARK: - Private Properties
+    // MARK: - Public Properties
     
     weak var delegate: TrackerTypeSelectionDelegate?
+    
+    // MARK: - Private Properties
     
     private let titleLabel: UILabel = {
         let label = UILabel()

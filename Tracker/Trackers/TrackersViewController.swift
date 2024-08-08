@@ -61,15 +61,15 @@ final class TrackersViewController: UIViewController {
         return label
     }()
     
-//    private lazy var collectionView: UICollectionView = {
-//        let layout = UICollectionViewFlowLayout()
-//        layout.scrollDirection = .vertical
-//        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-//        collectionView.dataSource = self
-//        collectionView.delegate = self
-//        collectionView.register(TrackerCell.self, forCellWithReuseIdentifier: "TrackerCell")
-//        return collectionView
-//    }()
+    //    private lazy var collectionView: UICollectionView = {
+    //        let layout = UICollectionViewFlowLayout()
+    //        layout.scrollDirection = .vertical
+    //        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+    //        collectionView.dataSource = self
+    //        collectionView.delegate = self
+    //        collectionView.register(TrackerCell.self, forCellWithReuseIdentifier: "TrackerCell")
+    //        return collectionView
+    //    }()
     
     // MARK: - Lifecycle
     
@@ -127,10 +127,10 @@ final class TrackersViewController: UIViewController {
             trackingLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             trackingLabel.heightAnchor.constraint(equalToConstant: 18),
             
-//            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 16),
-//            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-//            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-//            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            //            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 16),
+            //            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            //            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            //            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
@@ -185,14 +185,14 @@ final class TrackersViewController: UIViewController {
         dateFormatter.dateFormat = "dd.MM.yy"
         let dateString = dateFormatter.string(from: sender.date)
         print("Дата изменена на \(dateString)")
-//        collectionView.reloadData()
+        //        collectionView.reloadData()
     }
 }
 
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegate
 
 //extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-//    
+//
 //    func collectionView(
 //        _ collectionView: UICollectionView,
 //        numberOfItemsInSection section: Int
@@ -210,7 +210,7 @@ final class TrackersViewController: UIViewController {
 //        print("Количество трекеров: \(trackers.count)")
 //        return trackers.count
 //    }
-//    
+//
 //    func collectionView(
 //        _ collectionView: UICollectionView,
 //        cellForItemAt indexPath: IndexPath
@@ -225,7 +225,7 @@ final class TrackersViewController: UIViewController {
 //        cell.delegate = self
 //        return cell
 //    }
-//    
+//
 //    func collectionView(
 //        _ collectionView: UICollectionView,
 //        layout collectionViewLayout: UICollectionViewLayout,
