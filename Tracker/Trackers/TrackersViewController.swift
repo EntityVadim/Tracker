@@ -164,9 +164,11 @@ final class TrackersViewController: UIViewController {
     
     private func addNewTracker(to categoryTitle: String, tracker: Tracker) {
         if let index = categories.firstIndex(where: { $0.title == categoryTitle }) {
-            var category = categories[index]
-            category.trackers.append(tracker)
-            categories[index] = category
+            let updatedCategory = TrackerCategory(
+                title: categories[index].title,
+                trackers: categories[index].trackers + [tracker]
+            )
+            categories[index] = updatedCategory
         } else {
             let newCategory = TrackerCategory(title: categoryTitle, trackers: [tracker])
             categories.append(newCategory)

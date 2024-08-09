@@ -72,7 +72,7 @@ final class TrackerScheduleViewController: UIViewController {
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
             
-            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 130),
+//            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 130),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             tableView.bottomAnchor.constraint(equalTo: saveButton.topAnchor, constant: -47),
