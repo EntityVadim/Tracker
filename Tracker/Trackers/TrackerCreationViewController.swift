@@ -14,6 +14,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     // MARK: - Public Properties
     
     var trackerType: TrackerType?
+    var selectedCategory: String?
     
     // MARK: - Private Properties
     
@@ -145,13 +146,13 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             
             cancelButton.heightAnchor.constraint(equalToConstant: 60),
             cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            cancelButton.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            cancelButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34),
             cancelButton.trailingAnchor.constraint(equalTo: saveButton.leadingAnchor, constant: -8),
             cancelButton.widthAnchor.constraint(equalTo: saveButton.widthAnchor),
             
             saveButton.heightAnchor.constraint(equalToConstant: 60),
             saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34)
         ])
     }
     

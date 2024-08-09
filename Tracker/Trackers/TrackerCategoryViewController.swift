@@ -41,12 +41,17 @@ final class TrackerCategoryViewController: UIViewController {
         tableView.separatorStyle = .singleLine
         tableView.separatorColor = UIColor.ypGrey
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        tableView.rowHeight = 60 // Не понимаю, почему не работает
+        tableView.rowHeight = 60 // ❗❗❗Не понимаю, почему не работает❗❗❗
         return tableView
     }()
     
     private var categories: [String] = [] {
+        didSet { saveCategories() }
+    }
+    
+    private var selectedCategory: String? {
         didSet {
+            saveSelectedCategory()
             tableView.reloadData()
         }
     }
@@ -55,8 +60,10 @@ final class TrackerCategoryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
         view.backgroundColor = .ypWhite
+        setupUI()
+        loadCategories()
+        loadSelectedCategory()
     }
     
     // MARK: - Setup UI
@@ -85,15 +92,41 @@ final class TrackerCategoryViewController: UIViewController {
         ])
     }
     
+    // MARK: - UserDefaults Methods
+    
+    private func saveCategories() {
+        UserDefaults.standard.set(categories, forKey: "categories")
+    }
+    
+    private func loadCategories() {
+        categories = UserDefaults.standard.stringArray(forKey: "categories") ?? []
+    }
+    
+    private func saveSelectedCategory() {
+        UserDefaults.standard.set(selectedCategory, forKey: "selectedCategory")
+    }
+    
+    private func loadSelectedCategory() {
+        selectedCategory = UserDefaults.standard.string(forKey: "selectedCategory")
+        tableView.reloadData()
+    }
+    
     // MARK: - Actions
     
     @objc private func addCategoryButtonTapped() {
-        let newCategoryVC = TrackerNewCategoryViewController()
-        newCategoryVC.onCategorySave = { [weak self] categoryName in
-            self?.categories.append(categoryName)
-            self?.tableView.reloadData()
+        guard let selectedCategory = selectedCategory else {
+            let newCategoryVC = TrackerNewCategoryViewController()
+            newCategoryVC.onCategorySave = { [weak self] categoryName in
+                self?.categories.append(categoryName)
+                self?.selectedCategory = categoryName
+                self?.tableView.reloadData()
+            }
+            present(newCategoryVC, animated: true, completion: nil)
+            return
         }
-        present(newCategoryVC, animated: true, completion: nil)
+        let trackerCreationVC = TrackerCreationViewController()
+        trackerCreationVC.selectedCategory = selectedCategory
+        present(trackerCreationVC, animated: true, completion: nil)
     }
 }
 
@@ -113,6 +146,11 @@ extension TrackerCategoryViewController: UITableViewDataSource {
             cell.textLabel?.text = categories[indexPath.row]
             cell.textLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
             cell.contentView.backgroundColor = .ypLightGray
+            if categories[indexPath.row] == selectedCategory {
+                cell.accessoryType = .checkmark
+            } else {
+                cell.accessoryType = .none
+            }
             return cell
         }
 }
@@ -147,7 +185,16 @@ extension TrackerCategoryViewController: UITableViewDelegate {
             cell.contentView.layer.masksToBounds = true
         }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
+    func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+          let category = categories[indexPath.row]
+          if category == selectedCategory {
+              selectedCategory = nil
+          } else {
+              selectedCategory = category
+          }
+          tableView.reloadData()
+      }
 }
