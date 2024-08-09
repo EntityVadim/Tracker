@@ -64,6 +64,7 @@ final class TrackerCategoryViewController: UIViewController {
         setupUI()
         loadCategories()
         loadSelectedCategory()
+        tableView.register(TrackerCategoryCell.self, forCellReuseIdentifier: "CustomCategoryCell")
     }
     
     // MARK: - Setup UI
@@ -142,15 +143,15 @@ extension TrackerCategoryViewController: UITableViewDataSource {
     func tableView(
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
-            cell.textLabel?.text = categories[indexPath.row]
-            cell.textLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-            cell.contentView.backgroundColor = .ypLightGray
-            if categories[indexPath.row] == selectedCategory {
-                cell.accessoryType = .checkmark
-            } else {
-                cell.accessoryType = .none
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "CustomCategoryCell",
+                for: indexPath) as? TrackerCategoryCell else {
+                return UITableViewCell()
             }
+            let category = categories[indexPath.row]
+            let isSelected = category == selectedCategory
+            cell.configure(with: category, isSelected: isSelected)
+            cell.contentView.backgroundColor = .ypLightGray
             return cell
         }
 }
@@ -189,12 +190,12 @@ extension TrackerCategoryViewController: UITableViewDelegate {
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
     ) {
-          let category = categories[indexPath.row]
-          if category == selectedCategory {
-              selectedCategory = nil
-          } else {
-              selectedCategory = category
-          }
-          tableView.reloadData()
-      }
+        let category = categories[indexPath.row]
+        if category == selectedCategory {
+            selectedCategory = nil
+        } else {
+            selectedCategory = category
+        }
+        tableView.reloadData()
+    }
 }
