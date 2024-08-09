@@ -7,12 +7,17 @@
 
 import UIKit
 
+protocol TrackerCreationDelegate: AnyObject {
+    func didCreateTracker(_ tracker: Tracker, inCategory category: String)
+}
+
 // MARK: - TrackerCreation
 
 final class TrackerCreationViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: - Public Properties
     
+    weak var delegate: TrackerCreationDelegate?
     var trackerType: TrackerType?
     var selectedCategory: String?
     
@@ -197,11 +202,27 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     }
     
     @objc private func saveButtonTapped() {
+        guard let name = nameTextField.text, !name.isEmpty else { return }
+        guard let selectedCategory = selectedCategory else {
+            return
+        }
+        let newTracker = Tracker(
+            id: UUID(),
+            name: name,
+            color: .ypSelection4,
+            emoji: "😡",
+            schedule: selectedDays.map { $0.rawValue }
+        )
+        delegate?.didCreateTracker(newTracker, inCategory: selectedCategory)
         dismiss(animated: true, completion: nil)
     }
     
     @objc private func categoriesButtonTapped() {
         let categorySelectionVC = TrackerCategoryViewController()
+        categorySelectionVC.categorySelectionHandler = { [weak self] selectedCategory in
+            self?.selectedCategory = selectedCategory
+            self?.categoriesButton.setTitle(selectedCategory, for: .normal)
+        }
         present(categorySelectionVC, animated: true, completion: nil)
     }
     

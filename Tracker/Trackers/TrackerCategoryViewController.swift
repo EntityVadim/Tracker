@@ -9,6 +9,8 @@ import UIKit
 
 final class TrackerCategoryViewController: UIViewController {
     
+    var categorySelectionHandler: ((String) -> Void)?
+    
     // MARK: - Private Properties
     
     private let titleLabel: UILabel = {
@@ -125,9 +127,8 @@ final class TrackerCategoryViewController: UIViewController {
             present(newCategoryVC, animated: true, completion: nil)
             return
         }
-        let trackerCreationVC = TrackerCreationViewController()
-        trackerCreationVC.selectedCategory = selectedCategory
-        present(trackerCreationVC, animated: true, completion: nil)
+        categorySelectionHandler?(selectedCategory)
+        dismiss(animated: true, completion: nil)
     }
 }
 

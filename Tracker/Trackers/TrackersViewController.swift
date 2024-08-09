@@ -68,15 +68,15 @@ final class TrackersViewController: UIViewController {
         return label
     }()
     
-        private lazy var collectionView: UICollectionView = {
-            let layout = UICollectionViewFlowLayout()
-            layout.scrollDirection = .vertical
-            let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-            collectionView.dataSource = self
-            collectionView.delegate = self
-            collectionView.register(TrackerCell.self, forCellWithReuseIdentifier: "TrackerCell")
-            return collectionView
-        }()
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(TrackerCell.self, forCellWithReuseIdentifier: "TrackerCell")
+        return collectionView
+    }()
     
     // MARK: - Lifecycle
     
@@ -163,20 +163,15 @@ final class TrackersViewController: UIViewController {
     }
     
     private func addNewTracker(to categoryTitle: String, tracker: Tracker) {
-        var newCategories: [TrackerCategory] = []
-        for category in categories {
-            if category.title == categoryTitle {
-                var updatedTrackers = category.trackers
-                updatedTrackers.append(tracker)
-                let updatedCategory = TrackerCategory(
-                    title: category.title,
-                    trackers: updatedTrackers)
-                newCategories.append(updatedCategory)
-            } else {
-                newCategories.append(category)
-            }
+        if let index = categories.firstIndex(where: { $0.title == categoryTitle }) {
+            var category = categories[index]
+            category.trackers.append(tracker)
+            categories[index] = category
+        } else {
+            let newCategory = TrackerCategory(title: categoryTitle, trackers: [tracker])
+            categories.append(newCategory)
         }
-        categories = newCategories
+        updateTrackersView()
     }
     
     private func updateTrackersView() {
@@ -197,36 +192,44 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yy"
-        let dateString = dateFormatter.string(from: sender.date)
-        print("Дата изменена на \(dateString)")
+        selectedDate = sender.date
+        updateTrackersView()
     }
 }
 
 // MARK: - TrackerTypeSelectionDelegate
 
-extension TrackersViewController: TrackerTypeSelectionDelegate {
+extension TrackersViewController: TrackerTypeSelectionDelegate, TrackerCreationDelegate {
+    func didCreateTracker(
+        _ tracker: Tracker,
+        inCategory category: String
+    ) {
+        addNewTracker(to: category, tracker: tracker)
+    }
+    
     func didSelectTrackerType(_ type: TrackerType) {
         dismiss(animated: true) {
             let createTrackerVC = TrackerCreationViewController()
             createTrackerVC.trackerType = type
+            createTrackerVC.delegate = self
             self.present(createTrackerVC, animated: true, completion: nil)
         }
     }
 }
 
-// MARK: - UICollectionViewDataSource, UICollectionViewDelegate
+// MARK: - UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 
-extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-
+extension TrackersViewController:
+    UICollectionViewDataSource,
+    UICollectionViewDelegate,
+    UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
         return categories.flatMap { $0.trackers }.count
     }
-
+    
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
@@ -237,11 +240,12 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
         }
         let trackers = categories.flatMap { $0.trackers }
         let tracker = trackers[indexPath.item]
-        cell.configure(with: tracker, completedTrackers: completedTrackers)
+        let category = categories.first { $0.trackers.contains(where: { $0.id == tracker.id }) }?.title ?? ""
+        cell.configure(with: tracker, completedTrackers: completedTrackers, category: category)
         cell.delegate = self
         return cell
     }
-
+    
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,

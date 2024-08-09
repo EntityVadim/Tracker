@@ -21,7 +21,7 @@ final class TrackerCell: UICollectionViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Existing Category"
+        //        label.text = "Existing Category"
         label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
         label.textColor = .ypBlack
         return label
@@ -153,28 +153,32 @@ final class TrackerCell: UICollectionViewCell {
     
     // MARK: - Configuration
     
-    func configure(with tracker: Tracker, completedTrackers: [TrackerRecord]) {
-        self.tracker = tracker
-        self.completedTrackers = completedTrackers
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yy"
-        date = dateFormatter.string(from: Date())
-        if isCompletedForToday() {
-            completionButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
-        } else {
-            completionButton.setImage(UIImage(systemName: "plus"), for: .normal)
+    func configure(
+        with tracker: Tracker,
+        completedTrackers: [TrackerRecord],
+        category: String) {
+            self.tracker = tracker
+            self.completedTrackers = completedTrackers
+            emojiLabel.text = tracker.emoji
+            nameLabel.text = tracker.name
+            cardView.backgroundColor = tracker.color
+            titleLabel.text = category
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd.MM.yy"
+            date = dateFormatter.string(from: Date())
+            let countDays = completedTrackers.count
+            let day: String
+            switch countDays {
+            case 1:
+                day = "День"
+            case 2...4:
+                day = "Дня"
+            default:
+                day = "Дней"
+            }
+            countLabel.text = "\(countDays) \(day)"
+            completionButton.setImage(UIImage(systemName: isCompletedForToday() ? "checkmark" : "plus"), for: .normal)
         }
-        let countDays = completedTrackers.count
-        var day = ""
-        if countDays == 1 {
-            day = "День"
-        } else if (2...4).contains(countDays) {
-            day = "Дня"
-        } else {
-            day = "Дней"
-        }
-        countLabel.text = ("\(countDays) \(day)")
-    }
     
     // MARK: - Helper Methods
     
