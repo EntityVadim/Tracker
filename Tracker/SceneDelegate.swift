@@ -8,6 +8,7 @@
 import UIKit
 
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    
     var window: UIWindow?
     
     func scene(
@@ -15,7 +16,17 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
-        guard let _ = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        window = UIWindow(windowScene: windowScene)
+        let onboardingCompleted = UserDefaults.standard.bool(forKey: "isOnboardingCompleted")
+        if onboardingCompleted {
+            let rootViewController = MainTabBarController()
+            window?.rootViewController = rootViewController
+        } else {
+            let onboardingViewController = OnboardingViewController()
+            window?.rootViewController = onboardingViewController
+        }
+        window?.makeKeyAndVisible()
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {}
