@@ -20,7 +20,7 @@ struct TrackerCategory {
     let trackers: [Tracker]
 }
 
-struct TrackerRecord {
+struct TrackerRecord: Hashable {
     let trackerId: UUID
     let date: String
 }

@@ -53,7 +53,7 @@ final class TrackerCell: UICollectionViewCell {
         return label
     }()
     
-    private let kvuAleteView: UIView = {
+    private let quantityView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
         return view
@@ -96,9 +96,9 @@ final class TrackerCell: UICollectionViewCell {
         cardView.addSubview(nameLabel)
         cardView.addSubview(heartIcon)
         cardView.addSubview(titleLabel)
-        contentView.addSubview(kvuAleteView)
-        kvuAleteView.addSubview(completionButton)
-        kvuAleteView.addSubview(countLabel)
+        contentView.addSubview(quantityView)
+        quantityView.addSubview(completionButton)
+        quantityView.addSubview(countLabel)
     }
     
     private func setupConstraints() {
@@ -107,7 +107,7 @@ final class TrackerCell: UICollectionViewCell {
         emojiLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         heartIcon.translatesAutoresizingMaskIntoConstraints = false
-        kvuAleteView.translatesAutoresizingMaskIntoConstraints = false
+        quantityView.translatesAutoresizingMaskIntoConstraints = false
         completionButton.translatesAutoresizingMaskIntoConstraints = false
         countLabel.translatesAutoresizingMaskIntoConstraints = false
         
@@ -136,18 +136,18 @@ final class TrackerCell: UICollectionViewCell {
             heartIcon.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
             heartIcon.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
             
-            kvuAleteView.widthAnchor.constraint(equalToConstant: 167),
-            kvuAleteView.heightAnchor.constraint(equalToConstant: 58),
-            kvuAleteView.topAnchor.constraint(equalTo: cardView.bottomAnchor),
+            quantityView.widthAnchor.constraint(equalToConstant: 167),
+            quantityView.heightAnchor.constraint(equalToConstant: 58),
+            quantityView.topAnchor.constraint(equalTo: cardView.bottomAnchor),
             
             completionButton.widthAnchor.constraint(equalToConstant: 34),
             completionButton.heightAnchor.constraint(equalToConstant: 34),
-            completionButton.topAnchor.constraint(equalTo: kvuAleteView.topAnchor, constant: 8),
-            completionButton.trailingAnchor.constraint(equalTo: kvuAleteView.trailingAnchor, constant: -12),
+            completionButton.topAnchor.constraint(equalTo: quantityView.topAnchor, constant: 8),
+            completionButton.trailingAnchor.constraint(equalTo: quantityView.trailingAnchor, constant: -12),
             
             countLabel.heightAnchor.constraint(equalToConstant: 18),
-            countLabel.topAnchor.constraint(equalTo: kvuAleteView.topAnchor, constant: 16),
-            countLabel.leadingAnchor.constraint(equalTo: kvuAleteView.leadingAnchor, constant: 12)
+            countLabel.topAnchor.constraint(equalTo: quantityView.topAnchor, constant: 16),
+            countLabel.leadingAnchor.constraint(equalTo: quantityView.leadingAnchor, constant: 12)
         ])
     }
     
@@ -156,8 +156,6 @@ final class TrackerCell: UICollectionViewCell {
     func configure(with tracker: Tracker, completedTrackers: [TrackerRecord]) {
         self.tracker = tracker
         self.completedTrackers = completedTrackers
-        nameLabel.text = tracker.name
-        emojiLabel.text = tracker.emoji
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yy"
         date = dateFormatter.string(from: Date())

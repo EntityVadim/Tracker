@@ -98,6 +98,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
         setupUI()
+        
         if trackerType == .irregularEvent {
             scheduleButton.isHidden = true
             buttonsContainerView.isHidden = true

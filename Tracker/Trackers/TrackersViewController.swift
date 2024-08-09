@@ -12,6 +12,13 @@ final class TrackersViewController: UIViewController {
     
     private var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
+    private var selectedDate: Date = Date()
+    
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yy"
+        return formatter
+    }()
     
     private lazy var addButton: UIBarButtonItem = {
         let button = UIBarButtonItem(
@@ -61,15 +68,15 @@ final class TrackersViewController: UIViewController {
         return label
     }()
     
-    //    private lazy var collectionView: UICollectionView = {
-    //        let layout = UICollectionViewFlowLayout()
-    //        layout.scrollDirection = .vertical
-    //        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-    //        collectionView.dataSource = self
-    //        collectionView.delegate = self
-    //        collectionView.register(TrackerCell.self, forCellWithReuseIdentifier: "TrackerCell")
-    //        return collectionView
-    //    }()
+        private lazy var collectionView: UICollectionView = {
+            let layout = UICollectionViewFlowLayout()
+            layout.scrollDirection = .vertical
+            let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+            collectionView.dataSource = self
+            collectionView.delegate = self
+            collectionView.register(TrackerCell.self, forCellWithReuseIdentifier: "TrackerCell")
+            return collectionView
+        }()
     
     // MARK: - Lifecycle
     
@@ -89,6 +96,7 @@ final class TrackersViewController: UIViewController {
     private func setupUI() {
         setupNavigationBar()
         setupConstraints()
+        updateTrackersView()
     }
     
     private func setupNavigationBar() {
@@ -101,7 +109,7 @@ final class TrackersViewController: UIViewController {
          searchBar,
          errorImageView,
          trackingLabel,
-         /*collectionView*/].forEach {
+         collectionView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -127,10 +135,10 @@ final class TrackersViewController: UIViewController {
             trackingLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             trackingLabel.heightAnchor.constraint(equalToConstant: 18),
             
-            //            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 16),
-            //            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            //            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            //            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 16),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
@@ -167,9 +175,17 @@ final class TrackersViewController: UIViewController {
             } else {
                 newCategories.append(category)
             }
-            categories = newCategories
         }
-        print("Всего категорий: \(categories.count)")
+        categories = newCategories
+    }
+    
+    private func updateTrackersView() {
+        let trackers = categories.flatMap { $0.trackers }
+        let hasTrackers = !trackers.isEmpty
+        errorImageView.isHidden = hasTrackers
+        trackingLabel.isHidden = hasTrackers
+        collectionView.isHidden = !hasTrackers
+        collectionView.reloadData()
     }
     
     // MARK: - Actions
@@ -185,55 +201,8 @@ final class TrackersViewController: UIViewController {
         dateFormatter.dateFormat = "dd.MM.yy"
         let dateString = dateFormatter.string(from: sender.date)
         print("Дата изменена на \(dateString)")
-        //        collectionView.reloadData()
     }
 }
-
-// MARK: - UICollectionViewDataSource, UICollectionViewDelegate
-
-//extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-//
-//    func collectionView(
-//        _ collectionView: UICollectionView,
-//        numberOfItemsInSection section: Int
-//    ) -> Int {
-//        let trackers = categories.flatMap { $0.trackers }
-//        if trackers.isEmpty {
-//            errorImageView.isHidden = false
-//            trackingLabel.isHidden = false
-//            collectionView.isHidden = true
-//        } else {
-//            errorImageView.isHidden = true
-//            trackingLabel.isHidden = true
-//            collectionView.isHidden = false
-//        }
-//        print("Количество трекеров: \(trackers.count)")
-//        return trackers.count
-//    }
-//
-//    func collectionView(
-//        _ collectionView: UICollectionView,
-//        cellForItemAt indexPath: IndexPath
-//    ) -> UICollectionViewCell {
-//        guard let cell = collectionView.dequeueReusableCell(
-//            withReuseIdentifier: "TrackerCell", for: indexPath) as? TrackerCell else {
-//            return UICollectionViewCell()
-//        }
-//        let trackers = categories.flatMap { $0.trackers }
-//        let tracker = trackers[indexPath.item]
-//        cell.configure(with: tracker, completedTrackers: completedTrackers)
-//        cell.delegate = self
-//        return cell
-//    }
-//
-//    func collectionView(
-//        _ collectionView: UICollectionView,
-//        layout collectionViewLayout: UICollectionViewLayout,
-//        sizeForItemAt indexPath: IndexPath
-//    ) -> CGSize {
-//        return CGSize(width: 167, height: 148)
-//    }
-//}
 
 // MARK: - TrackerTypeSelectionDelegate
 
@@ -247,21 +216,54 @@ extension TrackersViewController: TrackerTypeSelectionDelegate {
     }
 }
 
+// MARK: - UICollectionViewDataSource, UICollectionViewDelegate
+
+extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
+        return categories.flatMap { $0.trackers }.count
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "TrackerCell", for: indexPath) as? TrackerCell else {
+            return UICollectionViewCell()
+        }
+        let trackers = categories.flatMap { $0.trackers }
+        let tracker = trackers[indexPath.item]
+        cell.configure(with: tracker, completedTrackers: completedTrackers)
+        cell.delegate = self
+        return cell
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        return CGSize(width: 167, height: 148)
+    }
+}
+
 // MARK: - TrackerCellDelegate
-//
-//extension TrackersViewController: TrackerCellDelegate {
-//    func trackerCellDidToggleCompletion(
-//        _ cell: TrackerCell,
-//        for tracker: Tracker
-//    ) {
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "dd.MM.yy"
-//        let dateString = dateFormatter.string(from: UIDatePicker().date)
-//        if cell.isCompletedForToday() {
-//            unmarkTrackerAsCompleted(trackerId: tracker.id, date: dateString)
-//        } else {
-//            markTrackerAsCompleted(trackerId: tracker.id, date: dateString)
-//        }
-//        collectionView.reloadData()
-//    }
-//}
+
+extension TrackersViewController: TrackerCellDelegate {
+    func trackerCellDidToggleCompletion(
+        _ cell: TrackerCell,
+        for tracker: Tracker
+    ) {
+        let dateString = dateFormatter.string(from: selectedDate)
+        if cell.isCompletedForToday() {
+            unmarkTrackerAsCompleted(trackerId: tracker.id, date: dateString)
+        } else {
+            markTrackerAsCompleted(trackerId: tracker.id, date: dateString)
+        }
+        updateTrackersView()
+    }
+}
