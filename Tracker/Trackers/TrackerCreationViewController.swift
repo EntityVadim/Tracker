@@ -96,8 +96,13 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
         view.backgroundColor = .ypWhite
+        setupUI()
+        if trackerType == .irregularEvent {
+            scheduleButton.isHidden = true
+            buttonsContainerView.isHidden = true
+            separatorView.isHidden = true
+        }
     }
     
     // MARK: - Setup Methods

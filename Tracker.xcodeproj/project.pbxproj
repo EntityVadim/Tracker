@@ -118,13 +118,13 @@
 			children = (
 				DD8B146C2C5CF5A20053819C /* TrackerModels.swift */,
 				DD0D6E942C57B7380036B9E0 /* TrackersViewController.swift */,
+				DDB316AC2C6212A100D59A77 /* TrackerCell.swift */,
 				DDDA9FF32C63684700499483 /* TrackerTypeSelectionViewController.swift */,
 				DD0E4D152C636ED4004C3A1D /* TrackerCreationViewController.swift */,
 				DDA2C4B82C64F8310055241D /* TrackerCategoryViewController.swift */,
 				DDB2ADD82C65E8350005D216 /* TrackerCategoryCell.swift */,
 				DDA2C4BA2C64FE340055241D /* TrackerNewCategoryViewController.swift */,
 				DD412A2C2C64AF9E00398175 /* TrackerScheduleViewController.swift */,
-				DDB316AC2C6212A100D59A77 /* TrackerCell.swift */,
 			);
 			path = Trackers;
 			sourceTree = "<group>";
