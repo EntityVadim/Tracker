@@ -32,7 +32,6 @@ final class TrackerScheduleViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = UIColor.ypLightGray
         tableView.layer.cornerRadius = 16
         tableView.delegate = self
         tableView.dataSource = self
@@ -72,10 +71,10 @@ final class TrackerScheduleViewController: UIViewController {
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
             
-//            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 130),
+            tableView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -16),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            tableView.bottomAnchor.constraint(equalTo: saveButton.topAnchor, constant: -47),
+            tableView.heightAnchor.constraint(equalToConstant: 525),
             
             saveButton.heightAnchor.constraint(equalToConstant: 60),
             saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -106,6 +105,7 @@ extension TrackerScheduleViewController: UITableViewDelegate, UITableViewDataSou
             let switchView = UISwitch()
             switchView.isOn = selectedDays.contains(day)
             switchView.addTarget(self, action: #selector(switchChanged(sender:)), for: .valueChanged)
+            switchView.onTintColor = UIColor.ypBlue
             cell.backgroundColor = UIColor.ypLightGray
             cell.accessoryView = switchView
             cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
