@@ -31,9 +31,7 @@ final class TrackerSectionHeader: UICollectionReusableView {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            titleLabel.heightAnchor.constraint(equalToConstant: 18),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 24),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 28),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
         ])
     }
 }

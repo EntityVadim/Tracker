@@ -18,14 +18,7 @@ final class TrackerCell: UICollectionViewCell {
     private var tracker: Tracker?
     private var completedTrackers: [TrackerRecord] = []
     private var date: String = ""
-    
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        //        label.text = "Existing Category"
-        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
-        label.textColor = .ypBlack
-        return label
-    }()
+    private var dataManager: TrackerDataManager?
     
     private let cardView: UIView = {
         let view = UIView()
@@ -44,12 +37,6 @@ final class TrackerCell: UICollectionViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         label.textColor = .ypWhite
-        return label
-    }()
-    
-    private let heartIcon: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 24)
         return label
     }()
     
@@ -94,51 +81,38 @@ final class TrackerCell: UICollectionViewCell {
         contentView.addSubview(cardView)
         cardView.addSubview(emojiLabel)
         cardView.addSubview(nameLabel)
-        cardView.addSubview(heartIcon)
-        cardView.addSubview(titleLabel)
         contentView.addSubview(quantityView)
         quantityView.addSubview(completionButton)
         quantityView.addSubview(countLabel)
     }
     
     private func setupConstraints() {
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         cardView.translatesAutoresizingMaskIntoConstraints = false
         emojiLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        heartIcon.translatesAutoresizingMaskIntoConstraints = false
         quantityView.translatesAutoresizingMaskIntoConstraints = false
         completionButton.translatesAutoresizingMaskIntoConstraints = false
         countLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            titleLabel.heightAnchor.constraint(equalToConstant: 18),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 24),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
-            
-            cardView.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 23),
+            cardView.heightAnchor.constraint(equalToConstant: 90),
+            cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
             cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            cardView.heightAnchor.constraint(equalToConstant: 90),
             
             emojiLabel.widthAnchor.constraint(equalToConstant: 24),
             emojiLabel.heightAnchor.constraint(equalToConstant: 24),
             emojiLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
             emojiLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
             
-            nameLabel.widthAnchor.constraint(equalToConstant: 143),
             nameLabel.heightAnchor.constraint(equalToConstant: 34),
             nameLabel.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor, constant: 12),
             nameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
             
-            heartIcon.widthAnchor.constraint(equalToConstant: 24),
-            heartIcon.heightAnchor.constraint(equalToConstant: 24),
-            heartIcon.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
-            heartIcon.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
-            
-            quantityView.widthAnchor.constraint(equalToConstant: 167),
             quantityView.heightAnchor.constraint(equalToConstant: 58),
             quantityView.topAnchor.constraint(equalTo: cardView.bottomAnchor),
+            quantityView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            quantityView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
             completionButton.widthAnchor.constraint(equalToConstant: 34),
             completionButton.heightAnchor.constraint(equalToConstant: 34),
@@ -156,13 +130,13 @@ final class TrackerCell: UICollectionViewCell {
     func configure(
         with tracker: Tracker,
         completedTrackers: [TrackerRecord],
-        category: String) {
+        dataManager: TrackerDataManager) {
             self.tracker = tracker
             self.completedTrackers = completedTrackers
+            self.dataManager = dataManager
             emojiLabel.text = tracker.emoji
             nameLabel.text = tracker.name
             cardView.backgroundColor = tracker.color
-            titleLabel.text = category
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd.MM.yy"
             date = dateFormatter.string(from: Date())
@@ -177,7 +151,8 @@ final class TrackerCell: UICollectionViewCell {
                 day = "Дней"
             }
             countLabel.text = "\(countDays) \(day)"
-            completionButton.setImage(UIImage(systemName: isCompletedForToday() ? "checkmark" : "plus"), for: .normal)
+            completionButton.setImage(UIImage(
+                systemName: isCompletedForToday() ? "checkmark" : "plus"), for: .normal)
         }
     
     // MARK: - Helper Methods
@@ -190,6 +165,12 @@ final class TrackerCell: UICollectionViewCell {
     
     @objc func completionButtonTapped() {
         guard let tracker = tracker else { return }
+        if isCompletedForToday() {
+            dataManager?.unmarkTrackerAsCompleted(trackerId: tracker.id, date: date)
+        } else {
+            dataManager?.markTrackerAsCompleted(trackerId: tracker.id, date: date)
+        }
+//        completionButton.setImage(UIImage(systemName: isCompletedForToday() ? "checkmark" : "plus"), for: .normal)
         delegate?.trackerCellDidToggleCompletion(self, for: tracker)
     }
 }

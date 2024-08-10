@@ -217,6 +217,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             schedule: selectedDays.map { $0.rawValue }
         )
         dataManager.addNewTracker(to: selectedCategory, tracker: newTracker)
+        delegate?.didCreateTracker(newTracker, inCategory: selectedCategory)
         dismiss(animated: true, completion: nil)
     }
     

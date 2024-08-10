@@ -1,4 +1,5 @@
-//  TrackersViewController.swift
+//
+//  TrackerViewController.swift
 //  Tracker
 //
 //  Created by Вадим on 29.07.2024.
@@ -6,12 +7,11 @@
 
 import UIKit
 
-final class TrackersViewController: UIViewController {
+final class TrackerViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private var categories: [TrackerCategory] = []
-    private var completedTrackers: [TrackerRecord] = []
+    private var dataManager = TrackerDataManager()
     private var selectedDate: Date = Date()
     
     private let dateFormatter: DateFormatter = {
@@ -74,7 +74,13 @@ final class TrackersViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(TrackerCell.self, forCellWithReuseIdentifier: "TrackerCell")
+        collectionView.register(
+            TrackerCell.self,
+            forCellWithReuseIdentifier: "TrackerCell")
+        collectionView.register(
+            TrackerSectionHeader.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: "TrackerSectionHeader")
         return collectionView
     }()
     
@@ -135,7 +141,7 @@ final class TrackersViewController: UIViewController {
             trackingLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             trackingLabel.heightAnchor.constraint(equalToConstant: 18),
             
-            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 16),
+            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 24),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -151,33 +157,8 @@ final class TrackersViewController: UIViewController {
         addButton.tintColor = isDarkMode ? .ypWhite : .ypBlack
     }
     
-    private func markTrackerAsCompleted(trackerId: UUID, date: String) {
-        let record = TrackerRecord(trackerId: trackerId, date: date)
-        completedTrackers.append(record)
-        print("Трекер отмечен как выполненный на дату \(date)")
-    }
-    
-    private func unmarkTrackerAsCompleted(trackerId: UUID, date: String) {
-        completedTrackers.removeAll { $0.trackerId == trackerId && $0.date == date }
-        print("Трекер отмечен как невыполненный на дату \(date)")
-    }
-    
-    private func addNewTracker(to categoryTitle: String, tracker: Tracker) {
-        if let index = categories.firstIndex(where: { $0.title == categoryTitle }) {
-            let updatedCategory = TrackerCategory(
-                title: categories[index].title,
-                trackers: categories[index].trackers + [tracker]
-            )
-            categories[index] = updatedCategory
-        } else {
-            let newCategory = TrackerCategory(title: categoryTitle, trackers: [tracker])
-            categories.append(newCategory)
-        }
-        updateTrackersView()
-    }
-    
     private func updateTrackersView() {
-        let trackers = categories.flatMap { $0.trackers }
+        let trackers = dataManager.categories.flatMap { $0.trackers }
         let hasTrackers = !trackers.isEmpty
         errorImageView.isHidden = hasTrackers
         trackingLabel.isHidden = hasTrackers
@@ -201,12 +182,13 @@ final class TrackersViewController: UIViewController {
 
 // MARK: - TrackerTypeSelectionDelegate
 
-extension TrackersViewController: TrackerTypeSelectionDelegate, TrackerCreationDelegate {
+extension TrackerViewController: TrackerTypeSelectionDelegate, TrackerCreationDelegate {
     func didCreateTracker(
         _ tracker: Tracker,
         inCategory category: String
     ) {
-        addNewTracker(to: category, tracker: tracker)
+        dataManager.addNewTracker(to: category, tracker: tracker)
+        updateTrackersView()
     }
     
     func didSelectTrackerType(_ type: TrackerType) {
@@ -221,32 +203,64 @@ extension TrackersViewController: TrackerTypeSelectionDelegate, TrackerCreationD
 
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 
-extension TrackersViewController:
+extension TrackerViewController:
     UICollectionViewDataSource,
     UICollectionViewDelegate,
     UICollectionViewDelegateFlowLayout {
-    func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-    ) -> Int {
-        return categories.flatMap { $0.trackers }.count
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        let sectionCount = dataManager.categories.count
+        return sectionCount
     }
     
     func collectionView(
         _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "TrackerCell", for: indexPath) as? TrackerCell else {
-            return UICollectionViewCell()
+        numberOfItemsInSection section: Int) -> Int {
+            let itemCount = dataManager.categories[section].trackers.count
+            return itemCount
         }
-        let trackers = categories.flatMap { $0.trackers }
-        let tracker = trackers[indexPath.item]
-        let category = categories.first { $0.trackers.contains(where: { $0.id == tracker.id }) }?.title ?? ""
-        cell.configure(with: tracker, completedTrackers: completedTrackers, category: category)
-        cell.delegate = self
-        return cell
-    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "TrackerCell",
+                for: indexPath) as? TrackerCell else {
+                return UICollectionViewCell()
+            }
+            let category = dataManager.categories[indexPath.section]
+            let tracker = category.trackers[indexPath.item]
+            let completedTrackers = dataManager.completedTrackers.filter { $0.trackerId == tracker.id }
+            cell.configure(with: tracker, completedTrackers: completedTrackers, dataManager: dataManager)
+            cell.delegate = self
+            return cell
+        }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath) -> UICollectionReusableView {
+            if kind == UICollectionView.elementKindSectionHeader {
+                guard let headerView = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: kind,
+                    withReuseIdentifier: "TrackerSectionHeader",
+                    for: indexPath
+                ) as? TrackerSectionHeader else {
+                    return UICollectionReusableView()
+                }
+                let category = dataManager.categories[indexPath.section]
+                headerView.titleLabel.text = category.title
+                return headerView
+            }
+            return UICollectionReusableView()
+        }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        referenceSizeForHeaderInSection section: Int) -> CGSize {
+            return CGSize(width: collectionView.frame.width, height: 30)
+        }
     
     func collectionView(
         _ collectionView: UICollectionView,
@@ -259,16 +273,16 @@ extension TrackersViewController:
 
 // MARK: - TrackerCellDelegate
 
-extension TrackersViewController: TrackerCellDelegate {
+extension TrackerViewController: TrackerCellDelegate {
     func trackerCellDidToggleCompletion(
         _ cell: TrackerCell,
         for tracker: Tracker
     ) {
         let dateString = dateFormatter.string(from: selectedDate)
         if cell.isCompletedForToday() {
-            unmarkTrackerAsCompleted(trackerId: tracker.id, date: dateString)
+            dataManager.unmarkTrackerAsCompleted(trackerId: tracker.id, date: dateString)
         } else {
-            markTrackerAsCompleted(trackerId: tracker.id, date: dateString)
+            dataManager.markTrackerAsCompleted(trackerId: tracker.id, date: dateString)
         }
         updateTrackersView()
     }
