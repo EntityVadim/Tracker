@@ -52,6 +52,7 @@ final class TrackerViewController: UIViewController {
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Поиск"
+        searchBar.backgroundImage = UIImage()
         return searchBar
     }()
     
