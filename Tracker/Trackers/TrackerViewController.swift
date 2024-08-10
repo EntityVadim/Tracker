@@ -278,12 +278,6 @@ extension TrackerViewController: TrackerCellDelegate {
         _ cell: TrackerCell,
         for tracker: Tracker
     ) {
-        let dateString = dateFormatter.string(from: selectedDate)
-        if cell.isCompletedForToday() {
-            dataManager.unmarkTrackerAsCompleted(trackerId: tracker.id, date: dateString)
-        } else {
-            dataManager.markTrackerAsCompleted(trackerId: tracker.id, date: dateString)
-        }
         updateTrackersView()
     }
 }

@@ -13,8 +13,11 @@ final class TrackerDataManager {
     private(set) var completedTrackers: [TrackerRecord] = []
     
     func markTrackerAsCompleted(trackerId: UUID, date: String) {
-        let record = TrackerRecord(trackerId: trackerId, date: date)
-        completedTrackers.append(record)
+        let recordExists = completedTrackers.contains { $0.trackerId == trackerId && $0.date == date }
+        if !recordExists {
+            let record = TrackerRecord(trackerId: trackerId, date: date)
+            completedTrackers.append(record)
+        }
     }
     
     func unmarkTrackerAsCompleted(trackerId: UUID, date: String) {

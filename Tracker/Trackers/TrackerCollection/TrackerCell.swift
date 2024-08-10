@@ -48,7 +48,8 @@ final class TrackerCell: UICollectionViewCell {
     
     private lazy var completionButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "plus"), for: .normal)
+        let plusImage = UIImage(systemName: "plus")
+        button.setImage(plusImage, for: .normal)
         button.tintColor = .white
         button.backgroundColor = cardView.backgroundColor
         button.layer.cornerRadius = 17
@@ -125,6 +126,14 @@ final class TrackerCell: UICollectionViewCell {
         ])
     }
     
+    private func updateCompletionButtonSaturation(forCompletedState isCompleted: Bool) {
+        if isCompleted {
+            completionButton.backgroundColor = tracker?.color.withAlphaComponent(0.3)
+        } else {
+            completionButton.backgroundColor = tracker?.color
+        }
+    }
+    
     // MARK: - Configuration
     
     func configure(
@@ -136,11 +145,9 @@ final class TrackerCell: UICollectionViewCell {
             self.dataManager = dataManager
             emojiLabel.text = tracker.emoji
             nameLabel.text = tracker.name
-            cardView.backgroundColor = tracker.color
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd.MM.yy"
-            date = dateFormatter.string(from: Date())
-            let countDays = completedTrackers.count
+            updateCompletionButtonSaturation(forCompletedState: isCompletedForToday())
+            let uniqueDates = Set(completedTrackers.map { $0.date })
+            let countDays = uniqueDates.count
             let day: String
             switch countDays {
             case 1:
@@ -151,8 +158,10 @@ final class TrackerCell: UICollectionViewCell {
                 day = "Дней"
             }
             countLabel.text = "\(countDays) \(day)"
-            completionButton.setImage(UIImage(
-                systemName: isCompletedForToday() ? "checkmark" : "plus"), for: .normal)
+            let configuration = UIImage.SymbolConfiguration(pointSize: 10, weight: .bold)
+            let iconName = isCompletedForToday() ? "checkmark" : "plus"
+            let iconImage = UIImage(systemName: iconName, withConfiguration: configuration)
+            completionButton.setImage(iconImage, for: .normal)
         }
     
     // MARK: - Helper Methods
@@ -170,7 +179,7 @@ final class TrackerCell: UICollectionViewCell {
         } else {
             dataManager?.markTrackerAsCompleted(trackerId: tracker.id, date: date)
         }
-//        completionButton.setImage(UIImage(systemName: isCompletedForToday() ? "checkmark" : "plus"), for: .normal)
+        updateCompletionButtonSaturation(forCompletedState: !isCompletedForToday())
         delegate?.trackerCellDidToggleCompletion(self, for: tracker)
     }
 }
