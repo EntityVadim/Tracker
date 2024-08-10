@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - TrackerCreationDelegate
+
 protocol TrackerCreationDelegate: AnyObject {
     func didCreateTracker(_ tracker: Tracker, inCategory category: String)
 }
@@ -24,6 +26,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     // MARK: - Private Properties
     
     private var selectedDays: [WeekDay] = []
+    private let dataManager = TrackerDataManager()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -213,7 +216,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             emoji: "😡",
             schedule: selectedDays.map { $0.rawValue }
         )
-        delegate?.didCreateTracker(newTracker, inCategory: selectedCategory)
+        dataManager.addNewTracker(to: selectedCategory, tracker: newTracker)
         dismiss(animated: true, completion: nil)
     }
     
