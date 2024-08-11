@@ -268,7 +268,8 @@ extension TrackerViewController:
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        return CGSize(width: 167, height: 148)
+        let cellWidth = collectionView.bounds.width / 2 - 20
+        return CGSize(width: cellWidth, height: 148)
     }
 }
 

@@ -28,6 +28,7 @@ final class TrackerCategoryViewController: UIViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypBlack
         button.setTitleColor(.ypWhite, for: .normal)
+        button.heightAnchor.constraint(equalToConstant: 60).isActive = true
         button.addTarget(
             self,
             action: #selector(addCategoryButtonTapped),
@@ -43,7 +44,7 @@ final class TrackerCategoryViewController: UIViewController {
         tableView.separatorStyle = .singleLine
         tableView.separatorColor = UIColor.ypGrey
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        tableView.rowHeight = 60 // ❗❗❗Не понимаю, почему не работает❗❗❗
+        tableView.rowHeight = 75
         return tableView
     }()
     
@@ -81,14 +82,13 @@ final class TrackerCategoryViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 38),
             
-            addCategoryButton.heightAnchor.constraint(equalToConstant: 60),
             addCategoryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             addCategoryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             addCategoryButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
             
-            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
+            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             tableView.bottomAnchor.constraint(equalTo: addCategoryButton.topAnchor, constant: -20)

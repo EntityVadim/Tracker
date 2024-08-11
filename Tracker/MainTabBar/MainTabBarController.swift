@@ -37,9 +37,10 @@ final class MainTabBarController: UITabBarController {
     }
     
     private func setupAppearance() {
+        let activeTabColor: UIColor = .ypBlue
         let isDarkMode = traitCollection.userInterfaceStyle == .dark
-        tabBar.tintColor = isDarkMode ? .ypWhite : .ypBlack
-        tabBar.barTintColor = isDarkMode ? .ypBlack : .ypBlack
+        tabBar.tintColor = activeTabColor
+        tabBar.barTintColor = isDarkMode ? .ypWhite : .ypBlack
         let topBorder = UIView(frame: CGRect(x: 0, y: 0, width: tabBar.frame.width, height: 1))
         topBorder.backgroundColor = .ypLightGray
         tabBar.addSubview(topBorder)

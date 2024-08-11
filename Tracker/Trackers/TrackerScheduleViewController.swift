@@ -46,6 +46,7 @@ final class TrackerScheduleViewController: UIViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypBlack
         button.setTitleColor(.ypWhite, for: .normal)
+        button.heightAnchor.constraint(equalToConstant: 60).isActive = true
         button.addTarget(
             self,
             action: #selector(saveButtonTapped),
@@ -69,18 +70,16 @@ final class TrackerScheduleViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 38),
             
-            // ❗❗❗Ревью, помоги, пожалуйста, выбрать правильные constant❗❗❗
-            tableView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -16),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            tableView.heightAnchor.constraint(equalToConstant: 525),
-            
-            saveButton.heightAnchor.constraint(equalToConstant: 60),
             saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50)
+            saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
+            
+            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
+            tableView.bottomAnchor.constraint(equalTo: saveButton.topAnchor, constant: -38),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
     }
     

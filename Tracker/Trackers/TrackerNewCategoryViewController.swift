@@ -30,7 +30,11 @@ final class TrackerNewCategoryViewController: UIViewController {
         let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
         textField.leftView = leftPaddingView
         textField.leftViewMode = .always
-        textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        textField.heightAnchor.constraint(equalToConstant: 75).isActive = true
+        textField.addTarget(
+            self,
+            action: #selector(textFieldDidChange(_:)),
+            for: .editingChanged)
         textField.delegate = self
         return textField
     }()
@@ -43,7 +47,11 @@ final class TrackerNewCategoryViewController: UIViewController {
         button.backgroundColor = .ypGrey
         button.setTitleColor(.ypWhite, for: .normal)
         button.isEnabled = false
-        button.addTarget(self, action: #selector(saveCategoryButtonTapped), for: .touchUpInside)
+        button.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        button.addTarget(
+            self,
+            action: #selector(saveCategoryButtonTapped),
+            for: .touchUpInside)
         return button
     }()
     
@@ -58,24 +66,21 @@ final class TrackerNewCategoryViewController: UIViewController {
     // MARK: - Setup UI
     
     private func setupUI() {
-        view.addSubview(titleLabel)
-        view.addSubview(categoryNameTextField)
-        view.addSubview(saveCategoryButton)
-        
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        categoryNameTextField.translatesAutoresizingMaskIntoConstraints = false
-        saveCategoryButton.translatesAutoresizingMaskIntoConstraints = false
+        [titleLabel,
+         categoryNameTextField,
+         saveCategoryButton].forEach {
+            view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
         
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 38),
             
-            categoryNameTextField.heightAnchor.constraint(equalToConstant: 75),
-            categoryNameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
+            categoryNameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
             categoryNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             categoryNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
-            saveCategoryButton.heightAnchor.constraint(equalToConstant: 60),
             saveCategoryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             saveCategoryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             saveCategoryButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50)
