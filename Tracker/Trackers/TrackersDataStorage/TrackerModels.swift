@@ -14,13 +14,3 @@ struct Tracker {
     let emoji: String
     let schedule: [String]
 }
-
-struct TrackerCategory {
-    let title: String
-    let trackers: [Tracker]
-}
-
-struct TrackerRecord: Hashable {
-    let trackerId: UUID
-    let date: String
-}
