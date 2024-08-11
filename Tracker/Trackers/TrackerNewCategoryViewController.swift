@@ -7,11 +7,15 @@
 
 import UIKit
 
+// MARK: - TrackerNewCategory
+
 final class TrackerNewCategoryViewController: UIViewController {
     
-    // MARK: - Private Properties
+    // MARK: - Public Properties
     
     var onCategorySave: ((String) -> Void)?
+    
+    // MARK: - Private Properties
     
     private let titleLabel: UILabel = {
         let label = UILabel()

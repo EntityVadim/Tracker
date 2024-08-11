@@ -7,7 +7,11 @@
 
 import UIKit
 
+// MARK: - TrackerCategory
+
 final class TrackerCategoryViewController: UIViewController {
+    
+    // MARK: - Public Properties
     
     var categorySelectionHandler: ((String) -> Void)?
     

@@ -7,9 +7,11 @@
 
 import UIKit
 
+// MARK: - StatisticsViewController
+
 final class StatisticsViewController: UIViewController {
     
-    // MARK: - Private Properties
+    // MARK: - UI Elements
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -45,7 +47,7 @@ final class StatisticsViewController: UIViewController {
         setupAppearance()
     }
     
-    // MARK: - Private Methods
+    // MARK: - Setup UI
     
     private func setupUI() {
         setupConstraints()

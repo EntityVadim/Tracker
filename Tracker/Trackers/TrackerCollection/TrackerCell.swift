@@ -7,13 +7,21 @@
 
 import UIKit
 
+// MARK: - TrackerCellDelegate
+
 protocol TrackerCellDelegate: AnyObject {
     func trackerCellDidToggleCompletion(_ cell: TrackerCell, for tracker: Tracker)
 }
 
+// MARK: - TrackerCell
+
 final class TrackerCell: UICollectionViewCell {
     
+    // MARK: - Public Properties
+    
     weak var delegate: TrackerCellDelegate?
+    
+    // MARK: - Private Properties
     
     private var tracker: Tracker?
     private var completedTrackers: [TrackerRecord] = []
@@ -170,7 +178,7 @@ final class TrackerCell: UICollectionViewCell {
         return completedTrackers.contains { $0.trackerId == tracker?.id && $0.date == date }
     }
     
-    // MARK: - Button Action
+    // MARK: - Action
     
     @objc func completionButtonTapped() {
         guard let tracker = tracker else { return }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-// MARK: - Protocol
+// MARK: - TrackerTypeSelectionDelegate
 
 protocol TrackerTypeSelectionDelegate: AnyObject {
     func didSelectTrackerType(_ type: TrackerType)

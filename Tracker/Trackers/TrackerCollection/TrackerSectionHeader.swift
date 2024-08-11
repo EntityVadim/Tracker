@@ -7,7 +7,11 @@
 
 import UIKit
 
+// MARK: - TrackerSectionHeader
+
 final class TrackerSectionHeader: UICollectionReusableView {
+    
+    // MARK: - UI Elements
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -15,6 +19,8 @@ final class TrackerSectionHeader: UICollectionReusableView {
         label.textColor = .ypBlack
         return label
     }()
+    
+    // MARK: - Initialization
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,6 +31,8 @@ final class TrackerSectionHeader: UICollectionReusableView {
         super.init(coder: coder)
         setupUI()
     }
+    
+    // MARK: - UI Setup
     
     private func setupUI() {
         addSubview(titleLabel)

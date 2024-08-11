@@ -7,7 +7,11 @@
 
 import UIKit
 
+// MARK: - MainTabBarController
+
 final class MainTabBarController: UITabBarController {
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +23,8 @@ final class MainTabBarController: UITabBarController {
         super.traitCollectionDidChange(previousTraitCollection)
         setupAppearance()
     }
+    
+    // MARK: - Setup Methods
     
     private func setupViewControllers() {
         let trackersViewController = UINavigationController(rootViewController: TrackerViewController())

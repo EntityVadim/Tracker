@@ -7,7 +7,11 @@
 
 import UIKit
 
+// MARK: - TrackerCategoryCell
+
 final class TrackerCategoryCell: UITableViewCell {
+    
+    // MARK: - UI Elements
     
     private let checkmarkImageView: UIImageView = {
         let imageView = UIImageView()
@@ -16,6 +20,8 @@ final class TrackerCategoryCell: UITableViewCell {
         imageView.isHidden = true
         return imageView
     }()
+    
+    // MARK: - Initializers
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -27,11 +33,15 @@ final class TrackerCategoryCell: UITableViewCell {
         setupUI()
     }
     
+    // MARK: - Configuration
+    
     func configure(with category: String, isSelected: Bool) {
         textLabel?.text = category
         textLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         checkmarkImageView.isHidden = !isSelected
     }
+    
+    // MARK: - Setup UI
     
     private func setupUI() {
         contentView.addSubview(checkmarkImageView)

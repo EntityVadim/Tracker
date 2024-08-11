@@ -7,10 +7,16 @@
 
 import UIKit
 
+// MARK: - TrackerDataManager
+
 final class TrackerDataManager {
+    
+    // MARK: - Private Properties
     
     private(set) var categories: [TrackerCategory] = []
     private(set) var completedTrackers: [TrackerRecord] = []
+    
+    // MARK: - Public Methods
     
     func markTrackerAsCompleted(trackerId: UUID, date: String) {
         let recordExists = completedTrackers.contains { $0.trackerId == trackerId && $0.date == date }

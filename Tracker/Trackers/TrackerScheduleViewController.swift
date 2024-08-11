@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - Enum
+
 enum WeekDay: String, CaseIterable {
     case monday = "Понедельник"
     case tuesday = "Вторник"
@@ -17,10 +19,16 @@ enum WeekDay: String, CaseIterable {
     case sunday = "Воскресенье"
 }
 
+// MARK: - TrackerSchedule
+
 final class TrackerScheduleViewController: UIViewController {
+    
+    // MARK: - Properties
     
     var selectedDays: [WeekDay] = []
     var daySelectionHandler: (([WeekDay]) -> Void)?
+    
+    // MARK: - UI Elements
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -54,11 +62,15 @@ final class TrackerScheduleViewController: UIViewController {
         return button
     }()
     
+    // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         view.backgroundColor = .ypWhite
     }
+    
+    // MARK: - Setup UI
     
     private func setupUI() {
         [titleLabel,
@@ -83,11 +95,15 @@ final class TrackerScheduleViewController: UIViewController {
         ])
     }
     
+    // MARK: - Actions
+    
     @objc private func saveButtonTapped() {
         daySelectionHandler?(selectedDays)
         dismiss(animated: true, completion: nil)
     }
 }
+
+// MARK: - UITableViewDelegate & UITableViewDataSource
 
 extension TrackerScheduleViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(
