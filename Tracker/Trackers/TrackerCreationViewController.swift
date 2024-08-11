@@ -84,7 +84,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     private lazy var categoriesButton: UIButton = {
         let button = createRoundedButton (
-            title: "Категория\n",
+            title: "Категория",
             action: #selector(categoriesButtonTapped),
             corners: [.topLeft, .topRight],
             radius: 16
@@ -97,7 +97,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     private lazy var scheduleButton: UIButton = {
         let button = createRoundedButton(
-            title: "Расписание\n",
+            title: "Расписание",
             action: #selector(scheduleButtonTapped),
             corners: [.bottomLeft, .bottomRight],
             radius: 16
@@ -126,6 +126,9 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         if trackerType == .irregularEvent {
             scheduleButton.isHidden = true
             separatorView.isHidden = true
+            updateCategoriesButtonCorners(.allCorners, radius: 16)
+        } else {
+            updateCategoriesButtonCorners([.topLeft, .topRight], radius: 16)
         }
     }
     
@@ -195,6 +198,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             let mask = CAShapeLayer()
             mask.path = path.cgPath
             button.layer.mask = mask
+            button.backgroundColor = .ypLightGray
             let arrowImageView = UIImageView(image: UIImage(systemName: "chevron.right"))
             arrowImageView.tintColor = .ypBlack
             button.addSubview(arrowImageView)
@@ -205,6 +209,19 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             ])
             return button
         }
+    
+    
+    private func updateCategoriesButtonCorners(_ corners: UIRectCorner, radius: CGFloat) {
+        let buttonWidth = UIScreen.main.bounds.width - 32
+        let path = UIBezierPath(
+            roundedRect: CGRect(x: 0, y: 0, width: buttonWidth, height: 75),
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: radius, height: radius))
+        let mask = CAShapeLayer()
+        mask.path = path.cgPath
+        categoriesButton.layer.mask = mask
+        categoriesButton.backgroundColor = .ypLightGray
+    }
     
     private func updateCategoriesButtonTitle() {
         let titleText = NSMutableAttributedString(string: "Категория\n", attributes: [
