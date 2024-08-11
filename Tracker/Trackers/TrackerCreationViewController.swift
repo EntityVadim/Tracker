@@ -82,19 +82,31 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         return button
     }()
     
-    private lazy var categoriesButton: UIButton = createRoundedButton(
-        title: "Категория",
-        action: #selector(categoriesButtonTapped),
-        corners: [.topLeft, .topRight],
-        radius: 16
-    )
+    private lazy var categoriesButton: UIButton = {
+        let button = createRoundedButton (
+            title: "Категория\n",
+            action: #selector(categoriesButtonTapped),
+            corners: [.topLeft, .topRight],
+            radius: 16
+        )
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.textAlignment = .left
+        button.contentHorizontalAlignment = .left
+        return button
+    }()
     
-    private lazy var scheduleButton: UIButton = createRoundedButton(
-        title: "Расписание",
-        action: #selector(scheduleButtonTapped),
-        corners: [.bottomLeft, .bottomRight],
-        radius: 16
-    )
+    private lazy var scheduleButton: UIButton = {
+        let button = createRoundedButton(
+            title: "Расписание\n",
+            action: #selector(scheduleButtonTapped),
+            corners: [.bottomLeft, .bottomRight],
+            radius: 16
+        )
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.textAlignment = .left
+        button.contentHorizontalAlignment = .left
+        return button
+    }()
     
     private let separatorView: UIView = {
         let view = UIView()
@@ -165,32 +177,68 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         action: Selector,
         corners: UIRectCorner,
         radius: CGFloat) -> UIButton {
-        let button = UIButton(type: .system)
-        button.setTitle(title, for: .normal)
-        button.heightAnchor.constraint(equalToConstant: 75).isActive = true
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        button.backgroundColor = .ypLightGray
-        button.setTitleColor(.ypBlack, for: .normal)
-        button.contentHorizontalAlignment = .left
-        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
-        button.addTarget(self, action: action, for: .touchUpInside)
-        let buttonWidth = UIScreen.main.bounds.width - 32
-        let path = UIBezierPath(
-            roundedRect: CGRect(x: 0, y: 0, width: buttonWidth, height: 75),
-            byRoundingCorners: corners,
-            cornerRadii: CGSize(width: radius, height: radius))
-        let mask = CAShapeLayer()
-        mask.path = path.cgPath
-        button.layer.mask = mask
-        let arrowImageView = UIImageView(image: UIImage(systemName: "chevron.right"))
-        arrowImageView.tintColor = .ypBlack
-        button.addSubview(arrowImageView)
-        arrowImageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            arrowImageView.centerYAnchor.constraint(equalTo: button.centerYAnchor),
-            arrowImageView.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -16)
+            let button = UIButton(type: .system)
+            button.setTitle(title, for: .normal)
+            button.heightAnchor.constraint(equalToConstant: 75).isActive = true
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+            button.backgroundColor = .ypLightGray
+            button.setTitleColor(.ypBlack, for: .normal)
+            button.contentHorizontalAlignment = .left
+            button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+            button.addTarget(self, action: action, for: .touchUpInside)
+            let buttonWidth = UIScreen.main.bounds.width - 32
+            let path = UIBezierPath(
+                roundedRect: CGRect(x: 0, y: 0, width: buttonWidth, height: 75),
+                byRoundingCorners: corners,
+                cornerRadii: CGSize(width: radius, height: radius))
+            let mask = CAShapeLayer()
+            mask.path = path.cgPath
+            button.layer.mask = mask
+            let arrowImageView = UIImageView(image: UIImage(systemName: "chevron.right"))
+            arrowImageView.tintColor = .ypBlack
+            button.addSubview(arrowImageView)
+            arrowImageView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                arrowImageView.centerYAnchor.constraint(equalTo: button.centerYAnchor),
+                arrowImageView.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -16)
+            ])
+            return button
+        }
+    
+    private func updateCategoriesButtonTitle() {
+        let titleText = NSMutableAttributedString(string: "Категория\n", attributes: [
+            .font: UIFont.systemFont(ofSize: 17, weight: .regular),
+            .foregroundColor: UIColor.ypBlack
         ])
-        return button
+        if let categoryText = selectedCategory {
+            let categoryAttributedText = NSAttributedString(string: categoryText, attributes: [
+                .font: UIFont.systemFont(ofSize: 17, weight: .regular),
+                .foregroundColor: UIColor.ypGrey
+            ])
+            titleText.append(categoryAttributedText)
+        }
+        categoriesButton.setAttributedTitle(titleText, for: .normal)
+    }
+    
+    private func updateScheduleButtonTitle() {
+        let weekDayShortNames = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
+        let titleText = NSMutableAttributedString(string: "Расписание\n", attributes: [
+            .font: UIFont.systemFont(ofSize: 17, weight: .regular),
+            .foregroundColor: UIColor.ypBlack
+        ])
+        var daysText: String
+        if selectedDays.count == WeekDay.allCases.count {
+            daysText = "Каждый день"
+        } else {
+            let shortNames = selectedDays.map { weekDayShortNames[WeekDay.allCases.firstIndex(of: $0)!] }
+            daysText = shortNames.joined(separator: ", ")
+        }
+        let daysAttributedText = NSAttributedString(string: daysText, attributes: [
+            .font: UIFont.systemFont(ofSize: 17, weight: .regular),
+            .foregroundColor: UIColor.ypGrey
+        ])
+        titleText.append(daysAttributedText)
+        scheduleButton.setAttributedTitle(titleText, for: .normal)
     }
     
     // MARK: - UITextFieldDelegate
@@ -227,7 +275,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         let categorySelectionVC = TrackerCategoryViewController()
         categorySelectionVC.categorySelectionHandler = { [weak self] selectedCategory in
             self?.selectedCategory = selectedCategory
-            self?.categoriesButton.setTitle(selectedCategory, for: .normal)
+            self?.updateCategoriesButtonTitle()
         }
         present(categorySelectionVC, animated: true, completion: nil)
     }
@@ -237,6 +285,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         scheduleVC.selectedDays = selectedDays
         scheduleVC.daySelectionHandler = { [weak self] selectedDays in
             self?.selectedDays = selectedDays
+            self?.updateScheduleButtonTitle()
         }
         present(scheduleVC, animated: true, completion: nil)
     }
