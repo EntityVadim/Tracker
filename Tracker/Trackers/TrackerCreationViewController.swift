@@ -121,6 +121,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
         setupUI()
+        updateSaveButtonState()
         
         if trackerType == .irregularEvent {
             scheduleButton.isHidden = true
@@ -241,10 +242,23 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         scheduleButton.setAttributedTitle(titleText, for: .normal)
     }
     
+    private func updateSaveButtonState() {
+        let isNameFilled = !(nameTextField.text?.isEmpty ?? true)
+        let isCategorySelected = selectedCategory != nil
+        if isNameFilled && isCategorySelected {
+            saveButton.isEnabled = true
+            saveButton.backgroundColor = .black
+        } else {
+            saveButton.isEnabled = false
+            saveButton.backgroundColor = .ypGrey
+        }
+    }
+    
     // MARK: - UITextFieldDelegate
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        updateSaveButtonState()
         return true
     }
     
@@ -276,6 +290,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         categorySelectionVC.categorySelectionHandler = { [weak self] selectedCategory in
             self?.selectedCategory = selectedCategory
             self?.updateCategoriesButtonTitle()
+            self?.updateSaveButtonState()
         }
         present(categorySelectionVC, animated: true, completion: nil)
     }
@@ -286,6 +301,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         scheduleVC.daySelectionHandler = { [weak self] selectedDays in
             self?.selectedDays = selectedDays
             self?.updateScheduleButtonTitle()
+            self?.updateSaveButtonState()
         }
         present(scheduleVC, animated: true, completion: nil)
     }
