@@ -234,7 +234,11 @@ extension TrackerViewController:
             let category = dataManager.categories[indexPath.section]
             let tracker = category.trackers[indexPath.item]
             let completedTrackers = dataManager.completedTrackers.filter { $0.trackerId == tracker.id }
-            cell.configure(with: tracker, completedTrackers: completedTrackers, dataManager: dataManager)
+            cell.configure(
+                with: tracker,
+                completedTrackers: completedTrackers,
+                dataManager: dataManager,
+                date: dateFormatter.string(from: selectedDate))
             cell.delegate = self
             return cell
         }

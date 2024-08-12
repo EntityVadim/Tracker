@@ -147,10 +147,12 @@ final class TrackerCell: UICollectionViewCell {
     func configure(
         with tracker: Tracker,
         completedTrackers: [TrackerRecord],
-        dataManager: TrackerDataManager) {
+        dataManager: TrackerDataManager,
+        date: String) {
             self.tracker = tracker
             self.completedTrackers = completedTrackers
             self.dataManager = dataManager
+            self.date = date
             emojiLabel.text = tracker.emoji
             nameLabel.text = tracker.name
             updateCompletionButtonSaturation(forCompletedState: isCompletedForToday())
@@ -182,6 +184,11 @@ final class TrackerCell: UICollectionViewCell {
     
     @objc func completionButtonTapped() {
         guard let tracker = tracker else { return }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yy"
+        guard let selectedDate = dateFormatter.date(from: date), selectedDate <= Date() else {
+            return
+        }
         if isCompletedForToday() {
             dataManager?.unmarkTrackerAsCompleted(trackerId: tracker.id, date: date)
         } else {

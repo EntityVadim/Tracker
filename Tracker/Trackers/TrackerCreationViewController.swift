@@ -287,9 +287,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     @objc private func saveButtonTapped() {
         guard let name = nameTextField.text, !name.isEmpty else { return }
-        guard let selectedCategory = selectedCategory else {
-            return
-        }
+        guard let selectedCategory = selectedCategory else { return }
         let newTracker = Tracker(
             id: UUID(),
             name: name,
