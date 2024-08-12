@@ -161,7 +161,9 @@ final class TrackerViewController: UIViewController {
     }
     
     private func updateTrackersView() {
-        let trackers = dataManager.categories.flatMap { $0.trackers }
+        let trackers = dataManager.categories.flatMap { category in
+            category.trackers.filter { dataManager.shouldDisplayTracker($0, forDate: selectedDate) }
+        }
         let hasTrackers = !trackers.isEmpty
         errorImageView.isHidden = hasTrackers
         trackingLabel.isHidden = hasTrackers

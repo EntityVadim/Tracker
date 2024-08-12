@@ -42,4 +42,29 @@ final class TrackerDataManager {
             categories.append(newCategory)
         }
     }
+    
+    func shouldDisplayTracker(_ tracker: Tracker, forDate date: Date) -> Bool {
+        let calendar = Calendar.current
+        let weekDay = calendar.component(.weekday, from: date)
+        var selectDayWeek: WeekDay
+        switch weekDay {
+            case 1:
+                selectDayWeek = .sunday
+            case 2:
+                selectDayWeek = .monday
+            case 3:
+                selectDayWeek = .tuesday
+            case 4:
+                selectDayWeek = .wednesday
+            case 5:
+                selectDayWeek = .thursday
+            case 6:
+                selectDayWeek = .friday
+            case 7:
+                selectDayWeek = .saturday
+            default:
+                fatalError("Неизвестный день недели")
+        }
+        return tracker.schedule.contains(selectDayWeek.rawValue)
+    }
 }
