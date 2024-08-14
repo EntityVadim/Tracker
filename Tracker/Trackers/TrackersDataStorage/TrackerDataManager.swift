@@ -54,13 +54,13 @@ final class TrackerDataManager {
     }
     
     func shouldDisplayTracker(_ tracker: Tracker, forDate date: Date, dateFormatter: DateFormatter) -> Bool {
+        let calendar = Calendar.current
         if isIrregularEvent(tracker: tracker) {
             let recordExists = completedTrackers.contains {
                 $0.trackerId == tracker.id && $0.date == dateFormatter.string(from: date)
             }
-            return recordExists || !recordExists
+            return !recordExists || calendar.isDateInToday(date)
         } else if isHabit(tracker: tracker) {
-            let calendar = Calendar.current
             let weekDay = calendar.component(.weekday, from: date)
             var selectDayWeek: WeekDay
             switch weekDay {

@@ -305,6 +305,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         delegate?.didCreateTracker(newTracker, inCategory: selectedCategory)
         dismiss(animated: true, completion: nil)
     }
+
     
     @objc private func categoriesButtonTapped() {
         let categorySelectionVC = TrackerCategoryViewController()
