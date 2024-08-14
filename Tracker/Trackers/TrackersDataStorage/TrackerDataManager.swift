@@ -30,6 +30,14 @@ final class TrackerDataManager {
         completedTrackers.removeAll { $0.trackerId == trackerId && $0.date == date }
     }
     
+    func isIrregularEvent(tracker: Tracker) -> Bool {
+        return tracker.schedule.contains("irregularEvent")
+    }
+    
+    func isHabit(tracker: Tracker) -> Bool {
+        return tracker.schedule.contains("habit")
+    }
+    
     func addNewTracker(to categoryTitle: String, tracker: Tracker) {
         if let index = categories.firstIndex(where: { $0.title == categoryTitle }) {
             var updatedTrackers = categories[index].trackers
@@ -46,27 +54,26 @@ final class TrackerDataManager {
     }
     
     func shouldDisplayTracker(_ tracker: Tracker, forDate date: Date) -> Bool {
-        let calendar = Calendar.current
-        let weekDay = calendar.component(.weekday, from: date)
-        var selectDayWeek: WeekDay
-        switch weekDay {
-            case 1:
-                selectDayWeek = .sunday
-            case 2:
-                selectDayWeek = .monday
-            case 3:
-                selectDayWeek = .tuesday
-            case 4:
-                selectDayWeek = .wednesday
-            case 5:
-                selectDayWeek = .thursday
-            case 6:
-                selectDayWeek = .friday
-            case 7:
-                selectDayWeek = .saturday
+        if isIrregularEvent(tracker: tracker) {
+            let recordExists = completedTrackers.contains { $0.trackerId == tracker.id }
+            return !recordExists
+        } else if isHabit(tracker: tracker) {
+            let calendar = Calendar.current
+            let weekDay = calendar.component(.weekday, from: date)
+            var selectDayWeek: WeekDay
+            switch weekDay {
+            case 1: selectDayWeek = .sunday
+            case 2: selectDayWeek = .monday
+            case 3: selectDayWeek = .tuesday
+            case 4: selectDayWeek = .wednesday
+            case 5: selectDayWeek = .thursday
+            case 6: selectDayWeek = .friday
+            case 7: selectDayWeek = .saturday
             default:
                 fatalError("Неизвестный день недели")
+            }
+            return tracker.schedule.contains(selectDayWeek.rawValue)
         }
-        return tracker.schedule.contains(selectDayWeek.rawValue)
+        return false
     }
 }

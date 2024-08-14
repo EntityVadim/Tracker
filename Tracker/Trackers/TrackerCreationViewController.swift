@@ -288,12 +288,18 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     @objc private func saveButtonTapped() {
         guard let name = nameTextField.text, !name.isEmpty else { return }
         guard let selectedCategory = selectedCategory else { return }
+        var schedule = selectedDays.map { $0.rawValue }
+        if trackerType == .irregularEvent {
+            schedule.append("irregularEvent")
+        } else {
+            schedule.append("habit")
+        }
         let newTracker = Tracker(
             id: UUID(),
             name: name,
             color: .ypSelection4,
             emoji: "😡",
-            schedule: selectedDays.map { $0.rawValue }
+            schedule: schedule
         )
         dataManager.addNewTracker(to: selectedCategory, tracker: newTracker)
         delegate?.didCreateTracker(newTracker, inCategory: selectedCategory)
