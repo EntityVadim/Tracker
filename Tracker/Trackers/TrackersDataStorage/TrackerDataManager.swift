@@ -32,9 +32,11 @@ final class TrackerDataManager {
     
     func addNewTracker(to categoryTitle: String, tracker: Tracker) {
         if let index = categories.firstIndex(where: { $0.title == categoryTitle }) {
+            var updatedTrackers = categories[index].trackers
+            updatedTrackers.append(tracker)
             let updatedCategory = TrackerCategory(
                 title: categories[index].title,
-                trackers: categories[index].trackers + [tracker]
+                trackers: updatedTrackers
             )
             categories[index] = updatedCategory
         } else {

@@ -221,8 +221,9 @@ extension TrackerViewController:
     func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int) -> Int {
-            let itemCount = dataManager.categories[section].trackers.count
-            return itemCount
+            let category = dataManager.categories[section]
+            let trackers = category.trackers.filter { dataManager.shouldDisplayTracker($0, forDate: selectedDate) }
+            return trackers.count
         }
     
     func collectionView(
@@ -234,7 +235,8 @@ extension TrackerViewController:
                 return UICollectionViewCell()
             }
             let category = dataManager.categories[indexPath.section]
-            let tracker = category.trackers[indexPath.item]
+            let trackers = category.trackers.filter { dataManager.shouldDisplayTracker($0, forDate: selectedDate) }
+            let tracker = trackers[indexPath.item]
             let completedTrackers = dataManager.completedTrackers.filter { $0.trackerId == tracker.id }
             cell.configure(
                 with: tracker,
