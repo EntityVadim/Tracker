@@ -162,7 +162,9 @@ final class TrackerViewController: UIViewController {
     
     private func updateTrackersView() {
         let trackers = dataManager.categories.flatMap { category in
-            category.trackers.filter { dataManager.shouldDisplayTracker($0, forDate: selectedDate) }
+            category.trackers.filter {
+                dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
+            }
         }
         let hasTrackers = !trackers.isEmpty
         errorImageView.isHidden = hasTrackers
@@ -222,7 +224,9 @@ extension TrackerViewController:
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int) -> Int {
             let category = dataManager.categories[section]
-            let trackers = category.trackers.filter { dataManager.shouldDisplayTracker($0, forDate: selectedDate) }
+            let trackers = category.trackers.filter {
+                dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
+            }
             return trackers.count
         }
     
@@ -235,7 +239,9 @@ extension TrackerViewController:
                 return UICollectionViewCell()
             }
             let category = dataManager.categories[indexPath.section]
-            let trackers = category.trackers.filter { dataManager.shouldDisplayTracker($0, forDate: selectedDate) }
+            let trackers = category.trackers.filter {
+                dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
+            }
             let tracker = trackers[indexPath.item]
             let completedTrackers = dataManager.completedTrackers.filter { $0.trackerId == tracker.id }
             cell.configure(

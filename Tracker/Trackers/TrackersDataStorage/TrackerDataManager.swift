@@ -53,10 +53,12 @@ final class TrackerDataManager {
         }
     }
     
-    func shouldDisplayTracker(_ tracker: Tracker, forDate date: Date) -> Bool {
+    func shouldDisplayTracker(_ tracker: Tracker, forDate date: Date, dateFormatter: DateFormatter) -> Bool {
         if isIrregularEvent(tracker: tracker) {
-            let recordExists = completedTrackers.contains { $0.trackerId == tracker.id }
-            return !recordExists
+            let recordExists = completedTrackers.contains {
+                $0.trackerId == tracker.id && $0.date == dateFormatter.string(from: date)
+            }
+            return recordExists || !recordExists
         } else if isHabit(tracker: tracker) {
             let calendar = Calendar.current
             let weekDay = calendar.component(.weekday, from: date)
