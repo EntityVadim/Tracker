@@ -20,6 +20,7 @@
 		DD412A2D2C64AF9E00398175 /* TrackerScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD412A2C2C64AF9E00398175 /* TrackerScheduleViewController.swift */; };
 		DD823D2D2C67975A00BD6C54 /* TrackerDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD823D2C2C67975A00BD6C54 /* TrackerDataManager.swift */; };
 		DD823D2F2C67A3AB00BD6C54 /* TrackerSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD823D2E2C67A3AB00BD6C54 /* TrackerSectionHeader.swift */; };
+		DD973E232C6E1A2200A289FB /* ExtensionTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD973E222C6E1A2200A289FB /* ExtensionTracker.swift */; };
 		DDA2C4B92C64F8310055241D /* TrackerCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA2C4B82C64F8310055241D /* TrackerCategoryViewController.swift */; };
 		DDA2C4BB2C64FE340055241D /* TrackerNewCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA2C4BA2C64FE340055241D /* TrackerNewCategoryViewController.swift */; };
 		DDA9CFC72C6914DD0035B64D /* TrackerCategoryModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA9CFC62C6914DD0035B64D /* TrackerCategoryModels.swift */; };
@@ -45,6 +46,7 @@
 		DD412A2C2C64AF9E00398175 /* TrackerScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerScheduleViewController.swift; sourceTree = "<group>"; };
 		DD823D2C2C67975A00BD6C54 /* TrackerDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerDataManager.swift; sourceTree = "<group>"; };
 		DD823D2E2C67A3AB00BD6C54 /* TrackerSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerSectionHeader.swift; sourceTree = "<group>"; };
+		DD973E222C6E1A2200A289FB /* ExtensionTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionTracker.swift; sourceTree = "<group>"; };
 		DDA2C4B82C64F8310055241D /* TrackerCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryViewController.swift; sourceTree = "<group>"; };
 		DDA2C4BA2C64FE340055241D /* TrackerNewCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerNewCategoryViewController.swift; sourceTree = "<group>"; };
 		DDA9CFC62C6914DD0035B64D /* TrackerCategoryModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryModels.swift; sourceTree = "<group>"; };
@@ -126,7 +128,7 @@
 			children = (
 				DD823D2B2C67956B00BD6C54 /* TrackersDataStorage */,
 				DDD533382C67C4DE00E49485 /* TrackerCollection */,
-				DD0D6E942C57B7380036B9E0 /* TrackerViewController.swift */,
+				DD973E242C6E1C3800A289FB /* TrackerViewController */,
 				DDDA9FF32C63684700499483 /* TrackerTypeSelectionViewController.swift */,
 				DD0E4D152C636ED4004C3A1D /* TrackerCreationViewController.swift */,
 				DDA2C4B82C64F8310055241D /* TrackerCategoryViewController.swift */,
@@ -154,6 +156,15 @@
 				DD823D2C2C67975A00BD6C54 /* TrackerDataManager.swift */,
 			);
 			path = TrackersDataStorage;
+			sourceTree = "<group>";
+		};
+		DD973E242C6E1C3800A289FB /* TrackerViewController */ = {
+			isa = PBXGroup;
+			children = (
+				DD0D6E942C57B7380036B9E0 /* TrackerViewController.swift */,
+				DD973E222C6E1A2200A289FB /* ExtensionTracker.swift */,
+			);
+			path = TrackerViewController;
 			sourceTree = "<group>";
 		};
 		DDD533382C67C4DE00E49485 /* TrackerCollection */ = {
@@ -236,6 +247,7 @@
 			files = (
 				DD0D6E8F2C57A2B30036B9E0 /* LaunchScreenViewController.swift in Sources */,
 				DDB316AD2C6212A100D59A77 /* TrackerCell.swift in Sources */,
+				DD973E232C6E1A2200A289FB /* ExtensionTracker.swift in Sources */,
 				DD0C7D1B2C6A7BDA007D700D /* TrackerModels.swift in Sources */,
 				DD412A2D2C64AF9E00398175 /* TrackerScheduleViewController.swift in Sources */,
 				DD0D6E7F2C5780EE0036B9E0 /* MainTabBarController.swift in Sources */,
