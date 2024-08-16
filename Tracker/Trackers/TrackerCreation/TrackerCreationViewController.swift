@@ -22,13 +22,32 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     weak var delegate: TrackerCreationDelegate?
     var trackerType: TrackerType?
     var selectedCategory: String?
+    var selectedEmoji: String?
+    var selectedColor: UIColor?
+    
+    let emojis = ["🙂", "😻", "🌺", "🐶", "❤️", "😱",
+                  "😇", "😡", "🥶", "🤔", "🙌", "🍔",
+                  "🥦", "🏓", "🥇", "🎸", "🌴", "😪"]
+    
+    let colors: [UIColor] = [.ypSelection1, .ypSelection2, .ypSelection3, .ypSelection4,
+                             .ypSelection5, .ypSelection6, .ypSelection7, .ypSelection8,
+                             .ypSelection9, .ypSelection10, .ypSelection11, .ypSelection12,
+                             .ypSelection13, .ypSelection14, .ypSelection15, .ypSelection16,
+                             .ypSelection17, .ypSelection18]
+    
+    lazy var emojiCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.backgroundColor = .clear
+        return collectionView
+    }()
     
     // MARK: - Private Properties
     
     private var selectedDays: [WeekDay] = []
     private let dataManager = TrackerDataManager()
-    private var selectedEmoji: String?
-    private var selectedColor: UIColor?
     
     private let emojiLabel: UILabel = {
         let label = UILabel()
@@ -46,35 +65,14 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         return label
     }()
     
-    private lazy var emojiCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.dataSource = self
-        collectionView.delegate = self
-//        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "emojiCell")
-        collectionView.backgroundColor = .clear
-        return collectionView
-    }()
-    
     private lazy var colorCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
-//        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "colorCell")
         collectionView.backgroundColor = .clear
         return collectionView
     }()
-    
-    private let emojis = ["🙂", "😻", "🌺", "🐶", "❤️", "😱",
-                          "😇", "😡", "🥶", "🤔", "🙌", "🍔",
-                          "🥦", "🏓", "🥇", "🎸", "🌴", "😪"]
-    
-    private let colors: [UIColor] = [.ypSelection1, .ypSelection2, .ypSelection3, .ypSelection4,
-                                     .ypSelection5, .ypSelection6, .ypSelection7, .ypSelection8,
-                                     .ypSelection9, .ypSelection10, .ypSelection11, .ypSelection12,
-                                     .ypSelection13, .ypSelection14, .ypSelection15, .ypSelection16,
-                                     .ypSelection17, .ypSelection18]
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -184,7 +182,29 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         colorCollectionView.register(ColorCell.self, forCellWithReuseIdentifier: ColorCell.reuseIdentifier)
     }
     
-    // MARK: - Setup Methods
+    // MARK: - Public Methods
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        updateSaveButtonState()
+        return true
+    }
+    
+    func updateSaveButtonState() {
+        let isNameFilled = !(nameTextField.text?.isEmpty ?? true)
+        let isCategorySelected = selectedCategory != nil
+        let isEmojiSelected = selectedEmoji != nil
+        let isColorSelected = selectedColor != nil
+        if isNameFilled && isCategorySelected && isEmojiSelected && isColorSelected {
+            saveButton.isEnabled = true
+            saveButton.backgroundColor = .ypBlack
+        } else {
+            saveButton.isEnabled = false
+            saveButton.backgroundColor = .ypGrey
+        }
+    }
+    
+    // MARK: - Private Methods
     
     private func setupUI() {
         [titleLabel,
@@ -330,19 +350,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         scheduleButton.setAttributedTitle(titleText, for: .normal)
     }
     
-    private func updateSaveButtonState() {
-        let isNameFilled = !(nameTextField.text?.isEmpty ?? true)
-        let isCategorySelected = selectedCategory != nil
-        let isEmojiSelected = selectedEmoji != nil
-        let isColorSelected = selectedColor != nil
-        if isNameFilled && isCategorySelected && isEmojiSelected && isColorSelected {
-            saveButton.isEnabled = true
-            saveButton.backgroundColor = .ypBlack
-        } else {
-            saveButton.isEnabled = false
-            saveButton.backgroundColor = .ypGrey
-        }
-    }
+    
     
     private func updateLayoutForTrackerType() {
         if trackerType == .habit {
@@ -362,14 +370,6 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         let heightCell = width / 6
         height = heightCell * 3
         return height
-    }
-    
-    // MARK: - UITextFieldDelegate
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        updateSaveButtonState()
-        return true
     }
     
     // MARK: - Actions
@@ -420,53 +420,5 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             self?.updateSaveButtonState()
         }
         present(scheduleVC, animated: true, completion: nil)
-    }
-}
-
-// MARK: - UICollectionViewDataSource, UICollectionViewDelegate
-
-extension TrackerCreationViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return collectionView == emojiCollectionView ? emojis.count : colors.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == emojiCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojiCell.reuseIdentifier, for: indexPath) as! EmojiCell
-            let emoji = emojis[indexPath.item]
-            let isSelected = emoji == selectedEmoji
-            cell.configure(with: emoji, isSelected: isSelected)
-            return cell
-        } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCell.reuseIdentifier, for: indexPath) as! ColorCell
-            let color = colors[indexPath.item]
-            let isSelected = color == selectedColor
-            cell.configure(with: color, isSelected: isSelected)
-            return cell
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (collectionView.bounds.width) / 6
-        return CGSize(width: width, height: width)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == emojiCollectionView {
-            selectedEmoji = emojis[indexPath.item]
-        } else {
-            selectedColor = colors[indexPath.item]
-        }
-        collectionView.reloadData()
-        updateSaveButtonState()
     }
 }
