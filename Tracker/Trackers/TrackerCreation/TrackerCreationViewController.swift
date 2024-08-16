@@ -27,6 +27,67 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     private var selectedDays: [WeekDay] = []
     private let dataManager = TrackerDataManager()
+    private var selectedEmoji: String?
+    private var selectedColor: UIColor?
+    private let numberOfColumns: CGFloat = 6
+    private let spacing: CGFloat = 16
+    
+    private lazy var cellWidth: CGFloat = {
+        let totalSpacing = spacing * (numberOfColumns - 1)
+        return (view.frame.width - 32 - totalSpacing) / numberOfColumns
+    }()
+    
+    private let emojiLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Emoji"
+        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+        label.textColor = .ypBlack
+        return label
+    }()
+    
+    private let colorLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Цвет"
+        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+        label.textColor = .ypBlack
+        return label
+    }()
+    
+    private lazy var emojiCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: cellWidth, height: cellWidth)
+        layout.minimumLineSpacing = spacing
+        layout.minimumInteritemSpacing = spacing
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "emojiCell")
+        collectionView.backgroundColor = .clear
+        return collectionView
+    }()
+    
+    private lazy var colorCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: cellWidth, height: cellWidth)
+        layout.minimumLineSpacing = spacing
+        layout.minimumInteritemSpacing = spacing
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "colorCell")
+        collectionView.backgroundColor = .clear
+        return collectionView
+    }()
+    
+    private let emojis = ["🙂", "😻", "🌺", "🐶", "❤️", "😱",
+                          "😇", "😡", "🥶", "🤔", "🙌", "🍔",
+                          "🥦", "🏓", "🥇", "🎸", "🌴", "😪"]
+    
+    private let colors: [UIColor] = [.ypSelection1, .ypSelection2, .ypSelection3, .ypSelection4,
+                                     .ypSelection5, .ypSelection6, .ypSelection7, .ypSelection8,
+                                     .ypSelection9, .ypSelection10, .ypSelection11, .ypSelection12,
+                                     .ypSelection13, .ypSelection14, .ypSelection15, .ypSelection16,
+                                     .ypSelection17, .ypSelection18]
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -137,11 +198,15 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     private func setupUI() {
         [titleLabel,
          nameTextField,
-         cancelButton,
-         saveButton,
+         emojiLabel,
+         emojiCollectionView,
+         colorLabel,
+         colorCollectionView,
          categoriesButton,
          separatorView,
-         scheduleButton].forEach {
+         scheduleButton,
+         cancelButton,
+         saveButton].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -154,9 +219,25 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
-            categoriesButton.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 24),
+            emojiLabel.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 32),
+            emojiLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
+            
+            emojiCollectionView.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor, constant: 8),
+            emojiCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            emojiCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            emojiCollectionView.heightAnchor.constraint(equalToConstant: cellWidth * 3 + spacing),
+            
+            colorLabel.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: 16),
+            colorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 26),
+            
+            colorCollectionView.topAnchor.constraint(equalTo: colorLabel.bottomAnchor, constant: 8),
+            colorCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            colorCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            colorCollectionView.heightAnchor.constraint(equalToConstant: cellWidth * 3 + spacing),
+            
+            categoriesButton.topAnchor.constraint(equalTo: colorCollectionView.bottomAnchor, constant: 24),
             categoriesButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            categoriesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -16),
+            categoriesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             separatorView.topAnchor.constraint(equalTo: categoriesButton.bottomAnchor),
             separatorView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
@@ -262,9 +343,11 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     private func updateSaveButtonState() {
         let isNameFilled = !(nameTextField.text?.isEmpty ?? true)
         let isCategorySelected = selectedCategory != nil
-        if isNameFilled && isCategorySelected {
+        let isEmojiSelected = selectedEmoji != nil
+        let isColorSelected = selectedColor != nil
+        if isNameFilled && isCategorySelected && isEmojiSelected && isColorSelected {
             saveButton.isEnabled = true
-            saveButton.backgroundColor = .black
+            saveButton.backgroundColor = .ypBlack
         } else {
             saveButton.isEnabled = false
             saveButton.backgroundColor = .ypGrey
@@ -288,6 +371,8 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     @objc private func saveButtonTapped() {
         guard let name = nameTextField.text, !name.isEmpty else { return }
         guard let selectedCategory = selectedCategory else { return }
+        guard let selectedEmoji = selectedEmoji else { return }
+        guard let selectedColor = selectedColor else { return }
         var schedule = selectedDays.map { $0.rawValue }
         if trackerType == .irregularEvent {
             schedule.append("irregularEvent")
@@ -297,15 +382,14 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         let newTracker = Tracker(
             id: UUID(),
             name: name,
-            color: .ypSelection4,
-            emoji: "😡",
+            color: selectedColor,
+            emoji: selectedEmoji,
             schedule: schedule
         )
         dataManager.addNewTracker(to: selectedCategory, tracker: newTracker)
         delegate?.didCreateTracker(newTracker, inCategory: selectedCategory)
         dismiss(animated: true, completion: nil)
     }
-
     
     @objc private func categoriesButtonTapped() {
         let categorySelectionVC = TrackerCategoryViewController()
@@ -326,5 +410,46 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             self?.updateSaveButtonState()
         }
         present(scheduleVC, animated: true, completion: nil)
+    }
+}
+
+// MARK: - UICollectionViewDataSource, UICollectionViewDelegate
+
+extension TrackerCreationViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return collectionView == emojiCollectionView ? emojis.count : colors.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if collectionView == emojiCollectionView {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath)
+            let emojiLabel = UILabel()
+            emojiLabel.text = emojis[indexPath.item]
+            emojiLabel.font = UIFont.systemFont(ofSize: 32)
+            emojiLabel.textAlignment = .center
+            emojiLabel.frame = cell.contentView.bounds
+            cell.contentView.addSubview(emojiLabel)
+            cell.contentView.backgroundColor = emojis[indexPath.item] == selectedEmoji ? UIColor.lightGray : .clear
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath)
+            cell.contentView.backgroundColor = colors[indexPath.item]
+            cell.contentView.layer.cornerRadius = 8
+            cell.contentView.layer.borderWidth = colors[indexPath.item] == selectedColor ? 2 : 0
+            cell.contentView.layer.borderColor = UIColor.black.cgColor
+            return cell
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == emojiCollectionView {
+            selectedEmoji = emojis[indexPath.item]
+            collectionView.reloadData()
+        } else {
+            selectedColor = colors[indexPath.item]
+            collectionView.reloadData()
+        }
+        updateSaveButtonState()
     }
 }
