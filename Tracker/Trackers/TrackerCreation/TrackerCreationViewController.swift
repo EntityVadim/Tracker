@@ -29,13 +29,6 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     private let dataManager = TrackerDataManager()
     private var selectedEmoji: String?
     private var selectedColor: UIColor?
-    private let numberOfColumns: CGFloat = 6
-    private let spacing: CGFloat = 16
-    
-    private lazy var cellWidth: CGFloat = {
-        let totalSpacing = spacing * (numberOfColumns - 1)
-        return (view.frame.width - 32 - totalSpacing) / numberOfColumns
-    }()
     
     private let emojiLabel: UILabel = {
         let label = UILabel()
@@ -55,26 +48,20 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     private lazy var emojiCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: cellWidth, height: cellWidth)
-        layout.minimumLineSpacing = spacing
-        layout.minimumInteritemSpacing = spacing
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "emojiCell")
+//        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "emojiCell")
         collectionView.backgroundColor = .clear
         return collectionView
     }()
     
     private lazy var colorCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: cellWidth, height: cellWidth)
-        layout.minimumLineSpacing = spacing
-        layout.minimumInteritemSpacing = spacing
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "colorCell")
+//        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "colorCell")
         collectionView.backgroundColor = .clear
         return collectionView
     }()
@@ -192,6 +179,9 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         } else {
             updateCategoriesButtonCorners([.topLeft, .topRight], radius: 16)
         }
+        
+        emojiCollectionView.register(EmojiCell.self, forCellWithReuseIdentifier: EmojiCell.reuseIdentifier)
+        colorCollectionView.register(ColorCell.self, forCellWithReuseIdentifier: ColorCell.reuseIdentifier)
     }
     
     // MARK: - Setup Methods
@@ -234,18 +224,18 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             
             emojiLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
             
-            emojiCollectionView.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor),
+            emojiCollectionView.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor, constant: 24),
             emojiCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             emojiCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            emojiCollectionView.heightAnchor.constraint(equalToConstant: cellWidth * 3 + spacing),
+            emojiCollectionView.heightAnchor.constraint(equalToConstant: calculateCellSize()),
             
             colorLabel.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: 16),
             colorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 26),
             
-            colorCollectionView.topAnchor.constraint(equalTo: colorLabel.bottomAnchor),
+            colorCollectionView.topAnchor.constraint(equalTo: colorLabel.bottomAnchor, constant: 24),
             colorCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             colorCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            colorCollectionView.heightAnchor.constraint(equalToConstant: cellWidth * 3 + spacing),
+            colorCollectionView.heightAnchor.constraint(equalToConstant: calculateCellSize()),
             
             cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             cancelButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34),
@@ -366,6 +356,14 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         }
     }
     
+    private func calculateCellSize() -> CGFloat {
+        let width = view.frame.width
+        let height: CGFloat
+        let heightCell = width / 6
+        height = heightCell * 3
+        return height
+    }
+    
     // MARK: - UITextFieldDelegate
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -428,40 +426,47 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegate
 
 extension TrackerCreationViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return collectionView == emojiCollectionView ? emojis.count : colors.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == emojiCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath)
-            let emojiLabel = UILabel()
-            emojiLabel.text = emojis[indexPath.item]
-            emojiLabel.font = UIFont.systemFont(ofSize: 32)
-            emojiLabel.textAlignment = .center
-            emojiLabel.frame = cell.contentView.bounds
-            cell.contentView.addSubview(emojiLabel)
-            cell.contentView.backgroundColor = emojis[indexPath.item] == selectedEmoji ? UIColor.lightGray : .clear
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojiCell.reuseIdentifier, for: indexPath) as! EmojiCell
+            let emoji = emojis[indexPath.item]
+            let isSelected = emoji == selectedEmoji
+            cell.configure(with: emoji, isSelected: isSelected)
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath)
-            cell.contentView.backgroundColor = colors[indexPath.item]
-            cell.contentView.layer.cornerRadius = 8
-            cell.contentView.layer.borderWidth = colors[indexPath.item] == selectedColor ? 2 : 0
-            cell.contentView.layer.borderColor = UIColor.black.cgColor
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCell.reuseIdentifier, for: indexPath) as! ColorCell
+            let color = colors[indexPath.item]
+            let isSelected = color == selectedColor
+            cell.configure(with: color, isSelected: isSelected)
             return cell
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = (collectionView.bounds.width) / 6
+        return CGSize(width: width, height: width)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == emojiCollectionView {
             selectedEmoji = emojis[indexPath.item]
-            collectionView.reloadData()
         } else {
             selectedColor = colors[indexPath.item]
-            collectionView.reloadData()
         }
+        collectionView.reloadData()
         updateSaveButtonState()
     }
 }
