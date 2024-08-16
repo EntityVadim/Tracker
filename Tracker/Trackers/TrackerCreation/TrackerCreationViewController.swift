@@ -183,6 +183,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         view.backgroundColor = .ypWhite
         setupUI()
         updateSaveButtonState()
+        updateLayoutForTrackerType()
         
         if trackerType == .irregularEvent {
             scheduleButton.isHidden = true
@@ -219,23 +220,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
-            emojiLabel.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 32),
-            emojiLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
-            
-            emojiCollectionView.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor, constant: 8),
-            emojiCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            emojiCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            emojiCollectionView.heightAnchor.constraint(equalToConstant: cellWidth * 3 + spacing),
-            
-            colorLabel.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: 16),
-            colorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 26),
-            
-            colorCollectionView.topAnchor.constraint(equalTo: colorLabel.bottomAnchor, constant: 8),
-            colorCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            colorCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            colorCollectionView.heightAnchor.constraint(equalToConstant: cellWidth * 3 + spacing),
-            
-            categoriesButton.topAnchor.constraint(equalTo: colorCollectionView.bottomAnchor, constant: 24),
+            categoriesButton.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 24),
             categoriesButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             categoriesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
@@ -246,6 +231,21 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             scheduleButton.topAnchor.constraint(equalTo: categoriesButton.bottomAnchor),
             scheduleButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             scheduleButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            
+            emojiLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
+            
+            emojiCollectionView.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor),
+            emojiCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            emojiCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            emojiCollectionView.heightAnchor.constraint(equalToConstant: cellWidth * 3 + spacing),
+            
+            colorLabel.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: 16),
+            colorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 26),
+            
+            colorCollectionView.topAnchor.constraint(equalTo: colorLabel.bottomAnchor),
+            colorCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            colorCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            colorCollectionView.heightAnchor.constraint(equalToConstant: cellWidth * 3 + spacing),
             
             cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             cancelButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34),
@@ -351,6 +351,18 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         } else {
             saveButton.isEnabled = false
             saveButton.backgroundColor = .ypGrey
+        }
+    }
+    
+    private func updateLayoutForTrackerType() {
+        if trackerType == .habit {
+            NSLayoutConstraint.activate([
+                emojiLabel.topAnchor.constraint(equalTo: scheduleButton.bottomAnchor, constant: 32)
+            ])
+        } else if trackerType == .irregularEvent {
+            NSLayoutConstraint.activate([
+                emojiLabel.topAnchor.constraint(equalTo: categoriesButton.bottomAnchor, constant: 32)
+            ])
         }
     }
     
