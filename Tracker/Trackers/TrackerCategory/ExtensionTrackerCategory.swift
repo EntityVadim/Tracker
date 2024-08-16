@@ -27,7 +27,7 @@ extension TrackerCategoryViewController: UITableViewDataSource {
             let category = categories[indexPath.row]
             let isSelected = category == selectedCategory
             cell.configure(with: category, isSelected: isSelected)
-            cell.contentView.backgroundColor = .ypLightGray
+            cell.contentView.backgroundColor = .ypBackgroundDay
             return cell
         }
 }

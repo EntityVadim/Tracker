@@ -29,7 +29,7 @@ final class TrackerNewCategoryViewController: UIViewController {
         let textField = UITextField()
         textField.placeholder = "Введите название категории"
         textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        textField.backgroundColor = .ypLightGray
+        textField.backgroundColor = .ypBackgroundDay
         textField.layer.cornerRadius = 16
         let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
         textField.leftView = leftPaddingView

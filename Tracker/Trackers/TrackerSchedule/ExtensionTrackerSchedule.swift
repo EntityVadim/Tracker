@@ -26,7 +26,7 @@ extension TrackerScheduleViewController: UITableViewDelegate, UITableViewDataSou
             switchView.isOn = selectedDays.contains(day)
             switchView.addTarget(self, action: #selector(switchChanged(sender:)), for: .valueChanged)
             switchView.onTintColor = UIColor.ypBlue
-            cell.backgroundColor = UIColor.ypLightGray
+            cell.backgroundColor = UIColor.ypBackgroundDay
             cell.accessoryView = switchView
             cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
             return cell
