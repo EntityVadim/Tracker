@@ -21,13 +21,17 @@ extension TrackerCreationViewController: UICollectionViewDataSource, UICollectio
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
             if collectionView == emojiCollectionView {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojiCell.reuseIdentifier, for: indexPath) as! EmojiCell
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: EmojiCell.reuseIdentifier,
+                    for: indexPath) as! EmojiCell
                 let emoji = emojis[indexPath.item]
                 let isSelected = emoji == selectedEmoji
                 cell.configure(with: emoji, isSelected: isSelected)
                 return cell
             } else {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCell.reuseIdentifier, for: indexPath) as! ColorCell
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: ColorCell.reuseIdentifier,
+                    for: indexPath) as! ColorCell
                 let color = colors[indexPath.item]
                 let isSelected = color == selectedColor
                 cell.configure(with: color, isSelected: isSelected)

@@ -86,7 +86,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         let textField = UITextField()
         textField.placeholder = "Введите название трекера"
         textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        textField.backgroundColor = .ypLightGray
+        textField.backgroundColor = .ypBackgroundDay
         textField.layer.cornerRadius = 16
         textField.heightAnchor.constraint(equalToConstant: 75).isActive = true
         let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
@@ -276,7 +276,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             button.setTitle(title, for: .normal)
             button.heightAnchor.constraint(equalToConstant: 75).isActive = true
             button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-            button.backgroundColor = .ypLightGray
+            button.backgroundColor = .ypBackgroundDay
             button.setTitleColor(.ypBlack, for: .normal)
             button.contentHorizontalAlignment = .left
             button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
@@ -289,7 +289,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             let mask = CAShapeLayer()
             mask.path = path.cgPath
             button.layer.mask = mask
-            button.backgroundColor = .ypLightGray
+            button.backgroundColor = .ypBackgroundDay
             let arrowImageView = UIImageView(image: UIImage(systemName: "chevron.right"))
             arrowImageView.tintColor = .ypBlack
             button.addSubview(arrowImageView)
@@ -301,7 +301,6 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             return button
         }
     
-    
     private func updateCategoriesButtonCorners(_ corners: UIRectCorner, radius: CGFloat) {
         let buttonWidth = UIScreen.main.bounds.width - 32
         let path = UIBezierPath(
@@ -311,7 +310,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         let mask = CAShapeLayer()
         mask.path = path.cgPath
         categoriesButton.layer.mask = mask
-        categoriesButton.backgroundColor = .ypLightGray
+        categoriesButton.backgroundColor = .ypBackgroundDay
     }
     
     private func updateCategoriesButtonTitle() {
@@ -349,8 +348,6 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         titleText.append(daysAttributedText)
         scheduleButton.setAttributedTitle(titleText, for: .normal)
     }
-    
-    
     
     private func updateLayoutForTrackerType() {
         if trackerType == .habit {
