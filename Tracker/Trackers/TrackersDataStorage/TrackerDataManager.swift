@@ -133,17 +133,6 @@ final class TrackerDataManager {
             return false
         }
     
-    func fetchCategories() -> [TrackerCategoryCoreData] {
-        let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
-        do {
-            let categories = try context.fetch(fetchRequest)
-            return categories
-        } catch {
-            print("Failed to fetch categories: \(error)")
-            return []
-        }
-    }
-    
     // MARK: - Private Methods
     
     private func fetchTracker(by id: UUID) -> TrackerCoreData? {

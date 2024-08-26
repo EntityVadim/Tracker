@@ -47,7 +47,6 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     // MARK: - Private Properties
     
     private var selectedDays: [WeekDay] = []
-//    private let dataManager = TrackerDataManager()
     private let dataManager = TrackerDataManager.shared
     
     private let emojiLabel: UILabel = {
