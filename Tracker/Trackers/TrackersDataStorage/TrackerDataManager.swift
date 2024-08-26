@@ -114,7 +114,8 @@ final class TrackerDataManager {
                 if let tracker = trackers.first {
                     let calendar = Calendar.current
                     if isIrregularEvent(tracker: tracker) {
-                        let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
+                        let fetchRequest:
+                        NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
                         fetchRequest.predicate = NSPredicate(
                             format: "tracker.id == %@",
                             tracker.id! as any CVarArg as CVarArg)
