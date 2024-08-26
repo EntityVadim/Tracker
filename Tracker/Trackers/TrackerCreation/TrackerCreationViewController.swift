@@ -161,6 +161,20 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         return view
     }()
     
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+    
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 0
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -207,6 +221,9 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     // MARK: - Private Methods
     
     private func setupUI() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(stackView)
+        
         [titleLabel,
          nameTextField,
          emojiLabel,
@@ -218,52 +235,66 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
          scheduleButton,
          cancelButton,
          saveButton].forEach {
-            view.addSubview($0)
+            stackView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 38),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            stackView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            titleLabel.centerXAnchor.constraint(equalTo: stackView.centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: stackView.topAnchor, constant: 38),
             
             nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
-            nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            nameTextField.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
+            nameTextField.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -16),
             
             categoriesButton.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 24),
-            categoriesButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            categoriesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            categoriesButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
+            categoriesButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -16),
             
             separatorView.topAnchor.constraint(equalTo: categoriesButton.bottomAnchor),
-            separatorView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
-            separatorView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
+            separatorView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 32),
+            separatorView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -32),
             
             scheduleButton.topAnchor.constraint(equalTo: categoriesButton.bottomAnchor),
-            scheduleButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            scheduleButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            scheduleButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
+            scheduleButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -16),
             
-            emojiLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
+            emojiLabel.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 28),
             
             emojiCollectionView.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor, constant: 24),
-            emojiCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            emojiCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            emojiCollectionView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
+            emojiCollectionView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -16),
             emojiCollectionView.heightAnchor.constraint(equalToConstant: calculateCellSize()),
             
             colorLabel.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: 16),
-            colorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 26),
+            colorLabel.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 26),
             
             colorCollectionView.topAnchor.constraint(equalTo: colorLabel.bottomAnchor, constant: 24),
-            colorCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            colorCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            colorCollectionView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
+            colorCollectionView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -16),
             colorCollectionView.heightAnchor.constraint(equalToConstant: calculateCellSize()),
             
-            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            cancelButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34),
+            cancelButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 20),
+            cancelButton.bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: -34),
             cancelButton.trailingAnchor.constraint(equalTo: saveButton.leadingAnchor, constant: -8),
             cancelButton.widthAnchor.constraint(equalTo: saveButton.widthAnchor),
             
-            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34)
+            saveButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -20),
+            saveButton.bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: -34)
         ])
     }
     
