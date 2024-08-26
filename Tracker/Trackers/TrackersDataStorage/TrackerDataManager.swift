@@ -26,6 +26,9 @@ final class TrackerDataManager {
         self.context = context
     }
     
+    private(set) var categories: [TrackerCategory] = []
+    private(set) var completedTrackers: [TrackerRecord] = []
+    
     // MARK: - Public Methods
     
     func markTrackerAsCompleted(
@@ -74,48 +77,85 @@ final class TrackerDataManager {
         return tracker.schedule?.contains("habit") ?? false
     }
     
-    func addNewTracker(
-        to categoryTitle: String,
-        tracker: Tracker) {
-            let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
-            fetchRequest.predicate = NSPredicate(
-                format: "title == %@",
-                categoryTitle)
-            do {
-                let categories = try context.fetch(fetchRequest)
-                if let category = categories.first {
-                    TrackerStore().addTracker(
-                        id: tracker.id,
-                        name: tracker.name,
-                        color: tracker.color,
-                        emoji: tracker.emoji,
-                        schedule: tracker.schedule,
-                        category: category)
-                }
-            } catch {
-                print("Failed to fetch or add category: \(error)")
-            }
-        }
+//    func fetchAllCategories() -> [TrackerCategoryCoreData] {
+//        let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+//        do {
+//            let categories = try context.fetch(fetchRequest)
+//            return categories
+//        } catch {
+//            print("Failed to fetch categories: \(error)")
+//            return []
+//        }
+//    }
     
-//        func addNewTracker(
-//            to categoryTitle: String,
-//            tracker: TrackerEntity) {
-//                let fetchRequest: NSFetchRequest<TrackerCategoryEntity> = TrackerCategoryEntity.fetchRequest()
-//                fetchRequest.predicate = NSPredicate(format: "title == %@", categoryTitle)
-//                do {
-//                    let categories = try context.fetch(fetchRequest)
-//                    if let category = categories.first {
-//                        category.addToTrackers(tracker)
-//                    } else {
-//                        let newCategory = TrackerCategoryEntity(context: context)
-//                        newCategory.title = categoryTitle
-//                        newCategory.addToTrackers(tracker)
-//                    }
-//                    saveContext()
-//                } catch {
-//                    print("Failed to fetch or add category: \(error)")
+        func addNewTracker(
+            to categoryTitle: String,
+            tracker: Tracker) {
+                let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+                fetchRequest.predicate = NSPredicate(format: "title == %@", categoryTitle)
+                do {
+                    let categories = try context.fetch(fetchRequest)
+                    let newTracker = TrackerCoreData(context: context)
+                    newTracker.id = tracker.id
+                    newTracker.name = tracker.name
+                    newTracker.color = tracker.color
+                    newTracker.emoji = tracker.emoji
+                    newTracker.schedule = tracker.schedule.joined(separator: ",")
+                    if let category = categories.first {
+                        category.addToTrackers(newTracker)
+                    } else {
+                        let newCategory = TrackerCategoryCoreData(context: context)
+                        newCategory.title = categoryTitle
+                        newCategory.addToTrackers(newTracker)
+                    }
+                    saveContext()
+                } catch {
+                    print("Failed to fetch or add category: \(error)")
+                }
+            }
+    
+//    func addNewTracker(
+//        to categoryTitle: String,
+//        tracker: Tracker) {
+//            let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+//            fetchRequest.predicate = NSPredicate(
+//                format: "title == %@",
+//                categoryTitle)
+//            do {
+//                let categories = try context.fetch(fetchRequest)
+//                if let category = categories.first {
+//                    TrackerStore().addTracker(
+//                        id: tracker.id,
+//                        name: tracker.name,
+//                        color: tracker.color,
+//                        emoji: tracker.emoji,
+//                        schedule: tracker.schedule,
+//                        category: category)
 //                }
+//            } catch {
+//                print("Failed to fetch or add category: \(error)")
 //            }
+//        }
+    
+    //        func addNewTracker(
+    //            to categoryTitle: String,
+    //            tracker: TrackerCoreData) {
+    //                let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+    //                fetchRequest.predicate = NSPredicate(format: "title == %@", categoryTitle)
+    //                do {
+    //                    let categories = try context.fetch(fetchRequest)
+    //                    if let category = categories.first {
+    //                        category.addToTrackers(tracker)
+    //                    } else {
+    //                        let newCategory = TrackerCategoryCoreData(context: context)
+    //                        newCategory.title = categoryTitle
+    //                        newCategory.addToTrackers(tracker)
+    //                    }
+    //                    saveContext()
+    //                } catch {
+    //                    print("Failed to fetch or add category: \(error)")
+    //                }
+    //            }
     
     func shouldDisplayTracker(
         _ tracker: TrackerCoreData,
