@@ -97,6 +97,26 @@ final class TrackerDataManager {
             }
         }
     
+//        func addNewTracker(
+//            to categoryTitle: String,
+//            tracker: TrackerEntity) {
+//                let fetchRequest: NSFetchRequest<TrackerCategoryEntity> = TrackerCategoryEntity.fetchRequest()
+//                fetchRequest.predicate = NSPredicate(format: "title == %@", categoryTitle)
+//                do {
+//                    let categories = try context.fetch(fetchRequest)
+//                    if let category = categories.first {
+//                        category.addToTrackers(tracker)
+//                    } else {
+//                        let newCategory = TrackerCategoryEntity(context: context)
+//                        newCategory.title = categoryTitle
+//                        newCategory.addToTrackers(tracker)
+//                    }
+//                    saveContext()
+//                } catch {
+//                    print("Failed to fetch or add category: \(error)")
+//                }
+//            }
+    
     func shouldDisplayTracker(
         _ tracker: TrackerCoreData,
         forDate date: Date,

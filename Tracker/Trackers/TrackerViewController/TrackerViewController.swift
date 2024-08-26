@@ -23,7 +23,7 @@ final class TrackerViewController: UIViewController {
     }()
     
     // MARK: - Private Properties
-
+    
     private lazy var addButton: UIBarButtonItem = {
         let button = UIBarButtonItem(
             image: UIImage(named: "Plus"),
@@ -106,14 +106,15 @@ final class TrackerViewController: UIViewController {
     
     func updateTrackersView() {
         let trackers = dataManager.categories.flatMap { category in
-             category.trackers.filter {
-                 dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
-             }
-        let hasTrackers = !trackers.isEmpty
-        errorImageView.isHidden = hasTrackers
-        trackingLabel.isHidden = hasTrackers
-        collectionView.isHidden = !hasTrackers
-        collectionView.reloadData()
+            category.trackers.filter {
+                dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
+            }
+            let hasTrackers = !trackers.isEmpty
+            errorImageView.isHidden = hasTrackers
+            trackingLabel.isHidden = hasTrackers
+            collectionView.isHidden = !hasTrackers
+            collectionView.reloadData()
+        }
     }
     
     // MARK: - Private Methods
