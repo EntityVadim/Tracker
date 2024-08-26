@@ -250,7 +250,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            //stackView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+            stackView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
         ])
         
         NSLayoutConstraint.activate([

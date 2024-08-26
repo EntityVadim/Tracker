@@ -37,7 +37,6 @@ extension TrackerViewController:
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         let sectionCount = dataManager.categories.count
-//        let sectionCount = dataManager.fetchAllCategories().count
         return sectionCount
     }
     
@@ -46,11 +45,8 @@ extension TrackerViewController:
         numberOfItemsInSection section: Int) -> Int {
             let category = dataManager.categories[section]
             let trackers = category.trackers.filter {
-//          let category = dataManager.fetchAllCategories()[section]
-//          let trackers = (category.trackers?.allObjects as? [TrackerCoreData])?.filter {
                 dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
             }
-//          } ?? []
             return trackers.count
         }
     
@@ -62,13 +58,10 @@ extension TrackerViewController:
                 for: indexPath) as? TrackerCell else {
                 return UICollectionViewCell()
             }
-//          let category = dataManager.fetchAllCategories()[indexPath.section]
-//          let trackers = (category.trackers?.allObjects as? [TrackerCoreData])?.filter {
             let category = dataManager.categories[indexPath.section]
             let trackers = category.trackers.filter {
                 dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
             }
-//          } ?? []
             let tracker = trackers[indexPath.item]
             let completedTrackers = dataManager.completedTrackers.filter { $0.trackerId == tracker.id }
             cell.configure(
@@ -92,7 +85,6 @@ extension TrackerViewController:
                 ) as? TrackerSectionHeader else {
                     return UICollectionReusableView()
                 }
-//              let category = dataManager.fetchAllCategories()[indexPath.section]
                 let category = dataManager.categories[indexPath.section]
                 headerView.titleLabel.text = category.title
                 return headerView

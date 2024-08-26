@@ -14,7 +14,6 @@ final class TrackerViewController: UIViewController {
     // MARK: - Public Properties
     
     let dataManager = TrackerDataManager.shared
-    var trackers: [TrackerCoreData] = []
     var selectedDate: Date = Date()
     
     let dateFormatter: DateFormatter = {
@@ -110,26 +109,13 @@ final class TrackerViewController: UIViewController {
             category.trackers.filter {
                 dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
             }
-            let hasTrackers = !trackers.isEmpty
-            errorImageView.isHidden = hasTrackers
-            trackingLabel.isHidden = hasTrackers
-            collectionView.isHidden = !hasTrackers
-            collectionView.reloadData()
         }
+        let hasTrackers = !trackers.isEmpty
+        errorImageView.isHidden = hasTrackers
+        trackingLabel.isHidden = hasTrackers
+        collectionView.isHidden = !hasTrackers
+        collectionView.reloadData()
     }
-    
-//    func updateTrackersView() {
-//        let trackers = dataManager.fetchAllCategories().flatMap { category in
-//            category.trackers?.allObjects.compactMap { $0 as? TrackerCoreData }.filter {
-//                dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
-//            } ?? []
-//        }
-//        let hasTrackers = !trackers.isEmpty
-//        errorImageView.isHidden = hasTrackers
-//        trackingLabel.isHidden = hasTrackers
-//        collectionView.isHidden = !hasTrackers
-//        collectionView.reloadData()
-//    }
     
     // MARK: - Private Methods
     

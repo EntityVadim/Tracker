@@ -25,7 +25,7 @@ final class TrackerCategoryStore {
     
     func getCategory() throws -> [TrackerCategory] {
         var categories: [TrackerCategory] = []
-        let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreDate")
+        let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         do {
             let authors = try context.fetch(request)
             authors.forEach { categories.append(TrackerCategory(title: $0.title!, trackers: [])) }

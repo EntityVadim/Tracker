@@ -77,118 +77,74 @@ final class TrackerDataManager {
         return tracker.schedule?.contains("habit") ?? false
     }
     
-//    func fetchAllCategories() -> [TrackerCategoryCoreData] {
-//        let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
-//        do {
-//            let categories = try context.fetch(fetchRequest)
-//            return categories
-//        } catch {
-//            print("Failed to fetch categories: \(error)")
-//            return []
-//        }
-//    }
-    
-        func addNewTracker(
-            to categoryTitle: String,
-            tracker: Tracker) {
-                let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
-                fetchRequest.predicate = NSPredicate(format: "title == %@", categoryTitle)
-                do {
-                    let categories = try context.fetch(fetchRequest)
-                    let newTracker = TrackerCoreData(context: context)
-                    newTracker.id = tracker.id
-                    newTracker.name = tracker.name
-                    newTracker.color = tracker.color
-                    newTracker.emoji = tracker.emoji
-                    newTracker.schedule = tracker.schedule.joined(separator: ",")
-                    if let category = categories.first {
-                        category.addToTrackers(newTracker)
-                    } else {
-                        let newCategory = TrackerCategoryCoreData(context: context)
-                        newCategory.title = categoryTitle
-                        newCategory.addToTrackers(newTracker)
-                    }
-                    saveContext()
-                } catch {
-                    print("Failed to fetch or add category: \(error)")
+    func addNewTracker(
+        to categoryTitle: String,
+        tracker: Tracker) {
+            let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "title == %@", categoryTitle)
+            do {
+                let categories = try context.fetch(fetchRequest)
+                let newTracker = TrackerCoreData(context: context)
+                newTracker.id = tracker.id
+                newTracker.name = tracker.name
+                newTracker.color = tracker.color
+                newTracker.emoji = tracker.emoji
+                newTracker.schedule = tracker.schedule.joined(separator: ",")
+                if let category = categories.first {
+                    category.addToTrackers(newTracker)
+                } else {
+                    let newCategory = TrackerCategoryCoreData(context: context)
+                    newCategory.title = categoryTitle
+                    newCategory.addToTrackers(newTracker)
                 }
+                saveContext()
+            } catch {
+                print("Failed to fetch or add category: \(error)")
             }
-    
-//    func addNewTracker(
-//        to categoryTitle: String,
-//        tracker: Tracker) {
-//            let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
-//            fetchRequest.predicate = NSPredicate(
-//                format: "title == %@",
-//                categoryTitle)
-//            do {
-//                let categories = try context.fetch(fetchRequest)
-//                if let category = categories.first {
-//                    TrackerStore().addTracker(
-//                        id: tracker.id,
-//                        name: tracker.name,
-//                        color: tracker.color,
-//                        emoji: tracker.emoji,
-//                        schedule: tracker.schedule,
-//                        category: category)
-//                }
-//            } catch {
-//                print("Failed to fetch or add category: \(error)")
-//            }
-//        }
-    
-    //        func addNewTracker(
-    //            to categoryTitle: String,
-    //            tracker: TrackerCoreData) {
-    //                let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
-    //                fetchRequest.predicate = NSPredicate(format: "title == %@", categoryTitle)
-    //                do {
-    //                    let categories = try context.fetch(fetchRequest)
-    //                    if let category = categories.first {
-    //                        category.addToTrackers(tracker)
-    //                    } else {
-    //                        let newCategory = TrackerCategoryCoreData(context: context)
-    //                        newCategory.title = categoryTitle
-    //                        newCategory.addToTrackers(tracker)
-    //                    }
-    //                    saveContext()
-    //                } catch {
-    //                    print("Failed to fetch or add category: \(error)")
-    //                }
-    //            }
+        }
     
     func shouldDisplayTracker(
-        _ tracker: TrackerCoreData,
+        _ tracker: Tracker,
         forDate date: Date,
         dateFormatter: DateFormatter) -> Bool {
-            let calendar = Calendar.current
-            if isIrregularEvent(tracker: tracker) {
-                let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
-                fetchRequest.predicate = NSPredicate(
-                    format: "tracker.id == %@",
-                    tracker.id! as any CVarArg as CVarArg)
-                do {
-                    let records = try context.fetch(fetchRequest)
-                    return records.contains { $0.date == dateFormatter.string(from: date) }
-                } catch {
-                    print("Failed to fetch records: \(error)")
+            let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "id == %@", tracker.id as NSUUID)
+            do {
+                let trackers = try context.fetch(fetchRequest)
+                if let tracker = trackers.first {
+                    let calendar = Calendar.current
+                    if isIrregularEvent(tracker: tracker) {
+                        let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
+                        fetchRequest.predicate = NSPredicate(
+                            format: "tracker.id == %@",
+                            tracker.id! as any CVarArg as CVarArg)
+                        do {
+                            let records = try context.fetch(fetchRequest)
+                            return records.contains { $0.date == dateFormatter.string(from: date) }
+                        } catch {
+                            print("Failed to fetch records: \(error)")
+                        }
+                        return true
+                    } else if isHabit(tracker: tracker) {
+                        let weekDay = calendar.component(.weekday, from: date)
+                        let selectDayWeek: WeekDay
+                        switch weekDay {
+                        case 1: selectDayWeek = .sunday
+                        case 2: selectDayWeek = .monday
+                        case 3: selectDayWeek = .tuesday
+                        case 4: selectDayWeek = .wednesday
+                        case 5: selectDayWeek = .thursday
+                        case 6: selectDayWeek = .friday
+                        case 7: selectDayWeek = .saturday
+                        default:
+                            fatalError("Unknown weekday")
+                        }
+                        return tracker.schedule?.contains(selectDayWeek.rawValue) ?? false
+                    }
+                    return false
                 }
-                return true
-            } else if isHabit(tracker: tracker) {
-                let weekDay = calendar.component(.weekday, from: date)
-                let selectDayWeek: WeekDay
-                switch weekDay {
-                case 1: selectDayWeek = .sunday
-                case 2: selectDayWeek = .monday
-                case 3: selectDayWeek = .tuesday
-                case 4: selectDayWeek = .wednesday
-                case 5: selectDayWeek = .thursday
-                case 6: selectDayWeek = .friday
-                case 7: selectDayWeek = .saturday
-                default:
-                    fatalError("Unknown weekday")
-                }
-                return tracker.schedule?.contains(selectDayWeek.rawValue) ?? false
+            } catch {
+                print("Error finding category: \(error)")
             }
             return false
         }
