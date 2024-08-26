@@ -13,7 +13,8 @@ final class TrackerViewController: UIViewController {
     
     // MARK: - Public Properties
     
-    var dataManager = TrackerDataManager()
+    let dataManager = TrackerDataManager.shared
+    //    var dataManager = TrackerDataManager()
     var selectedDate: Date = Date()
     
     let dateFormatter: DateFormatter = {
@@ -23,7 +24,7 @@ final class TrackerViewController: UIViewController {
     }()
     
     // MARK: - Private Properties
-    
+
     private lazy var addButton: UIBarButtonItem = {
         let button = UIBarButtonItem(
             image: UIImage(named: "Plus"),
@@ -105,10 +106,13 @@ final class TrackerViewController: UIViewController {
     // MARK: - Public Methods
     
     func updateTrackersView() {
-        let trackers = dataManager.categories.flatMap { category in
-            category.trackers.filter {
-                dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
-            }
+        let trackers = dataManager.fetchCategories().flatMap { category in
+            category.trackers?.filter {
+                dataManager.shouldDisplayTracker(
+                    $0 as! TrackerCoreData,
+                    forDate: selectedDate,
+                    dateFormatter: dateFormatter)
+            } ?? []
         }
         let hasTrackers = !trackers.isEmpty
         errorImageView.isHidden = hasTrackers

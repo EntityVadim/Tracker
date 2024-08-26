@@ -24,8 +24,8 @@ extension TrackerCategoryViewController: UITableViewDataSource {
                 for: indexPath) as? TrackerCategoryCell else {
                 return UITableViewCell()
             }
-            let category = categories[indexPath.row]
-            let isSelected = category == selectedCategory
+            let category = categories[indexPath.row].title
+            let isSelected = category == selectedCategory?.title
             cell.configure(with: category, isSelected: isSelected)
             cell.contentView.backgroundColor = .ypBackgroundDay
             return cell
@@ -67,7 +67,7 @@ extension TrackerCategoryViewController: UITableViewDelegate {
         didSelectRowAt indexPath: IndexPath
     ) {
         let category = categories[indexPath.row]
-        if category == selectedCategory {
+        if category.title == selectedCategory?.title {
             selectedCategory = nil
         } else {
             selectedCategory = category

@@ -17,11 +17,7 @@ struct Tracker {
 }
 
 final class TrackerStore {
-    private let context: NSManagedObjectContext
-    
-    init(context: NSManagedObjectContext) {
-        self.context = context
-    }
+    private let context = TrackerDataManager.shared.context
     
     func addTracker(
         id: UUID,
@@ -29,8 +25,8 @@ final class TrackerStore {
         color: UIColor,
         emoji: String,
         schedule: [String],
-        category: TrackerCategoryEntity) {
-            let trackerObject = TrackerEntity(context: context)
+        category: TrackerCategoryCoreData) {
+            let trackerObject = TrackerCoreData(context: context)
             trackerObject.id = id
             trackerObject.name = name
             trackerObject.color = color
@@ -42,8 +38,8 @@ final class TrackerStore {
             saveContext()
         }
     
-    func fetchAllTrackers() -> [TrackerEntity] {
-        let request: NSFetchRequest<TrackerEntity> = TrackerEntity.fetchRequest()
+    func fetchAllTrackers() -> [TrackerCoreData] {
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
         do {
             let trackers = try context.fetch(request)
             trackers.forEach { tracker in
@@ -59,7 +55,7 @@ final class TrackerStore {
         }
     }
     
-    func deleteTracker(_ tracker: TrackerEntity) {
+    func deleteTracker(_ tracker: TrackerCoreData) {
         context.delete(tracker)
         saveContext()
     }

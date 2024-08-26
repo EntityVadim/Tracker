@@ -47,7 +47,8 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     // MARK: - Private Properties
     
     private var selectedDays: [WeekDay] = []
-    private let dataManager = TrackerDataManager()
+//    private let dataManager = TrackerDataManager()
+    private let dataManager = TrackerDataManager.shared
     
     private let emojiLabel: UILabel = {
         let label = UILabel()
@@ -250,7 +251,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            stackView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+            //stackView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
         ])
         
         NSLayoutConstraint.activate([
@@ -432,7 +433,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     @objc private func categoriesButtonTapped() {
         let categorySelectionVC = TrackerCategoryViewController()
         categorySelectionVC.categorySelectionHandler = { [weak self] selectedCategory in
-            self?.selectedCategory = selectedCategory
+            self?.selectedCategory = selectedCategory.title
             self?.updateCategoriesButtonTitle()
             self?.updateSaveButtonState()
         }

@@ -10,7 +10,6 @@ import UIKit
 
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
-    
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "Tracker")
         container.loadPersistentStores { (storeDescription, error) in
@@ -20,10 +19,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         return container
     }()
-    
-    var context: NSManagedObjectContext {
-        return persistentContainer.viewContext
-    }
     
     func saveContext () {
         let context = persistentContainer.viewContext

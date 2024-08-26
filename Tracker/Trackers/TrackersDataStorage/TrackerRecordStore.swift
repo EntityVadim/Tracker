@@ -14,21 +14,17 @@ struct TrackerRecord {
 }
 
 final class TrackerRecordStore {
-    private let context: NSManagedObjectContext
+    private let context = TrackerDataManager.shared.context
     
-    init(context: NSManagedObjectContext) {
-        self.context = context
-    }
-    
-    func addRecord(date: String, tracker: TrackerEntity) {
-        let recordObject = TrackerRecordEntity(context: context)
+    func addRecord(date: String, tracker: TrackerCoreData) {
+        let recordObject = TrackerRecordCoreData(context: context)
         recordObject.date = date
         recordObject.tracker = tracker
         saveContext()
     }
     
-    func fetchRecords(for tracker: TrackerEntity) -> [TrackerRecordEntity] {
-        let request: NSFetchRequest<TrackerRecordEntity> = TrackerRecordEntity.fetchRequest()
+    func fetchRecords(for tracker: TrackerCoreData) -> [TrackerRecordCoreData] {
+        let request: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
         request.predicate = NSPredicate(format: "tracker == %@", tracker)
         do {
             return try context.fetch(request)
@@ -38,7 +34,7 @@ final class TrackerRecordStore {
         }
     }
     
-    func deleteRecord(_ record: TrackerRecordEntity) {
+    func deleteRecord(_ record: TrackerRecordCoreData) {
         context.delete(record)
         saveContext()
     }

@@ -13,7 +13,7 @@ final class TrackerNewCategoryViewController: UIViewController {
     
     // MARK: - Public Properties
     
-    var onCategorySave: ((String) -> Void)?
+    var onCategorySave: ((TrackerCategory) -> Void)?
     
     // MARK: - Private Properties
     
@@ -95,7 +95,8 @@ final class TrackerNewCategoryViewController: UIViewController {
     
     @objc private func saveCategoryButtonTapped() {
         guard let categoryName = categoryNameTextField.text, !categoryName.isEmpty else { return }
-        onCategorySave?(categoryName)
+        let newCategory = TrackerCategory(title: categoryName, trackers: [])
+        onCategorySave?(newCategory)
         dismiss(animated: true, completion: nil)
     }
     

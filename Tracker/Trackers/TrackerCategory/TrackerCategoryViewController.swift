@@ -13,15 +13,17 @@ final class TrackerCategoryViewController: UIViewController {
     
     // MARK: - Public Properties
     
-    var categorySelectionHandler: ((String) -> Void)?
+    var categorySelectionHandler: ((TrackerCategory) -> Void)?
     
-    var categories: [String] = [] {
+    var categories: [TrackerCategory] = [] {
         didSet {
-            saveCategories()
+            if let selectedCategory {
+                saveCategories(selectedCategory.title)
+            }
         }
     }
     
-    var selectedCategory: String? {
+    var selectedCategory: TrackerCategory? {
         didSet {
             saveSelectedCategory()
             tableView.reloadData()
@@ -29,6 +31,8 @@ final class TrackerCategoryViewController: UIViewController {
     }
     
     // MARK: - Private Properties
+    
+    private let trackerCategoryStore = TrackerCategoryStore()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -103,21 +107,27 @@ final class TrackerCategoryViewController: UIViewController {
     
     // MARK: - UserDefaults Methods
     
-    private func saveCategories() {
-        UserDefaults.standard.set(categories, forKey: "categories")
+    private func saveCategories(_ categoryName: String) {
+        trackerCategoryStore.addCategory(title: categoryName, trackers: [])
     }
     
     private func loadCategories() {
-        categories = UserDefaults.standard.stringArray(forKey: "categories") ?? []
+        do {
+            categories = try trackerCategoryStore.getCategory()
+        } catch {
+            print("Сохранение не удалось: \(error)")
+        }
     }
     
     private func saveSelectedCategory() {
-        UserDefaults.standard.set(selectedCategory, forKey: "selectedCategory")
+        UserDefaults.standard.set(selectedCategory?.title, forKey: "selectedCategory")
     }
     
     private func loadSelectedCategory() {
-        selectedCategory = UserDefaults.standard.string(forKey: "selectedCategory")
-        tableView.reloadData()
+        if let title = UserDefaults.standard.string(forKey: "selectedCategory") {
+            selectedCategory = TrackerCategory(title: title, trackers: [])
+            tableView.reloadData()
+        }
     }
     
     // MARK: - Actions

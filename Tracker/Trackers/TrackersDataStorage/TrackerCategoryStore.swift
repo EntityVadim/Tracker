@@ -14,30 +14,28 @@ struct TrackerCategory {
 }
 
 final class TrackerCategoryStore {
-    private let context: NSManagedObjectContext
+    private let context = TrackerDataManager.shared.context
     
-    init(context: NSManagedObjectContext) {
-        self.context = context
-    }
-    
-    func addCategory(title: String, trackers: [TrackerEntity]) {
-        let categoryObject = TrackerCategoryEntity(context: context)
+    func addCategory(title: String, trackers: [TrackerCoreData]) {
+        let categoryObject = TrackerCategoryCoreData(context: context)
         categoryObject.title = title
         categoryObject.addToTrackers(NSSet(array: trackers))
         saveContext()
     }
     
-    func fetchAllCategories() -> [TrackerCategoryEntity] {
-        let request: NSFetchRequest<TrackerCategoryEntity> = TrackerCategoryEntity.fetchRequest()
+    func getCategory() throws -> [TrackerCategory] {
+        var categories: [TrackerCategory] = []
+        let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreDate")
         do {
-            return try context.fetch(request)
+            let authors = try context.fetch(request)
+            authors.forEach { categories.append(TrackerCategory(title: $0.title!, trackers: [])) }
         } catch {
-            print("Failed to fetch categories: \(error)")
-            return []
+            throw error
         }
+        return categories
     }
     
-    func deleteCategory(_ category: TrackerCategoryEntity) {
+    func deleteCategory(_ category: TrackerCategoryCoreData) {
         context.delete(category)
         saveContext()
     }
