@@ -33,6 +33,8 @@ final class TrackerStore {
             trackerObject.emoji = emoji
             if let jsonData = try? JSONEncoder().encode(schedule) {
                 trackerObject.schedule = String(data: jsonData, encoding: .utf8)
+            } else {
+                print("Failed to encode schedule to JSON.")
             }
             trackerObject.category = category
             saveContext()
@@ -62,9 +64,12 @@ final class TrackerStore {
     
     private func saveContext() {
         do {
-            try context.save()
+            if context.hasChanges {
+                try context.save()
+                print("Context successfully saved.")
+            }
         } catch {
-            print("Failed to save context: \(error)")
+            print("Failed to save context: \(error.localizedDescription)")
         }
     }
 }

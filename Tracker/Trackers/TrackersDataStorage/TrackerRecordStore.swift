@@ -41,9 +41,12 @@ final class TrackerRecordStore {
     
     private func saveContext() {
         do {
-            try context.save()
+            if context.hasChanges {
+                try context.save()
+                print("Context successfully saved.")
+            }
         } catch {
-            print("Failed to save context: \(error)")
+            print("Failed to save context: \(error.localizedDescription)")
         }
     }
 }

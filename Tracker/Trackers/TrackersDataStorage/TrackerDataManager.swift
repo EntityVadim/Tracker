@@ -94,7 +94,11 @@ final class TrackerDataManager {
             newTracker.name = tracker.name
             newTracker.color = tracker.color
             newTracker.emoji = tracker.emoji
-            newTracker.schedule = tracker.schedule.joined(separator: ",")
+            if let jsonData = try? JSONEncoder().encode(tracker.schedule) {
+                newTracker.schedule = String(data: jsonData, encoding: .utf8)
+            } else {
+                print("Failed to encode schedule to JSON.")
+            }
             if let category = categories.first {
                 category.addToTrackers(newTracker)
             } else {
@@ -112,33 +116,41 @@ final class TrackerDataManager {
         _ tracker: Tracker,
         forDate date: Date,
         dateFormatter: DateFormatter) -> Bool {
+            print("Проверка отображения трекера: \(tracker.id), дата: \(dateFormatter.string(from: date))")
             guard !tracker.schedule.isEmpty else {
+                print("Трекер не имеет расписания: \(tracker.schedule). Отображаем его по умолчанию.")
                 return true
             }
             let calendar = Calendar.current
             let weekdayIndex = calendar.component(.weekday, from: date) - 1
             let weekdaySymbols = calendar.weekdaySymbols
-            _ = weekdaySymbols[weekdayIndex]
+            let currentDay = weekdaySymbols[weekdayIndex]
+            print("Сегодняшний день недели: \(currentDay)")
             let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
             fetchRequest.predicate = NSPredicate(format: "id == %@", tracker.id as NSUUID)
             do {
                 let trackers = try context.fetch(fetchRequest)
-                if let tracker = trackers.first {
-                    let calendar = Calendar.current
-                    if isIrregularEvent(tracker: tracker) {
+                if let fetchedTracker = trackers.first {
+                    print("Найденный трекер: \(fetchedTracker)")
+                    if isIrregularEvent(tracker: fetchedTracker) {
                         let fetchRequest:
                         NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
                         fetchRequest.predicate = NSPredicate(
                             format: "tracker.id == %@",
-                            tracker.id! as any CVarArg as CVarArg)
+                            fetchedTracker.id! as CVarArg)
+                        
                         do {
                             let records = try context.fetch(fetchRequest)
-                            return records.contains { $0.date == dateFormatter.string(from: date) }
+                            let isCompletedToday = records.contains { $0.date == dateFormatter.string(from: date) }
+                            print("Записи трекера на сегодня: \(records)")
+                            print("Трекер с нерегулярным расписанием, завершен сегодня: \(isCompletedToday)")
+                            return isCompletedToday
                         } catch {
-                            print("Failed to fetch records: \(error)")
+                            print("Ошибка при получении записей трекера: \(error)")
                         }
+                        print("Трекер с нерегулярным расписанием, возвращаем true по умолчанию.")
                         return true
-                    } else if isHabit(tracker: tracker) {
+                    } else if isHabit(tracker: fetchedTracker) {
                         let weekDay = calendar.component(.weekday, from: date)
                         let selectDayWeek: WeekDay
                         switch weekDay {
@@ -150,15 +162,19 @@ final class TrackerDataManager {
                         case 6: selectDayWeek = .friday
                         case 7: selectDayWeek = .saturday
                         default:
-                            fatalError("Unknown weekday")
+                            fatalError("Неизвестный день недели")
                         }
-                        return tracker.schedule?.contains(selectDayWeek.rawValue) ?? false
+                        let isScheduledToday = fetchedTracker.schedule?.contains(selectDayWeek.rawValue) ?? false
+                        print("Трекер с привычкой, сегодня: \(selectDayWeek.rawValue), в расписании: \(isScheduledToday)")
+                        return isScheduledToday
                     }
+                    print("Трекер не относится ни к нерегулярным событиям, ни к привычкам.")
                     return false
                 }
             } catch {
-                print("Error finding category: \(error)")
+                print("Ошибка при поиске трекера: \(error)")
             }
+            print("Не удалось найти трекер с указанным id: \(tracker.id).")
             return false
         }
     
