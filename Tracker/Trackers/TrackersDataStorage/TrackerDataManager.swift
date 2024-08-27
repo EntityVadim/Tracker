@@ -77,31 +77,36 @@ final class TrackerDataManager {
         return tracker.schedule?.contains("habit") ?? false
     }
     
-    func addNewTracker(
-        to categoryTitle: String,
-        tracker: Tracker) {
-            let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
-            fetchRequest.predicate = NSPredicate(format: "title == %@", categoryTitle)
-            do {
-                let categories = try context.fetch(fetchRequest)
-                let newTracker = TrackerCoreData(context: context)
-                newTracker.id = tracker.id
-                newTracker.name = tracker.name
-                newTracker.color = tracker.color
-                newTracker.emoji = tracker.emoji
-                newTracker.schedule = tracker.schedule.joined(separator: ",")
-                if let category = categories.first {
-                    category.addToTrackers(newTracker)
-                } else {
-                    let newCategory = TrackerCategoryCoreData(context: context)
-                    newCategory.title = categoryTitle
-                    newCategory.addToTrackers(newTracker)
+    func addNewTracker(to categoryTitle: String, tracker: Tracker) {
+        let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "title == %@", categoryTitle)
+        do {
+            let categories = try context.fetch(fetchRequest)
+            if let category = categories.first {
+                let existingTrackers = category.trackers?.allObjects as? [TrackerCoreData]
+                if existingTrackers?.contains(where: { $0.id == tracker.id }) == true {
+                    print("Tracker with id \(tracker.id) already exists in category \(categoryTitle)")
+                    return
                 }
-                saveContext()
-            } catch {
-                print("Failed to fetch or add category: \(error)")
             }
+            let newTracker = TrackerCoreData(context: context)
+            newTracker.id = tracker.id
+            newTracker.name = tracker.name
+            newTracker.color = tracker.color
+            newTracker.emoji = tracker.emoji
+            newTracker.schedule = tracker.schedule.joined(separator: ",")
+            if let category = categories.first {
+                category.addToTrackers(newTracker)
+            } else {
+                let newCategory = TrackerCategoryCoreData(context: context)
+                newCategory.title = categoryTitle
+                newCategory.addToTrackers(newTracker)
+            }
+            saveContext()
+        } catch {
+            print("Failed to fetch or add category: \(error)")
         }
+    }
     
     func shouldDisplayTracker(
         _ tracker: Tracker,
