@@ -117,7 +117,7 @@ final class TrackerDataManager {
         forDate date: Date,
         dateFormatter: DateFormatter) -> Bool {
             print("Проверка отображения трекера: \(tracker.id), дата: \(dateFormatter.string(from: date))")
-            guard !tracker.schedule.isEmpty else {
+            guard !tracker.schedule.contains("irregularEvent") else {
                 print("Трекер не имеет расписания: \(tracker.schedule). Отображаем его по умолчанию.")
                 return true
             }
