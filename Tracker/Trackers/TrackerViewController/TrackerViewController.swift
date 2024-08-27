@@ -105,12 +105,12 @@ final class TrackerViewController: UIViewController {
     // MARK: - Public Methods
     
     func updateTrackersView() {
-        let trackers = dataManager.categories.flatMap { category in
-            category.trackers.filter {
-                dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
-            }
+        dataManager.loadCategories()
+        let trackers = dataManager.categories.flatMap { $0.trackers }
+        let filteredTrackers = trackers.filter {
+            dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
         }
-        let hasTrackers = !trackers.isEmpty
+        let hasTrackers = !filteredTrackers.isEmpty
         errorImageView.isHidden = hasTrackers
         trackingLabel.isHidden = hasTrackers
         collectionView.isHidden = !hasTrackers

@@ -107,6 +107,13 @@ final class TrackerDataManager {
         _ tracker: Tracker,
         forDate date: Date,
         dateFormatter: DateFormatter) -> Bool {
+            guard !tracker.schedule.isEmpty else {
+                return true
+            }
+            let calendar = Calendar.current
+            let weekdayIndex = calendar.component(.weekday, from: date) - 1
+            let weekdaySymbols = calendar.weekdaySymbols
+            _ = weekdaySymbols[weekdayIndex]
             let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
             fetchRequest.predicate = NSPredicate(format: "id == %@", tracker.id as NSUUID)
             do {
@@ -165,9 +172,48 @@ final class TrackerDataManager {
     
     private func saveContext() {
         do {
-            try context.save()
+            if context.hasChanges {
+                try context.save()
+                print("Context successfully saved.")
+            }
         } catch {
-            print("Failed to save context: \(error)")
+            print("Failed to save context: \(error.localizedDescription)")
+        }
+    }
+}
+
+extension TrackerDataManager {
+    func loadCategories() {
+        let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        do {
+            let fetchedCategories = try context.fetch(fetchRequest)
+            self.categories = fetchedCategories.map { categoryCoreData in
+                let trackers = (categoryCoreData.trackers?.allObjects as? [TrackerCoreData])?.map {
+                    trackerCoreData in
+                    return Tracker(
+                        id: trackerCoreData.id ?? UUID(),
+                        name: trackerCoreData.name ?? "",
+                        color: trackerCoreData.color as! UIColor,
+                        emoji: trackerCoreData.emoji ?? "",
+                        schedule: decodeSchedule(trackerCoreData.schedule))
+                } ?? []
+                return TrackerCategory(
+                    title: categoryCoreData.title ?? "",
+                    trackers: trackers)
+            }
+        } catch {
+            print("Failed to fetch categories: \(error)")
+        }
+    }
+    
+    private func decodeSchedule(_ scheduleString: String?) -> [String] {
+        guard let data = scheduleString?.data(using: .utf8) else { return [] }
+        do {
+            let schedule = try JSONDecoder().decode([String].self, from: data)
+            return schedule
+        } catch {
+            print("Failed to decode schedule: \(error)")
+            return []
         }
     }
 }
