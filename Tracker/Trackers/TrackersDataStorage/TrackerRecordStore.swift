@@ -50,3 +50,10 @@ final class TrackerRecordStore {
         }
     }
 }
+
+extension TrackerRecord {
+    init(coreData: TrackerRecordCoreData) {
+        self.trackerId = coreData.tracker?.id ?? UUID()
+        self.date = coreData.date ?? ""
+    }
+}

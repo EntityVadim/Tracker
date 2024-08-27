@@ -45,6 +45,10 @@ final class TrackerDataManager {
                     newRecord.tracker = fetchTracker(by: trackerId)
                     newRecord.date = date
                     saveContext()
+                    if let newTrackerRecord = fetchTracker(by: trackerId) {
+                        let trackerRecord = TrackerRecord(coreData: newRecord)
+                        completedTrackers.append(trackerRecord)
+                    }
                 }
             } catch {
                 print("Failed to fetch records: \(error)")
@@ -64,6 +68,7 @@ final class TrackerDataManager {
                     context.delete(record)
                 }
                 saveContext()
+                completedTrackers.removeAll { $0.trackerId == trackerId && $0.date == date }
             } catch {
                 print("Failed to fetch records: \(error)")
             }
@@ -116,22 +121,18 @@ final class TrackerDataManager {
         _ tracker: Tracker,
         forDate date: Date,
         dateFormatter: DateFormatter) -> Bool {
-            print("Проверка отображения трекера: \(tracker.id), дата: \(dateFormatter.string(from: date))")
             guard !tracker.schedule.contains("irregularEvent") else {
-                print("Трекер не имеет расписания: \(tracker.schedule). Отображаем его по умолчанию.")
                 return true
             }
             let calendar = Calendar.current
             let weekdayIndex = calendar.component(.weekday, from: date) - 1
             let weekdaySymbols = calendar.weekdaySymbols
             let currentDay = weekdaySymbols[weekdayIndex]
-            print("Сегодняшний день недели: \(currentDay)")
             let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
             fetchRequest.predicate = NSPredicate(format: "id == %@", tracker.id as NSUUID)
             do {
                 let trackers = try context.fetch(fetchRequest)
                 if let fetchedTracker = trackers.first {
-                    print("Найденный трекер: \(fetchedTracker)")
                     if isIrregularEvent(tracker: fetchedTracker) {
                         let fetchRequest:
                         NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
@@ -142,13 +143,9 @@ final class TrackerDataManager {
                         do {
                             let records = try context.fetch(fetchRequest)
                             let isCompletedToday = records.contains { $0.date == dateFormatter.string(from: date) }
-                            print("Записи трекера на сегодня: \(records)")
-                            print("Трекер с нерегулярным расписанием, завершен сегодня: \(isCompletedToday)")
                             return isCompletedToday
                         } catch {
-                            print("Ошибка при получении записей трекера: \(error)")
                         }
-                        print("Трекер с нерегулярным расписанием, возвращаем true по умолчанию.")
                         return true
                     } else if isHabit(tracker: fetchedTracker) {
                         let weekDay = calendar.component(.weekday, from: date)
@@ -165,16 +162,12 @@ final class TrackerDataManager {
                             fatalError("Неизвестный день недели")
                         }
                         let isScheduledToday = fetchedTracker.schedule?.contains(selectDayWeek.rawValue) ?? false
-                        print("Трекер с привычкой, сегодня: \(selectDayWeek.rawValue), в расписании: \(isScheduledToday)")
                         return isScheduledToday
                     }
-                    print("Трекер не относится ни к нерегулярным событиям, ни к привычкам.")
                     return false
                 }
             } catch {
-                print("Ошибка при поиске трекера: \(error)")
             }
-            print("Не удалось найти трекер с указанным id: \(tracker.id).")
             return false
         }
     
