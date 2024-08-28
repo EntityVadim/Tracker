@@ -134,20 +134,15 @@ final class TrackerDataManager {
                 let trackers = try context.fetch(fetchRequest)
                 if let fetchedTracker = trackers.first {
                     if isIrregularEvent(tracker: fetchedTracker) {
-                        let fetchRequest:
+                        let recordRequest:
                         NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
-                        fetchRequest.predicate = NSPredicate(
-                            format: "tracker.id == %@",
-                            fetchedTracker.id! as CVarArg)
-                        
-                        do {
-                            let records = try context.fetch(fetchRequest)
-                            let isCompletedToday = records.contains { $0.date == dateFormatter.string(from: date) }
-                            return isCompletedToday
-                        } catch {
-                        }
-                        return true
-                    } else if isHabit(tracker: fetchedTracker) {
+                        recordRequest.predicate = NSPredicate(
+                            format: "tracker.id == %@ AND date == %@",
+                            fetchedTracker.id! as CVarArg, dateFormatter.string(from: date))
+                        let records = try context.fetch(recordRequest)
+                        return !records.isEmpty
+                    }
+                    else if isHabit(tracker: fetchedTracker) {
                         let weekDay = calendar.component(.weekday, from: date)
                         let selectDayWeek: WeekDay
                         switch weekDay {
@@ -164,9 +159,9 @@ final class TrackerDataManager {
                         let isScheduledToday = fetchedTracker.schedule?.contains(selectDayWeek.rawValue) ?? false
                         return isScheduledToday
                     }
-                    return false
                 }
             } catch {
+                print("Ошибка при запросе данных: \(error)")
             }
             return false
         }
