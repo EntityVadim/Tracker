@@ -20,7 +20,7 @@ extension TrackerCategoryViewController: UITableViewDataSource {
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "CustomCategoryCell",
+                withIdentifier: TrackerCategoryCell.identifier,
                 for: indexPath) as? TrackerCategoryCell else {
                 return UITableViewCell()
             }

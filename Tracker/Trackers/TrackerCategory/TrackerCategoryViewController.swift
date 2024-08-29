@@ -7,6 +7,12 @@
 
 import UIKit
 
+// MARK: - Keys
+
+private enum UserDefaultsKeys {
+    static let selectedCategory = "selectedCategory"
+}
+
 // MARK: - TrackerCategory
 
 final class TrackerCategoryViewController: UIViewController {
@@ -77,7 +83,7 @@ final class TrackerCategoryViewController: UIViewController {
         setupUI()
         loadCategories()
         loadSelectedCategory()
-        tableView.register(TrackerCategoryCell.self, forCellReuseIdentifier: "CustomCategoryCell")
+        tableView.register(TrackerCategoryCell.self, forCellReuseIdentifier: TrackerCategoryCell.identifier)
     }
     
     // MARK: - Setup UI
@@ -120,14 +126,15 @@ final class TrackerCategoryViewController: UIViewController {
     }
     
     private func saveSelectedCategory() {
-        UserDefaults.standard.set(selectedCategory?.title, forKey: "selectedCategory")
+        UserDefaults.standard.set(selectedCategory?.title, forKey: UserDefaultsKeys.selectedCategory)
     }
     
     private func loadSelectedCategory() {
-        if let title = UserDefaults.standard.string(forKey: "selectedCategory") {
-            selectedCategory = TrackerCategory(title: title, trackers: [])
-            tableView.reloadData()
+        guard let title = UserDefaults.standard.string(forKey: UserDefaultsKeys.selectedCategory) else {
+            return
         }
+        selectedCategory = TrackerCategory(title: title, trackers: [])
+        tableView.reloadData()
     }
     
     // MARK: - Actions
