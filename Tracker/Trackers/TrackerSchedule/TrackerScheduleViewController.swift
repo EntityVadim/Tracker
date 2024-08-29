@@ -23,6 +23,10 @@ enum WeekDay: String, CaseIterable {
 
 final class TrackerScheduleViewController: UIViewController {
     
+    // MARK: - Identifier
+    
+    static let cellIdentifier = "TrackerScheduleCell"
+    
     // MARK: - Public Properties
     
     var selectedDays: [WeekDay] = []
@@ -33,7 +37,9 @@ final class TrackerScheduleViewController: UIViewController {
         tableView.layer.cornerRadius = 16
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(
+            UITableViewCell.self,
+            forCellReuseIdentifier: TrackerScheduleViewController.cellIdentifier)
         return tableView
     }()
     

@@ -7,9 +7,9 @@
 
 import UIKit
 
-// MARK: - UITableViewDelegate & UITableViewDataSource
+// MARK: - UITableViewDataSource
 
-extension TrackerScheduleViewController: UITableViewDelegate, UITableViewDataSource {
+extension TrackerScheduleViewController: UITableViewDataSource {
     func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int) -> Int {
@@ -19,7 +19,9 @@ extension TrackerScheduleViewController: UITableViewDelegate, UITableViewDataSou
     func tableView(
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: TrackerScheduleViewController.cellIdentifier,
+                for: indexPath)
             let day = WeekDay.allCases[indexPath.row]
             cell.textLabel?.text = day.rawValue
             let switchView = UISwitch()
@@ -31,13 +33,21 @@ extension TrackerScheduleViewController: UITableViewDelegate, UITableViewDataSou
             cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
             return cell
         }
-    
+}
+
+// MARK: - UITableViewDelegate
+
+extension TrackerScheduleViewController: UITableViewDelegate {
     func tableView(
         _ tableView: UITableView,
         heightForRowAt indexPath: IndexPath) -> CGFloat {
             return 75
         }
-    
+}
+
+// MARK: - TrackerScheduleViewController
+
+extension TrackerScheduleViewController {
     @objc func switchChanged(sender: UISwitch) {
         guard let cell = sender.superview as? UITableViewCell,
               let indexPath = tableView.indexPath(for: cell) else {

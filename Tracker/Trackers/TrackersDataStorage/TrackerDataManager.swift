@@ -45,7 +45,7 @@ final class TrackerDataManager {
                     newRecord.tracker = fetchTracker(by: trackerId)
                     newRecord.date = date
                     saveContext()
-                    if let newTrackerRecord = fetchTracker(by: trackerId) {
+                    if fetchTracker(by: trackerId) != nil {
                         let trackerRecord = TrackerRecord(coreData: newRecord)
                         completedTrackers.append(trackerRecord)
                     }
@@ -127,7 +127,7 @@ final class TrackerDataManager {
             let calendar = Calendar.current
             let weekdayIndex = calendar.component(.weekday, from: date) - 1
             let weekdaySymbols = calendar.weekdaySymbols
-            let currentDay = weekdaySymbols[weekdayIndex]
+            _ = weekdaySymbols[weekdayIndex]
             let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
             fetchRequest.predicate = NSPredicate(format: "id == %@", tracker.id as NSUUID)
             do {

@@ -9,15 +9,7 @@ import UIKit
 
 // MARK: - TrackerTypeSelectionDelegate
 
-extension TrackerViewController: TrackerTypeSelectionDelegate, TrackerCreationDelegate {
-    func didCreateTracker(
-        _ tracker: Tracker,
-        inCategory category: String
-    ) {
-        dataManager.addNewTracker(to: category, tracker: tracker)
-        updateTrackersView()
-    }
-    
+extension TrackerViewController: TrackerTypeSelectionDelegate {
     func didSelectTrackerType(_ type: TrackerType) {
         dismiss(animated: true) {
             let createTrackerVC = TrackerCreationViewController()
@@ -28,16 +20,23 @@ extension TrackerViewController: TrackerTypeSelectionDelegate, TrackerCreationDe
     }
 }
 
-// MARK: - UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
+// MARK: - TrackerCreationDelegate
 
-extension TrackerViewController:
-    UICollectionViewDataSource,
-    UICollectionViewDelegate,
-    UICollectionViewDelegateFlowLayout {
-    
+extension TrackerViewController: TrackerCreationDelegate {
+    func didCreateTracker(
+        _ tracker: Tracker,
+        inCategory category: String
+    ) {
+        dataManager.addNewTracker(to: category, tracker: tracker)
+        updateTrackersView()
+    }
+}
+
+// MARK: - UICollectionViewDataSource
+
+extension TrackerViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        let sectionCount = dataManager.categories.count
-        return sectionCount
+        dataManager.categories.count
     }
     
     func collectionView(
@@ -54,7 +53,7 @@ extension TrackerViewController:
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
             guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "TrackerCell",
+                withReuseIdentifier: TrackerCell.trackerCellIdentifier,
                 for: indexPath) as? TrackerCell else {
                 return UICollectionViewCell()
             }
@@ -72,7 +71,11 @@ extension TrackerViewController:
             cell.delegate = self
             return cell
         }
-    
+}
+
+// MARK: - UICollectionViewDelegate
+
+extension TrackerViewController: UICollectionViewDelegate {
     func collectionView(
         _ collectionView: UICollectionView,
         viewForSupplementaryElementOfKind kind: String,
@@ -80,7 +83,7 @@ extension TrackerViewController:
             if kind == UICollectionView.elementKindSectionHeader {
                 guard let headerView = collectionView.dequeueReusableSupplementaryView(
                     ofKind: kind,
-                    withReuseIdentifier: "TrackerSectionHeader",
+                    withReuseIdentifier: TrackerSectionHeader.trackerSectionHeaderIdentifier,
                     for: indexPath
                 ) as? TrackerSectionHeader else {
                     return UICollectionReusableView()
@@ -91,7 +94,11 @@ extension TrackerViewController:
             }
             return UICollectionReusableView()
         }
-    
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
+
+extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -102,11 +109,10 @@ extension TrackerViewController:
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
-        let cellWidth = collectionView.bounds.width / 2 - 20
-        return CGSize(width: cellWidth, height: 148)
-    }
+        sizeForItemAt indexPath: IndexPath) -> CGSize {
+            let cellWidth = collectionView.bounds.width / 2 - 20
+            return CGSize(width: cellWidth, height: 148)
+        }
 }
 
 // MARK: - TrackerCellDelegate

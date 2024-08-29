@@ -17,6 +17,10 @@ protocol TrackerCellDelegate: AnyObject {
 
 final class TrackerCell: UICollectionViewCell {
     
+    // MARK: - Identifier
+    
+    static let trackerCellIdentifier = "TrackerCell"
+    
     // MARK: - Public Properties
     
     weak var delegate: TrackerCellDelegate?

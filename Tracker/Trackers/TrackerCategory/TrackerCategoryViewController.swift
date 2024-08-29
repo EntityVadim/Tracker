@@ -7,15 +7,13 @@
 
 import UIKit
 
-// MARK: - Keys
-
-private enum UserDefaultsKeys {
-    static let selectedCategory = "selectedCategory"
-}
-
 // MARK: - TrackerCategory
 
 final class TrackerCategoryViewController: UIViewController {
+    
+    // MARK: - Keys
+    
+    static let selectedCategory = "selectedCategory"
     
     // MARK: - Public Properties
     
@@ -126,11 +124,15 @@ final class TrackerCategoryViewController: UIViewController {
     }
     
     private func saveSelectedCategory() {
-        UserDefaults.standard.set(selectedCategory?.title, forKey: UserDefaultsKeys.selectedCategory)
+        UserDefaults.standard.set(
+            selectedCategory?.title,
+            forKey: TrackerCategoryViewController.selectedCategory)
     }
     
     private func loadSelectedCategory() {
-        guard let title = UserDefaults.standard.string(forKey: UserDefaultsKeys.selectedCategory) else {
+        guard let title = UserDefaults.standard.string(
+            forKey: TrackerCategoryViewController.selectedCategory
+        ) else {
             return
         }
         selectedCategory = TrackerCategory(title: title, trackers: [])
