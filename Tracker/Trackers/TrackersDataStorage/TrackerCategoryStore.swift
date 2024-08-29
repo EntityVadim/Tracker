@@ -28,7 +28,13 @@ final class TrackerCategoryStore {
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         do {
             let authors = try context.fetch(request)
-            authors.forEach { categories.append(TrackerCategory(title: $0.title!, trackers: [])) }
+            authors.forEach {
+                if let title = $0.title {
+                    categories.append(TrackerCategory(title: title, trackers: []))
+                } else {
+                    print("Warning: TrackerCategoryCoreData object with nil title found.")
+                }
+            }
         } catch {
             throw error
         }

@@ -225,12 +225,10 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     // MARK: - Private Methods
     
-// ❗❗❗ДОРОГОЙ РЕВЬЮ, Я ПЕРВЫЙ РАЗ В ЖИЗНИ ДЕЛАЛ СКРОЛВЬЮ И ПОЭТОМУ ДАЙ СОВЕТЫ КАК МОЖНО ЛУЧШЕ СДЕЛАТЬ ❗❗❗
-    
     private func setupUI() {
         view.addSubview(scrollView)
         scrollView.addSubview(stackView)
-
+        
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(createSpacingView(height: 24))
         stackView.addArrangedSubview(nameTextField)
@@ -249,73 +247,73 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         stackView.addArrangedSubview(stackViewButtom)
         stackViewButtom.addArrangedSubview(cancelButton)
         stackViewButtom.addArrangedSubview(saveButton)
-
+        
         stackView.axis = .vertical
         stackView.distribution = .fill
         stackView.alignment = .fill
-
+        
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-
+            
             stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
         ])
-
+        
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: stackView.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: stackView.topAnchor, constant: 38),
-
+            
             nameTextField.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
             nameTextField.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -16)
         ])
-
+        
         NSLayoutConstraint.activate([
             categoriesButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
             categoriesButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -16),
-
+            
             separatorView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 32),
             separatorView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -32),
-
+            
             scheduleButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
             scheduleButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -16)
         ])
-
+        
         NSLayoutConstraint.activate([
             emojiLabel.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 28),
-
+            
             emojiCollectionView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
             emojiCollectionView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -16),
             emojiCollectionView.heightAnchor.constraint(equalToConstant: calculateCellSize())
         ])
-
+        
         NSLayoutConstraint.activate([
             colorLabel.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 28),
-
+            
             colorCollectionView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
             colorCollectionView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -16),
             colorCollectionView.heightAnchor.constraint(equalToConstant: calculateCellSize())
         ])
-
+        
         NSLayoutConstraint.activate([
             stackViewButtom.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 20),
             stackViewButtom.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -20),
             stackViewButtom.bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: -20),
             stackViewButtom.heightAnchor.constraint(equalToConstant: 60),
-
+            
             cancelButton.trailingAnchor.constraint(equalTo: saveButton.leadingAnchor, constant: -8),
             cancelButton.widthAnchor.constraint(equalTo: saveButton.widthAnchor),
-
+            
             saveButton.trailingAnchor.constraint(equalTo: stackViewButtom.trailingAnchor),
             saveButton.bottomAnchor.constraint(equalTo: stackViewButtom.bottomAnchor)
         ])
     }
-
+    
     private func createSpacingView(height: CGFloat) -> UIView {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
