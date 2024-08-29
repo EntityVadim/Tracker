@@ -125,10 +125,25 @@ final class TrackerDataManager {
         _ tracker: Tracker,
         forDate date: Date,
         dateFormatter: DateFormatter) -> Bool {
-            guard !tracker.schedule.contains("irregularEvent") else {
-                return true
-            }
             let calendar = Calendar.current
+            if tracker.schedule.contains("irregularEvent") {
+                let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
+                fetchRequest.predicate = NSPredicate(
+                    format: "tracker.id == %@ AND date == %@",
+                    tracker.id as CVarArg, dateFormatter.string(from: date)
+                )
+                do {
+                    let records = try context.fetch(fetchRequest)
+                    if records.isEmpty {
+                        let trackerCreatedRecently = !completedTrackers.contains { $0.trackerId == tracker.id }
+                        return trackerCreatedRecently
+                    }
+                    return !records.isEmpty
+                } catch {
+                    print("Ошибка при запросе данных: \(error)")
+                    return false
+                }
+            }
             let weekdayIndex = calendar.component(.weekday, from: date) - 1
             let weekdaySymbols = calendar.weekdaySymbols
             _ = weekdaySymbols[weekdayIndex]
@@ -137,16 +152,7 @@ final class TrackerDataManager {
             do {
                 let trackers = try context.fetch(fetchRequest)
                 if let fetchedTracker = trackers.first {
-                    if isIrregularEvent(tracker: fetchedTracker) {
-                        let recordRequest:
-                        NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
-                        recordRequest.predicate = NSPredicate(
-                            format: "tracker.id == %@ AND date == %@",
-                            fetchedTracker.id! as CVarArg, dateFormatter.string(from: date))
-                        let records = try context.fetch(recordRequest)
-                        return !records.isEmpty
-                    }
-                    else if isHabit(tracker: fetchedTracker) {
+                    if isHabit(tracker: fetchedTracker) {
                         let weekDay = calendar.component(.weekday, from: date)
                         let selectDayWeek: WeekDay
                         switch weekDay {
