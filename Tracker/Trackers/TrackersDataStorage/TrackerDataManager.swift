@@ -20,6 +20,7 @@ final class TrackerDataManager {
     private init() {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         self.context = appDelegate.persistentContainer.viewContext
+        loadCompletedTrackers()
     }
     
     init(context: NSManagedObjectContext) {
@@ -41,14 +42,17 @@ final class TrackerDataManager {
             do {
                 let records = try context.fetch(fetchRequest)
                 if records.isEmpty {
+                    guard let tracker = fetchTracker(by: trackerId) else {
+                        print("Tracker not found with id: \(trackerId)")
+                        return
+                    }
                     let newRecord = TrackerRecordCoreData(context: context)
-                    newRecord.tracker = fetchTracker(by: trackerId)
+                    newRecord.tracker = tracker
+                    newRecord.trackerId = tracker.id
                     newRecord.date = date
                     saveContext()
-                    if fetchTracker(by: trackerId) != nil {
-                        let trackerRecord = TrackerRecord(coreData: newRecord)
-                        completedTrackers.append(trackerRecord)
-                    }
+                    let trackerRecord = TrackerRecord(coreData: newRecord)
+                    completedTrackers.append(trackerRecord)
                 }
             } catch {
                 print("Failed to fetch records: \(error)")
@@ -167,6 +171,16 @@ final class TrackerDataManager {
         }
     
     // MARK: - Private Methods
+    
+    private func loadCompletedTrackers() {
+        let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
+        do {
+            let records = try context.fetch(fetchRequest)
+            self.completedTrackers = records.map { TrackerRecord(coreData: $0) }
+        } catch {
+            print("Failed to fetch completed trackers: \(error)")
+        }
+    }
     
     private func fetchTracker(by id: UUID) -> TrackerCoreData? {
         let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
