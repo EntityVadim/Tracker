@@ -11,6 +11,10 @@ import UIKit
 
 final class TrackerCategoryCell: UITableViewCell {
     
+    // MARK: - Identifier
+    
+    static let identifier = "CustomCategoryCell"
+    
     // MARK: - UI Elements
     
     private let checkmarkImageView: UIImageView = {

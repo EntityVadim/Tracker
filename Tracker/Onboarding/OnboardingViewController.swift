@@ -7,7 +7,13 @@
 
 import UIKit
 
+// MARK: - OnboardingViewController
+
 final class OnboardingViewController: UIViewController {
+    
+    // MARK: - Keys
+    
+    static let onboardingCompletedKey = "isOnboardingCompleted"
     
     // MARK: - Private Properties
     
@@ -138,7 +144,7 @@ final class OnboardingViewController: UIViewController {
     }
     
     @objc private func didTapActionButton() {
-        UserDefaults.standard.set(true, forKey: "isOnboardingCompleted")
+        UserDefaults.standard.set(true, forKey: OnboardingViewController.onboardingCompletedKey)
         let mainTabBarController = MainTabBarController()
         if let window = UIApplication.shared.windows.first {
             window.rootViewController = mainTabBarController

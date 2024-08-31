@@ -11,6 +11,10 @@ import UIKit
 
 final class TrackerSectionHeader: UICollectionReusableView {
     
+    // MARK: - Identifier
+    
+    static let trackerSectionHeaderIdentifier = "TrackerSectionHeader"
+    
     // MARK: - UI Elements
     
     let titleLabel: UILabel = {

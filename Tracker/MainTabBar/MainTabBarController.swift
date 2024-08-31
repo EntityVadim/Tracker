@@ -48,7 +48,7 @@ final class MainTabBarController: UITabBarController {
         tabBar.tintColor = activeTabColor
         tabBar.barTintColor = isDarkMode ? .ypWhite : .ypBlack
         let topBorder = UIView(frame: CGRect(x: 0, y: 0, width: tabBar.frame.width, height: 1))
-        topBorder.backgroundColor = .ypLightGray
+        topBorder.backgroundColor = .ypBackgroundDay
         tabBar.addSubview(topBorder)
     }
 }

@@ -17,6 +17,10 @@ protocol TrackerCellDelegate: AnyObject {
 
 final class TrackerCell: UICollectionViewCell {
     
+    // MARK: - Identifier
+    
+    static let trackerCellIdentifier = "TrackerCell"
+    
     // MARK: - Public Properties
     
     weak var delegate: TrackerCellDelegate?
@@ -30,14 +34,12 @@ final class TrackerCell: UICollectionViewCell {
     
     private let cardView: UIView = {
         let view = UIView()
-        view.backgroundColor = .ypSelection4
         view.layer.cornerRadius = 16
         return view
     }()
     
     private let emojiLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 24)
         return label
     }()
     
@@ -153,6 +155,7 @@ final class TrackerCell: UICollectionViewCell {
             self.completedTrackers = completedTrackers
             self.dataManager = dataManager
             self.date = date
+            cardView.backgroundColor = tracker.color
             emojiLabel.text = tracker.emoji
             nameLabel.text = tracker.name
             updateCompletionButtonSaturation(forCompletedState: isCompletedForToday())

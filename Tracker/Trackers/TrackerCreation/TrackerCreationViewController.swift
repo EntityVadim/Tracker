@@ -22,11 +22,57 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     weak var delegate: TrackerCreationDelegate?
     var trackerType: TrackerType?
     var selectedCategory: String?
+    var selectedEmoji: String?
+    var selectedColor: UIColor?
+    
+    let emojis = ["🙂", "😻", "🌺", "🐶", "❤️", "😱",
+                  "😇", "😡", "🥶", "🤔", "🙌", "🍔",
+                  "🥦", "🏓", "🥇", "🎸", "🌴", "😪"]
+    
+    let colors: [UIColor] = [.ypSelection1, .ypSelection2, .ypSelection3, .ypSelection4,
+                             .ypSelection5, .ypSelection6, .ypSelection7, .ypSelection8,
+                             .ypSelection9, .ypSelection10, .ypSelection11, .ypSelection12,
+                             .ypSelection13, .ypSelection14, .ypSelection15, .ypSelection16,
+                             .ypSelection17, .ypSelection18]
+    
+    lazy var emojiCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.backgroundColor = .clear
+        return collectionView
+    }()
     
     // MARK: - Private Properties
     
     private var selectedDays: [WeekDay] = []
-    private let dataManager = TrackerDataManager()
+    private let dataManager = TrackerDataManager.shared
+    
+    private let emojiLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Emoji"
+        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+        label.textColor = .ypBlack
+        return label
+    }()
+    
+    private let colorLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Цвет"
+        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+        label.textColor = .ypBlack
+        return label
+    }()
+    
+    private lazy var colorCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.backgroundColor = .clear
+        return collectionView
+    }()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -40,7 +86,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         let textField = UITextField()
         textField.placeholder = "Введите название трекера"
         textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        textField.backgroundColor = .ypLightGray
+        textField.backgroundColor = .ypBackgroundDay
         textField.layer.cornerRadius = 16
         textField.heightAnchor.constraint(equalToConstant: 75).isActive = true
         let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
@@ -115,6 +161,25 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         return view
     }()
     
+    private var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+    
+    private var stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
+    private var stackViewButtom: UIStackView = {
+        let stackViewButtom = UIStackView()
+        stackViewButtom.axis = .horizontal
+        stackViewButtom.translatesAutoresizingMaskIntoConstraints = false
+        return stackViewButtom
+    }()
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -122,6 +187,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         view.backgroundColor = .ypWhite
         setupUI()
         updateSaveButtonState()
+        updateLayoutForTrackerType()
         
         if trackerType == .irregularEvent {
             scheduleButton.isHidden = true
@@ -130,50 +196,129 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         } else {
             updateCategoriesButtonCorners([.topLeft, .topRight], radius: 16)
         }
+        
+        emojiCollectionView.register(EmojiCell.self, forCellWithReuseIdentifier: EmojiCell.reuseIdentifier)
+        colorCollectionView.register(ColorCell.self, forCellWithReuseIdentifier: ColorCell.reuseIdentifier)
     }
     
-    // MARK: - Setup Methods
+    // MARK: - Public Methods
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        updateSaveButtonState()
+        return true
+    }
+    
+    func updateSaveButtonState() {
+        let isNameFilled = !(nameTextField.text?.isEmpty ?? true)
+        let isCategorySelected = selectedCategory != nil
+        let isEmojiSelected = selectedEmoji != nil
+        let isColorSelected = selectedColor != nil
+        if isNameFilled && isCategorySelected && isEmojiSelected && isColorSelected {
+            saveButton.isEnabled = true
+            saveButton.backgroundColor = .ypBlack
+        } else {
+            saveButton.isEnabled = false
+            saveButton.backgroundColor = .ypGrey
+        }
+    }
+    
+    // MARK: - Private Methods
     
     private func setupUI() {
-        [titleLabel,
-         nameTextField,
-         cancelButton,
-         saveButton,
-         categoriesButton,
-         separatorView,
-         scheduleButton].forEach {
-            view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
+        view.addSubview(scrollView)
+        scrollView.addSubview(stackView)
+        
+        stackView.addArrangedSubview(titleLabel)
+        stackView.addArrangedSubview(createSpacingView(height: 24))
+        stackView.addArrangedSubview(nameTextField)
+        stackView.addArrangedSubview(createSpacingView(height: 24))
+        stackView.addArrangedSubview(categoriesButton)
+        stackView.addArrangedSubview(separatorView)
+        stackView.addArrangedSubview(scheduleButton)
+        stackView.addArrangedSubview(createSpacingView(height: 32))
+        stackView.addArrangedSubview(emojiLabel)
+        stackView.addArrangedSubview(createSpacingView(height: 16))
+        stackView.addArrangedSubview(emojiCollectionView)
+        stackView.addArrangedSubview(createSpacingView(height: 16))
+        stackView.addArrangedSubview(colorLabel)
+        stackView.addArrangedSubview(createSpacingView(height: 16))
+        stackView.addArrangedSubview(colorCollectionView)
+        stackView.addArrangedSubview(stackViewButtom)
+        stackViewButtom.addArrangedSubview(cancelButton)
+        stackViewButtom.addArrangedSubview(saveButton)
+        
+        stackView.axis = .vertical
+        stackView.distribution = .fill
+        stackView.alignment = .fill
         
         NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 38),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
-            nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+        ])
+        
+        NSLayoutConstraint.activate([
+            titleLabel.centerXAnchor.constraint(equalTo: stackView.centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: stackView.topAnchor, constant: 38),
             
-            categoriesButton.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 24),
-            categoriesButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            categoriesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -16),
+            nameTextField.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
+            nameTextField.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -16)
+        ])
+        
+        NSLayoutConstraint.activate([
+            categoriesButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
+            categoriesButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -16),
             
-            separatorView.topAnchor.constraint(equalTo: categoriesButton.bottomAnchor),
-            separatorView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
-            separatorView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
+            separatorView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 32),
+            separatorView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -32),
             
-            scheduleButton.topAnchor.constraint(equalTo: categoriesButton.bottomAnchor),
-            scheduleButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            scheduleButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            scheduleButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
+            scheduleButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -16)
+        ])
+        
+        NSLayoutConstraint.activate([
+            emojiLabel.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 28),
             
-            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            cancelButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34),
+            emojiCollectionView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
+            emojiCollectionView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -16),
+            emojiCollectionView.heightAnchor.constraint(equalToConstant: calculateCellSize())
+        ])
+        
+        NSLayoutConstraint.activate([
+            colorLabel.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 28),
+            
+            colorCollectionView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
+            colorCollectionView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -16),
+            colorCollectionView.heightAnchor.constraint(equalToConstant: calculateCellSize())
+        ])
+        
+        NSLayoutConstraint.activate([
+            stackViewButtom.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 20),
+            stackViewButtom.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -20),
+            stackViewButtom.bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: -20),
+            stackViewButtom.heightAnchor.constraint(equalToConstant: 60),
+            
             cancelButton.trailingAnchor.constraint(equalTo: saveButton.leadingAnchor, constant: -8),
             cancelButton.widthAnchor.constraint(equalTo: saveButton.widthAnchor),
             
-            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34)
+            saveButton.trailingAnchor.constraint(equalTo: stackViewButtom.trailingAnchor),
+            saveButton.bottomAnchor.constraint(equalTo: stackViewButtom.bottomAnchor)
         ])
+    }
+    
+    private func createSpacingView(height: CGFloat) -> UIView {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.heightAnchor.constraint(equalToConstant: height).isActive = true
+        return view
     }
     
     private func createRoundedButton(
@@ -185,7 +330,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             button.setTitle(title, for: .normal)
             button.heightAnchor.constraint(equalToConstant: 75).isActive = true
             button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-            button.backgroundColor = .ypLightGray
+            button.backgroundColor = .ypBackgroundDay
             button.setTitleColor(.ypBlack, for: .normal)
             button.contentHorizontalAlignment = .left
             button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
@@ -198,7 +343,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             let mask = CAShapeLayer()
             mask.path = path.cgPath
             button.layer.mask = mask
-            button.backgroundColor = .ypLightGray
+            button.backgroundColor = .ypBackgroundDay
             let arrowImageView = UIImageView(image: UIImage(systemName: "chevron.right"))
             arrowImageView.tintColor = .ypBlack
             button.addSubview(arrowImageView)
@@ -210,7 +355,6 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             return button
         }
     
-    
     private func updateCategoriesButtonCorners(_ corners: UIRectCorner, radius: CGFloat) {
         let buttonWidth = UIScreen.main.bounds.width - 32
         let path = UIBezierPath(
@@ -220,7 +364,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         let mask = CAShapeLayer()
         mask.path = path.cgPath
         categoriesButton.layer.mask = mask
-        categoriesButton.backgroundColor = .ypLightGray
+        categoriesButton.backgroundColor = .ypBackgroundDay
     }
     
     private func updateCategoriesButtonTitle() {
@@ -259,24 +403,24 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         scheduleButton.setAttributedTitle(titleText, for: .normal)
     }
     
-    private func updateSaveButtonState() {
-        let isNameFilled = !(nameTextField.text?.isEmpty ?? true)
-        let isCategorySelected = selectedCategory != nil
-        if isNameFilled && isCategorySelected {
-            saveButton.isEnabled = true
-            saveButton.backgroundColor = .black
-        } else {
-            saveButton.isEnabled = false
-            saveButton.backgroundColor = .ypGrey
+    private func updateLayoutForTrackerType() {
+        if trackerType == .habit {
+            NSLayoutConstraint.activate([
+                emojiLabel.topAnchor.constraint(equalTo: scheduleButton.bottomAnchor, constant: 32)
+            ])
+        } else if trackerType == .irregularEvent {
+            NSLayoutConstraint.activate([
+                emojiLabel.topAnchor.constraint(equalTo: categoriesButton.bottomAnchor, constant: 32)
+            ])
         }
     }
     
-    // MARK: - UITextFieldDelegate
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        updateSaveButtonState()
-        return true
+    private func calculateCellSize() -> CGFloat {
+        let width = view.frame.width
+        let height: CGFloat
+        let heightCell = width / 6
+        height = heightCell * 3
+        return height
     }
     
     // MARK: - Actions
@@ -288,6 +432,8 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     @objc private func saveButtonTapped() {
         guard let name = nameTextField.text, !name.isEmpty else { return }
         guard let selectedCategory = selectedCategory else { return }
+        guard let selectedEmoji = selectedEmoji else { return }
+        guard let selectedColor = selectedColor else { return }
         var schedule = selectedDays.map { $0.rawValue }
         if trackerType == .irregularEvent {
             schedule.append("irregularEvent")
@@ -297,20 +443,19 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         let newTracker = Tracker(
             id: UUID(),
             name: name,
-            color: .ypSelection4,
-            emoji: "😡",
+            color: selectedColor,
+            emoji: selectedEmoji,
             schedule: schedule
         )
         dataManager.addNewTracker(to: selectedCategory, tracker: newTracker)
         delegate?.didCreateTracker(newTracker, inCategory: selectedCategory)
         dismiss(animated: true, completion: nil)
     }
-
     
     @objc private func categoriesButtonTapped() {
         let categorySelectionVC = TrackerCategoryViewController()
         categorySelectionVC.categorySelectionHandler = { [weak self] selectedCategory in
-            self?.selectedCategory = selectedCategory
+            self?.selectedCategory = selectedCategory.title
             self?.updateCategoriesButtonTitle()
             self?.updateSaveButtonState()
         }

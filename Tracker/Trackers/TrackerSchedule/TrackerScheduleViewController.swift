@@ -23,12 +23,27 @@ enum WeekDay: String, CaseIterable {
 
 final class TrackerScheduleViewController: UIViewController {
     
-    // MARK: - Properties
+    // MARK: - Identifier
+    
+    static let cellIdentifier = "TrackerScheduleCell"
+    
+    // MARK: - Public Properties
     
     var selectedDays: [WeekDay] = []
     var daySelectionHandler: (([WeekDay]) -> Void)?
     
-    // MARK: - UI Elements
+    lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.layer.cornerRadius = 16
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(
+            UITableViewCell.self,
+            forCellReuseIdentifier: TrackerScheduleViewController.cellIdentifier)
+        return tableView
+    }()
+    
+    // MARK: - Private Properties
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -36,15 +51,6 @@ final class TrackerScheduleViewController: UIViewController {
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
-    }()
-    
-    private lazy var tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.layer.cornerRadius = 16
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        return tableView
     }()
     
     private lazy var saveButton: UIButton = {
@@ -62,7 +68,7 @@ final class TrackerScheduleViewController: UIViewController {
         return button
     }()
     
-    // MARK: - Life Cycle
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,52 +106,5 @@ final class TrackerScheduleViewController: UIViewController {
     @objc private func saveButtonTapped() {
         daySelectionHandler?(selectedDays)
         dismiss(animated: true, completion: nil)
-    }
-}
-
-// MARK: - UITableViewDelegate & UITableViewDataSource
-
-extension TrackerScheduleViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(
-        _ tableView: UITableView,
-        numberOfRowsInSection section: Int) -> Int {
-            return WeekDay.allCases.count
-        }
-    
-    func tableView(
-        _ tableView: UITableView,
-        cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            let day = WeekDay.allCases[indexPath.row]
-            cell.textLabel?.text = day.rawValue
-            let switchView = UISwitch()
-            switchView.isOn = selectedDays.contains(day)
-            switchView.addTarget(self, action: #selector(switchChanged(sender:)), for: .valueChanged)
-            switchView.onTintColor = UIColor.ypBlue
-            cell.backgroundColor = UIColor.ypLightGray
-            cell.accessoryView = switchView
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-            return cell
-        }
-    
-    func tableView(
-        _ tableView: UITableView,
-        heightForRowAt indexPath: IndexPath) -> CGFloat {
-            return 75
-        }
-    
-    @objc func switchChanged(sender: UISwitch) {
-        guard let cell = sender.superview as? UITableViewCell,
-              let indexPath = tableView.indexPath(for: cell) else {
-            return
-        }
-        let day = WeekDay.allCases[indexPath.row]
-        if sender.isOn {
-            selectedDays.append(day)
-        } else {
-            if let index = selectedDays.firstIndex(of: day) {
-                selectedDays.remove(at: index)
-            }
-        }
     }
 }
