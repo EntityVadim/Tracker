@@ -131,11 +131,7 @@ final class TrackerViewController: UIViewController {
     }
     
     private func setupConstraints() {
-        [titleLabel,
-         searchBar,
-         errorImageView,
-         trackingLabel,
-         collectionView].forEach {
+        [titleLabel, searchBar, errorImageView, trackingLabel, collectionView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }

@@ -79,9 +79,7 @@ final class TrackerScheduleViewController: UIViewController {
     // MARK: - Setup UI
     
     private func setupUI() {
-        [titleLabel,
-         tableView,
-         saveButton].forEach {
+        [titleLabel, tableView, saveButton].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }

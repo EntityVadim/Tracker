@@ -79,9 +79,7 @@ final class TrackerTypeSelectionViewController: UIViewController {
     // MARK: - Setup Methods
     
     private func setupUI() {
-        [titleLabel,
-         habitButton,
-         irregularEventButton].forEach {
+        [titleLabel, habitButton, irregularEventButton].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }

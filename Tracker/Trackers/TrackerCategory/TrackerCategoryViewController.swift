@@ -87,9 +87,7 @@ final class TrackerCategoryViewController: UIViewController {
     // MARK: - Setup UI
     
     private func setupUI() {
-        [titleLabel,
-         addCategoryButton,
-         tableView].forEach {
+        [titleLabel, addCategoryButton, tableView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }

@@ -70,9 +70,7 @@ final class TrackerNewCategoryViewController: UIViewController {
     // MARK: - Setup UI
     
     private func setupUI() {
-        [titleLabel,
-         categoryNameTextField,
-         saveCategoryButton].forEach {
+        [titleLabel, categoryNameTextField, saveCategoryButton].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
