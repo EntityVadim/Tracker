@@ -7,9 +7,9 @@
 
 import UIKit
 
-// MARK: - UIPageViewControllerDataSource, UIPageViewControllerDelegate
+// MARK: - UIPageViewControllerDataSource
 
-extension OnboardingPageViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+extension OnboardingPageViewController: UIPageViewControllerDataSource {
     
     func pageViewController(
         _ pageViewController: UIPageViewController,
@@ -24,6 +24,11 @@ extension OnboardingPageViewController: UIPageViewControllerDataSource, UIPageVi
             let index = currentIndex
             return index == pages.count - 1 ? nil : pages[index + 1]
         }
+}
+
+// MARK: - UIPageViewControllerDelegate
+
+extension OnboardingPageViewController: UIPageViewControllerDelegate {
     
     func pageViewController(
         _ pageViewController: UIPageViewController,
