@@ -10,7 +10,6 @@ import UIKit
 // MARK: - UIPageViewControllerDataSource
 
 extension OnboardingPageViewController: UIPageViewControllerDataSource {
-    
     func pageViewController(
         _ pageViewController: UIPageViewController,
         viewControllerBefore viewController: UIViewController) -> UIViewController? {
@@ -29,7 +28,6 @@ extension OnboardingPageViewController: UIPageViewControllerDataSource {
 // MARK: - UIPageViewControllerDelegate
 
 extension OnboardingPageViewController: UIPageViewControllerDelegate {
-    
     func pageViewController(
         _ pageViewController: UIPageViewController,
         didFinishAnimating finished: Bool,

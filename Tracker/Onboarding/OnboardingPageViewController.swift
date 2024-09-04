@@ -38,8 +38,8 @@ final class OnboardingPageViewController: UIPageViewController {
     
     private let pageControl: UIPageControl = {
         let pageControl = UIPageControl()
-        pageControl.currentPageIndicatorTintColor = .black
-        pageControl.pageIndicatorTintColor = .lightGray
+        pageControl.currentPageIndicatorTintColor = .ypBlack
+        pageControl.pageIndicatorTintColor = .ypGrey
         pageControl.numberOfPages = 2
         return pageControl
     }()
