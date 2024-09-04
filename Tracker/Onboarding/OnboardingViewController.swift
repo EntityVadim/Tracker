@@ -97,8 +97,7 @@ final class OnboardingContentViewController: UIViewController {
                     [parentPageViewController.pages[parentPageViewController.currentIndex + 1]],
                     direction: .forward,
                     animated: true,
-                    completion: nil
-                )
+                    completion: nil)
             }
         }
     }

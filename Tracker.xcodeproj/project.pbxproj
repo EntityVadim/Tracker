@@ -119,9 +119,9 @@
 		DD6291B82C5A957200E683F4 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
-				DD0D6E902C57A7EC0036B9E0 /* OnboardingViewController.swift */,
 				DD38DBE52C8749CE00BE2BC3 /* OnboardingPageViewController.swift */,
 				DD6642342C8848FC0042FB1B /* Extension OnboardingPage.swift */,
+				DD0D6E902C57A7EC0036B9E0 /* OnboardingViewController.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
