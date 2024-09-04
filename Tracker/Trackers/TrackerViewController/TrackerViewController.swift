@@ -7,7 +7,7 @@
 
 import UIKit
 
-// MARK: - TrackerViewController
+// MARK: - Tracker
 
 final class TrackerViewController: UIViewController {
     

@@ -54,9 +54,7 @@ final class StatisticsViewController: UIViewController {
     }
     
     private func setupConstraints() {
-        [titleLabel,
-         errorImageView,
-         placeholderLabel].forEach {
+        [titleLabel, errorImageView, placeholderLabel].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }

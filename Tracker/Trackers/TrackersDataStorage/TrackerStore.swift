@@ -8,6 +8,8 @@
 import CoreData
 import UIKit
 
+// MARK: - TrackerModels
+
 struct Tracker {
     let id: UUID
     let name: String
@@ -16,8 +18,15 @@ struct Tracker {
     let schedule: [String]
 }
 
+// MARK: - TrackerStore
+
 final class TrackerStore {
+    
+    // MARK: - Private Properties
+    
     private let context = TrackerDataManager.shared.context
+    
+    // MARK: - Public Methods
     
     func addTracker(
         id: UUID,
@@ -61,6 +70,8 @@ final class TrackerStore {
         context.delete(tracker)
         saveContext()
     }
+    
+    // MARK: - Private Methods
     
     private func saveContext() {
         do {

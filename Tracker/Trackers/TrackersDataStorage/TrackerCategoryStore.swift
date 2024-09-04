@@ -8,13 +8,22 @@
 import CoreData
 import UIKit
 
+// MARK: - TrackerCategoryModels
+
 struct TrackerCategory {
     let title: String
     let trackers: [Tracker]
 }
 
+// MARK: - TrackerCategoryStore
+
 final class TrackerCategoryStore {
+    
+    // MARK: - Private Properties
+    
     private let context = TrackerDataManager.shared.context
+    
+    // MARK: - Public Methods
     
     func addCategory(title: String, trackers: [TrackerCoreData]) {
         let categoryObject = TrackerCategoryCoreData(context: context)
@@ -45,6 +54,8 @@ final class TrackerCategoryStore {
         context.delete(category)
         saveContext()
     }
+    
+    // MARK: - Private Methods
     
     private func saveContext() {
         do {

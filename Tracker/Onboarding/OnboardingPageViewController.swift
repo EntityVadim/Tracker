@@ -7,11 +7,15 @@
 
 import UIKit
 
+// MARK: - OnboardingPage
+
 final class OnboardingPageViewController: UIPageViewController {
+    
+    // MARK: - Identifier
     
     static let onboardingCompletedKey = "isOnboardingCompleted"
     
-    // MARK: - Private Properties
+    // MARK: - Public Properties
     
     let pages: [UIViewController] = {
         let firstPage = OnboardingContentViewController(
@@ -30,6 +34,8 @@ final class OnboardingPageViewController: UIPageViewController {
         return pages.firstIndex(of: currentViewController) ?? 0
     }
     
+    // MARK: - Private Properties
+    
     private let pageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.currentPageIndicatorTintColor = .black
@@ -44,12 +50,21 @@ final class OnboardingPageViewController: UIPageViewController {
         super.viewDidLoad()
         dataSource = self
         delegate = self
+        setupUI()
         
         if let firstPage = pages.first {
-            setViewControllers([firstPage], direction: .forward, animated: true, completion: nil)
+            setViewControllers(
+                [firstPage],
+                direction: .forward,
+                animated: true,
+                completion: nil)
         }
-        
-        setupUI()
+    }
+    
+    // MARK: - Public Methods
+    
+    func updatePageControl() {
+        pageControl.currentPage = currentIndex
     }
     
     // MARK: - Private Methods
@@ -62,39 +77,5 @@ final class OnboardingPageViewController: UIPageViewController {
             pageControl.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -168),
             pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
-    }
-    
-    private func updatePageControl() {
-        pageControl.currentPage = currentIndex
-    }
-}
-
-// MARK: - UIPageViewControllerDataSource, UIPageViewControllerDelegate
-
-extension OnboardingPageViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
-    
-    func pageViewController(
-        _ pageViewController: UIPageViewController,
-        viewControllerBefore viewController: UIViewController) -> UIViewController? {
-            let index = currentIndex
-            return index == 0 ? nil : pages[index - 1]
-        }
-    
-    func pageViewController(
-        _ pageViewController: UIPageViewController,
-        viewControllerAfter viewController: UIViewController) -> UIViewController? {
-            let index = currentIndex
-            return index == pages.count - 1 ? nil : pages[index + 1]
-        }
-    
-    func pageViewController(
-        _ pageViewController: UIPageViewController,
-        didFinishAnimating finished: Bool,
-        previousViewControllers: [UIViewController],
-        transitionCompleted completed: Bool
-    ) {
-        if completed {
-            updatePageControl()
-        }
     }
 }

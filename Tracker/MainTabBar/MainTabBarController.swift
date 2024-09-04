@@ -7,7 +7,7 @@
 
 import UIKit
 
-// MARK: - MainTabBarController
+// MARK: - MainTabBar
 
 final class MainTabBarController: UITabBarController {
     
@@ -24,7 +24,7 @@ final class MainTabBarController: UITabBarController {
         setupAppearance()
     }
     
-    // MARK: - Setup Methods
+    // MARK: - Private Methods
     
     private func setupViewControllers() {
         let trackersViewController = UINavigationController(rootViewController: TrackerViewController())

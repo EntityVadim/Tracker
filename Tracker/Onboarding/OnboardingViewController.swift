@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - OnboardingContent
+
 final class OnboardingContentViewController: UIViewController {
     
     // MARK: - Private Properties
@@ -15,7 +17,7 @@ final class OnboardingContentViewController: UIViewController {
     private let textLabel: UILabel
     private let actionButton: UIButton
     
-    // MARK: - Init
+    // MARK: - Initialization
     
     init(imageName: String, text: String, buttonTitle: String) {
         self.imageView = UIImageView(image: UIImage(named: imageName))
@@ -52,7 +54,6 @@ final class OnboardingContentViewController: UIViewController {
     // MARK: - Private Methods
     
     private func setupUI() {
-        
         [imageView, textLabel, actionButton].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -74,6 +75,8 @@ final class OnboardingContentViewController: UIViewController {
             actionButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
+    
+    // MARK: - Actions
     
     @objc private func didTapActionButton() {
         if let parentPageViewController = parent as? OnboardingPageViewController {

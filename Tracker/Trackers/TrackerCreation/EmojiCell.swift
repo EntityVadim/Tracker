@@ -7,8 +7,15 @@
 
 import UIKit
 
+// MARK: - EmojiCell
+
 final class EmojiCell: UICollectionViewCell {
+    
+    // MARK: - Identifier
+    
     static let reuseIdentifier = "emojiCell"
+    
+    // MARK: - Private Properties
     
     private let emojiContainer: UIView = {
         let view = UIView()
@@ -22,6 +29,8 @@ final class EmojiCell: UICollectionViewCell {
         label.textAlignment = .center
         return label
     }()
+    
+    // MARK: - Initialization
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -37,6 +46,15 @@ final class EmojiCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Public Methods
+    
+    func configure(with emoji: String, isSelected: Bool) {
+        emojiLabel.text = emoji
+        contentView.backgroundColor = isSelected ? UIColor.ypLightGray : .clear
+    }
+    
+    // MARK: - Private Methods
+    
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             emojiContainer.widthAnchor.constraint(equalToConstant: 32),
@@ -45,10 +63,5 @@ final class EmojiCell: UICollectionViewCell {
             emojiLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             emojiLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
-    }
-    
-    func configure(with emoji: String, isSelected: Bool) {
-        emojiLabel.text = emoji
-        contentView.backgroundColor = isSelected ? UIColor.ypLightGray : .clear
     }
 }
