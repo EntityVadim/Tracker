@@ -46,6 +46,27 @@ final class TrackerCategoryViewController: UIViewController {
         return label
     }()
     
+    private let errorImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "Error"))
+        return imageView
+    }()
+    
+    private let placeholderLabel: UILabel = {
+        let label = UILabel()
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 4
+        let attributedString = NSAttributedString(
+            string: "Привычки и события можно\n объединить по смыслу",
+            attributes: [
+                .font: UIFont.systemFont(ofSize: 12, weight: .medium),
+                .paragraphStyle: paragraphStyle]
+        )
+        label.attributedText = attributedString
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+    
     private lazy var addCategoryButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Добавить категорию", for: .normal)
@@ -82,12 +103,13 @@ final class TrackerCategoryViewController: UIViewController {
         loadCategories()
         loadSelectedCategory()
         tableView.register(TrackerCategoryCell.self, forCellReuseIdentifier: TrackerCategoryCell.identifier)
+        updateUI()
     }
     
     // MARK: - Setup UI
     
     private func setupUI() {
-        [titleLabel, addCategoryButton, tableView].forEach {
+        [titleLabel, errorImageView, placeholderLabel, addCategoryButton, tableView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -95,6 +117,16 @@ final class TrackerCategoryViewController: UIViewController {
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 38),
+            
+            errorImageView.widthAnchor.constraint(equalToConstant: 80),
+            errorImageView.heightAnchor.constraint(equalToConstant: 80),
+            errorImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            errorImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            placeholderLabel.topAnchor.constraint(equalTo: errorImageView.bottomAnchor, constant: 8),
+            placeholderLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            placeholderLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            placeholderLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             addCategoryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             addCategoryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
@@ -107,10 +139,22 @@ final class TrackerCategoryViewController: UIViewController {
         ])
     }
     
-    // MARK: - UserDefaults Methods
+    // MARK: - Private Methods
     
     private func saveCategories(_ categoryName: String) {
         trackerCategoryStore.addCategory(title: categoryName, trackers: [])
+    }
+    
+    private func updateUI() {
+        if categories.isEmpty {
+            errorImageView.isHidden = false
+            placeholderLabel.isHidden = false
+            tableView.isHidden = true
+        } else {
+            errorImageView.isHidden = true
+            placeholderLabel.isHidden = true
+            tableView.isHidden = false
+        }
     }
     
     private func loadCategories() {
@@ -119,6 +163,7 @@ final class TrackerCategoryViewController: UIViewController {
         } catch {
             print("Сохранение не удалось: \(error)")
         }
+        updateUI()
     }
     
     private func saveSelectedCategory() {
@@ -153,5 +198,6 @@ final class TrackerCategoryViewController: UIViewController {
         }
         categorySelectionHandler?(selectedCategory)
         dismiss(animated: true, completion: nil)
+        updateUI()
     }
 }

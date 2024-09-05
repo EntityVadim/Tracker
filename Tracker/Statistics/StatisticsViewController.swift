@@ -22,7 +22,6 @@ final class StatisticsViewController: UIViewController {
     
     private let errorImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "ErrorStat"))
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
@@ -50,10 +49,6 @@ final class StatisticsViewController: UIViewController {
     // MARK: - Setup UI
     
     private func setupUI() {
-        setupConstraints()
-    }
-    
-    private func setupConstraints() {
         [titleLabel, errorImageView, placeholderLabel].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false

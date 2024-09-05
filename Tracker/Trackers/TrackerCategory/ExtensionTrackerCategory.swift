@@ -38,29 +38,30 @@ extension TrackerCategoryViewController: UITableViewDelegate {
     func tableView(
         _ tableView: UITableView,
         willDisplay cell: UITableViewCell,
-        forRowAt indexPath: IndexPath) {
-            if indexPath.row == 0 && categories.count == 1 {
-                cell.contentView.layer.cornerRadius = 16
-                cell.contentView.layer.maskedCorners = [
-                    .layerMinXMinYCorner,
-                    .layerMaxXMinYCorner,
-                    .layerMinXMaxYCorner,
-                    .layerMaxXMaxYCorner]
-            } else if indexPath.row == 0 {
-                cell.contentView.layer.cornerRadius = 16
-                cell.contentView.layer.maskedCorners = [
-                    .layerMinXMinYCorner,
-                    .layerMaxXMinYCorner]
-            } else if indexPath.row == categories.count - 1 {
-                cell.contentView.layer.cornerRadius = 16
-                cell.contentView.layer.maskedCorners = [
-                    .layerMinXMaxYCorner,
-                    .layerMaxXMaxYCorner]
-            } else {
-                cell.contentView.layer.cornerRadius = 0
-            }
-            cell.contentView.layer.masksToBounds = true
+        forRowAt indexPath: IndexPath
+    ) {
+        if indexPath.row == 0 && categories.count == 1 {
+            cell.contentView.layer.cornerRadius = 16
+            cell.contentView.layer.maskedCorners = [
+                .layerMinXMinYCorner,
+                .layerMaxXMinYCorner,
+                .layerMinXMaxYCorner,
+                .layerMaxXMaxYCorner]
+        } else if indexPath.row == 0 {
+            cell.contentView.layer.cornerRadius = 16
+            cell.contentView.layer.maskedCorners = [
+                .layerMinXMinYCorner,
+                .layerMaxXMinYCorner]
+        } else if indexPath.row == categories.count - 1 {
+            cell.contentView.layer.cornerRadius = 16
+            cell.contentView.layer.maskedCorners = [
+                .layerMinXMaxYCorner,
+                .layerMaxXMaxYCorner]
+        } else {
+            cell.contentView.layer.cornerRadius = 0
         }
+        cell.contentView.layer.masksToBounds = true
+    }
     
     func tableView(
         _ tableView: UITableView,
