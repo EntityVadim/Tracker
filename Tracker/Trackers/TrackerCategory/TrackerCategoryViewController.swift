@@ -143,6 +143,7 @@ final class TrackerCategoryViewController: UIViewController {
         guard let selectedCategory = selectedCategory else {
             let newCategoryVC = TrackerNewCategoryViewController()
             newCategoryVC.onCategorySave = { [weak self] categoryName in
+                self?.trackerCategoryStore.addCategory(title: categoryName.title, trackers: [])
                 self?.categories.append(categoryName)
                 self?.selectedCategory = categoryName
                 self?.tableView.reloadData()
