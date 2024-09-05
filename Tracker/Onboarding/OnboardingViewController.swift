@@ -79,26 +79,16 @@ final class OnboardingContentViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func didTapActionButton() {
-        if let parentPageViewController = parent as? OnboardingPageViewController {
-            if parentPageViewController.currentIndex == parentPageViewController.pages.count - 2 {
-                UserDefaults.standard.set(true, forKey: OnboardingPageViewController.onboardingCompletedKey)
-                let mainTabBarController = MainTabBarController()
-                if let window = UIApplication.shared.windows.first {
-                    window.rootViewController = mainTabBarController
-                    UIView.transition(
-                        with: window,
-                        duration: 0.5,
-                        options: .transitionCrossDissolve,
-                        animations: nil,
-                        completion: nil)
-                }
-            } else {
-                parentPageViewController.setViewControllers(
-                    [parentPageViewController.pages[parentPageViewController.currentIndex + 1]],
-                    direction: .forward,
-                    animated: true,
-                    completion: nil)
-            }
+        UserDefaults.standard.set(true, forKey: OnboardingPageViewController.onboardingCompletedKey)
+        let mainTabBarController = MainTabBarController()
+        if let window = UIApplication.shared.windows.first {
+            window.rootViewController = mainTabBarController
+            UIView.transition(
+                with: window,
+                duration: 0.5,
+                options: .transitionCrossDissolve,
+                animations: nil,
+                completion: nil)
         }
     }
 }
