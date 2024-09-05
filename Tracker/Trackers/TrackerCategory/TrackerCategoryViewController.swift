@@ -7,36 +7,16 @@
 
 import UIKit
 
-// MARK: - TrackerCategory
+// MARK: - TrackerCategoryViewController
 
 final class TrackerCategoryViewController: UIViewController {
     
-    // MARK: - Keys
-    
-    static let selectedCategory = "selectedCategory"
-    
     // MARK: - Public Properties
     
+    let viewModel = TrackerCategoryViewModel()
     var categorySelectionHandler: ((TrackerCategory) -> Void)?
     
-    var categories: [TrackerCategory] = [] {
-        didSet {
-            if let selectedCategory {
-                saveCategories(selectedCategory.title)
-            }
-        }
-    }
-    
-    var selectedCategory: TrackerCategory? {
-        didSet {
-            saveSelectedCategory()
-            tableView.reloadData()
-        }
-    }
-    
     // MARK: - Private Properties
-    
-    private let trackerCategoryStore = TrackerCategoryStore()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -86,7 +66,7 @@ final class TrackerCategoryViewController: UIViewController {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CategoryCell")
+        tableView.register(TrackerCategoryCell.self, forCellReuseIdentifier: TrackerCategoryCell.identifier)
         tableView.separatorStyle = .singleLine
         tableView.separatorColor = UIColor.ypGrey
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
@@ -100,10 +80,7 @@ final class TrackerCategoryViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
         setupUI()
-        loadCategories()
-        loadSelectedCategory()
-        tableView.register(TrackerCategoryCell.self, forCellReuseIdentifier: TrackerCategoryCell.identifier)
-        updateUI()
+        bindViewModel()
     }
     
     // MARK: - Setup UI
@@ -141,12 +118,18 @@ final class TrackerCategoryViewController: UIViewController {
     
     // MARK: - Private Methods
     
-    private func saveCategories(_ categoryName: String) {
-        trackerCategoryStore.addCategory(title: categoryName, trackers: [])
+    private func bindViewModel() {
+        viewModel.updateUI = { [weak self] in
+            self?.updateUI()
+        }
+        viewModel.saveCategory = { [weak self] in
+            self?.tableView.reloadData()
+        }
+        updateUI()
     }
     
     private func updateUI() {
-        if categories.isEmpty {
+        if viewModel.categories.isEmpty {
             errorImageView.isHidden = false
             placeholderLabel.isHidden = false
             tableView.isHidden = true
@@ -155,49 +138,21 @@ final class TrackerCategoryViewController: UIViewController {
             placeholderLabel.isHidden = true
             tableView.isHidden = false
         }
-    }
-    
-    private func loadCategories() {
-        do {
-            categories = try trackerCategoryStore.getCategory()
-        } catch {
-            print("Сохранение не удалось: \(error)")
-        }
-        updateUI()
-    }
-    
-    private func saveSelectedCategory() {
-        UserDefaults.standard.set(
-            selectedCategory?.title,
-            forKey: TrackerCategoryViewController.selectedCategory)
-    }
-    
-    private func loadSelectedCategory() {
-        guard let title = UserDefaults.standard.string(
-            forKey: TrackerCategoryViewController.selectedCategory
-        ) else {
-            return
-        }
-        selectedCategory = TrackerCategory(title: title, trackers: [])
         tableView.reloadData()
     }
     
     // MARK: - Actions
     
     @objc private func addCategoryButtonTapped() {
-        guard let selectedCategory = selectedCategory else {
+        if let selectedCategory = viewModel.selectedCategory {
+            categorySelectionHandler?(selectedCategory)
+            dismiss(animated: true, completion: nil)
+        } else {
             let newCategoryVC = TrackerNewCategoryViewController()
             newCategoryVC.onCategorySave = { [weak self] categoryName in
-                self?.trackerCategoryStore.addCategory(title: categoryName.title, trackers: [])
-                self?.categories.append(categoryName)
-                self?.selectedCategory = categoryName
-                self?.tableView.reloadData()
+                self?.viewModel.addCategory(with: categoryName.title)
             }
             present(newCategoryVC, animated: true, completion: nil)
-            return
         }
-        categorySelectionHandler?(selectedCategory)
-        dismiss(animated: true, completion: nil)
-        updateUI()
     }
 }
