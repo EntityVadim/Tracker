@@ -80,7 +80,7 @@ final class OnboardingContentViewController: UIViewController {
     
     @objc private func didTapActionButton() {
         if let parentPageViewController = parent as? OnboardingPageViewController {
-            if parentPageViewController.currentIndex == parentPageViewController.pages.count - 1 {
+            if parentPageViewController.currentIndex == parentPageViewController.pages.count - 2 {
                 UserDefaults.standard.set(true, forKey: OnboardingPageViewController.onboardingCompletedKey)
                 let mainTabBarController = MainTabBarController()
                 if let window = UIApplication.shared.windows.first {

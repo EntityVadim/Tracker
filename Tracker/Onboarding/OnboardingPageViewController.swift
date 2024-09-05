@@ -85,10 +85,19 @@ final class OnboardingPageViewController: UIPageViewController {
     private func setupUI() {
         view.addSubview(pageControl)
         pageControl.translatesAutoresizingMaskIntoConstraints = false
+        pageControl.addTarget(self, action: #selector(pageControlValueChanged(_:)), for: .valueChanged)
         
         NSLayoutConstraint.activate([
             pageControl.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -168),
             pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
+    }
+    
+    // MARK: - Actions
+    
+    @objc private func pageControlValueChanged(_ sender: UIPageControl) {
+        let selectedIndex = sender.currentPage
+        let direction: UIPageViewController.NavigationDirection = selectedIndex > currentIndex ? .forward : .reverse
+        setViewControllers([pages[selectedIndex]], direction: direction, animated: true, completion: nil)
     }
 }
