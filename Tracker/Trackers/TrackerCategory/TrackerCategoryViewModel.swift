@@ -31,7 +31,7 @@ final class TrackerCategoryViewModel {
             saveCategory?()
         }
     }
-
+    
     // MARK: - Private Properties
     
     private let trackerCategoryStore = TrackerCategoryStore()
