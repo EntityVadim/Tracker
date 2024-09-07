@@ -13,8 +13,8 @@ final class TrackerViewController: UIViewController {
     
     // MARK: - Public Properties
     
-    let dataManager = TrackerDataManager.shared
     var selectedDate: Date = Date()
+    let dataManager = TrackerDataManager.shared
     
     let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -46,26 +46,26 @@ final class TrackerViewController: UIViewController {
         return UIBarButtonItem(customView: datePicker)
     }()
     
-    private let titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Трекеры"
         label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         return label
     }()
     
-    private let searchBar: UISearchBar = {
+    private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Поиск"
         searchBar.backgroundImage = UIImage()
         return searchBar
     }()
     
-    private let errorImageView: UIImageView = {
+    private lazy var errorImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "Error"))
         return imageView
     }()
     
-    private let trackingLabel: UILabel = {
+    private lazy var trackingLabel: UILabel = {
         let label = UILabel()
         label.text = "Что будем отслеживать?"
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
@@ -94,7 +94,10 @@ final class TrackerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupConstraints()
+        setupNavigationBar()
         setupAppearance()
+        updateTrackersView()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -120,22 +123,13 @@ final class TrackerViewController: UIViewController {
     // MARK: - Private Methods
     
     private func setupUI() {
-        setupNavigationBar()
-        setupConstraints()
-        updateTrackersView()
-    }
-    
-    private func setupNavigationBar() {
-        navigationItem.leftBarButtonItems = [addButton]
-        navigationItem.rightBarButtonItems = [datePicker]
-    }
-    
-    private func setupConstraints() {
         [titleLabel, searchBar, errorImageView, trackingLabel, collectionView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-        
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -162,6 +156,11 @@ final class TrackerViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    private func setupNavigationBar() {
+        navigationItem.leftBarButtonItems = [addButton]
+        navigationItem.rightBarButtonItems = [datePicker]
     }
     
     private func setupAppearance() {

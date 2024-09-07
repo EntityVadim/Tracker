@@ -36,11 +36,15 @@ final class OnboardingPageViewController: UIPageViewController {
     
     // MARK: - Private Properties
     
-    private let pageControl: UIPageControl = {
+    private lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.currentPageIndicatorTintColor = .ypBlack
         pageControl.pageIndicatorTintColor = .ypGrey
         pageControl.numberOfPages = 2
+        pageControl.addTarget(
+            self,
+            action: #selector(pageControlValueChanged(_:)),
+            for: .valueChanged)
         return pageControl
     }()
     
@@ -64,6 +68,7 @@ final class OnboardingPageViewController: UIPageViewController {
         dataSource = self
         delegate = self
         setupUI()
+        setupConstraints()
         
         if let firstPage = pages.first {
             setViewControllers(
@@ -85,8 +90,9 @@ final class OnboardingPageViewController: UIPageViewController {
     private func setupUI() {
         view.addSubview(pageControl)
         pageControl.translatesAutoresizingMaskIntoConstraints = false
-        pageControl.addTarget(self, action: #selector(pageControlValueChanged(_:)), for: .valueChanged)
-        
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             pageControl.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -168),
             pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor)
@@ -97,7 +103,12 @@ final class OnboardingPageViewController: UIPageViewController {
     
     @objc private func pageControlValueChanged(_ sender: UIPageControl) {
         let selectedIndex = sender.currentPage
-        let direction: UIPageViewController.NavigationDirection = selectedIndex > currentIndex ? .forward : .reverse
-        setViewControllers([pages[selectedIndex]], direction: direction, animated: true, completion: nil)
+        let direction: UIPageViewController.NavigationDirection = selectedIndex > currentIndex ?
+            .forward : .reverse
+        setViewControllers(
+            [pages[selectedIndex]],
+            direction: direction,
+            animated: true,
+            completion: nil)
     }
 }

@@ -18,7 +18,7 @@ final class TrackerCategoryViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private let titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Категория"
         label.textAlignment = .center
@@ -26,12 +26,12 @@ final class TrackerCategoryViewController: UIViewController {
         return label
     }()
     
-    private let errorImageView: UIImageView = {
+    private lazy var errorImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "Error"))
         return imageView
     }()
     
-    private let placeholderLabel: UILabel = {
+    private lazy var placeholderLabel: UILabel = {
         let label = UILabel()
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 4
@@ -80,6 +80,7 @@ final class TrackerCategoryViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
         setupUI()
+        setupConstraints()
         bindViewModel()
     }
     
@@ -90,7 +91,9 @@ final class TrackerCategoryViewController: UIViewController {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-        
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 38),

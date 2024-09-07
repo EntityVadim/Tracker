@@ -17,7 +17,7 @@ final class TrackerNewCategoryViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private let titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Новая категория"
         label.textAlignment = .center
@@ -64,6 +64,7 @@ final class TrackerNewCategoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupConstraints()
         view.backgroundColor = .ypWhite
     }
     
@@ -74,7 +75,9 @@ final class TrackerNewCategoryViewController: UIViewController {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-        
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 38),

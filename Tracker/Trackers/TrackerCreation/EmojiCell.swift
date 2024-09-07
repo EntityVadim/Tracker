@@ -17,13 +17,12 @@ final class EmojiCell: UICollectionViewCell {
     
     // MARK: - Private Properties
     
-    private let emojiContainer: UIView = {
+    private lazy var emojiContainer: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    private let emojiLabel: UILabel = {
+    private lazy var emojiLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 32)
         label.textAlignment = .center
@@ -34,9 +33,7 @@ final class EmojiCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(emojiContainer)
-        emojiContainer.addSubview(emojiLabel)
-        emojiLabel.translatesAutoresizingMaskIntoConstraints = false
+        setupUI()
         setupConstraints()
         contentView.layer.cornerRadius = 16
         contentView.clipsToBounds = true
@@ -54,6 +51,18 @@ final class EmojiCell: UICollectionViewCell {
     }
     
     // MARK: - Private Methods
+    
+    private func setupUI() {
+        [emojiContainer].forEach {
+            contentView.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        [emojiLabel].forEach {
+            emojiContainer.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+    }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([

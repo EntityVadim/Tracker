@@ -49,7 +49,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     private var selectedDays: [WeekDay] = []
     private let dataManager = TrackerDataManager.shared
     
-    private let emojiLabel: UILabel = {
+    private lazy var emojiLabel: UILabel = {
         let label = UILabel()
         label.text = "Emoji"
         label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
@@ -57,7 +57,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         return label
     }()
     
-    private let colorLabel: UILabel = {
+    private lazy var colorLabel: UILabel = {
         let label = UILabel()
         label.text = "Цвет"
         label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
@@ -74,7 +74,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         return collectionView
     }()
     
-    private let titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Новая привычка"
         label.textAlignment = .center
@@ -154,26 +154,26 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         return button
     }()
     
-    private let separatorView: UIView = {
+    private lazy var separatorView: UIView = {
         let view = UIView()
         view.backgroundColor = .ypLightGray
         view.heightAnchor.constraint(equalToConstant: 1).isActive = true
         return view
     }()
     
-    private var scrollView: UIScrollView = {
+    private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
     
-    private var stackView: UIStackView = {
+    private lazy var stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
-    private var stackViewButtom: UIStackView = {
+    private lazy var stackViewButtom: UIStackView = {
         let stackViewButtom = UIStackView()
         stackViewButtom.axis = .horizontal
         stackViewButtom.translatesAutoresizingMaskIntoConstraints = false
@@ -186,8 +186,12 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
         setupUI()
+        setupConstraints()
         updateSaveButtonState()
         updateLayoutForTrackerType()
+        
+        emojiCollectionView.register(EmojiCell.self, forCellWithReuseIdentifier: EmojiCell.reuseIdentifier)
+        colorCollectionView.register(ColorCell.self, forCellWithReuseIdentifier: ColorCell.reuseIdentifier)
         
         if trackerType == .irregularEvent {
             scheduleButton.isHidden = true
@@ -196,9 +200,6 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         } else {
             updateCategoriesButtonCorners([.topLeft, .topRight], radius: 16)
         }
-        
-        emojiCollectionView.register(EmojiCell.self, forCellWithReuseIdentifier: EmojiCell.reuseIdentifier)
-        colorCollectionView.register(ColorCell.self, forCellWithReuseIdentifier: ColorCell.reuseIdentifier)
     }
     
     // MARK: - Public Methods
@@ -226,32 +227,45 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     // MARK: - Private Methods
     
     private func setupUI() {
-        view.addSubview(scrollView)
-        scrollView.addSubview(stackView)
+        [scrollView].forEach {
+            view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
         
-        stackView.addArrangedSubview(titleLabel)
-        stackView.addArrangedSubview(createSpacingView(height: 24))
-        stackView.addArrangedSubview(nameTextField)
-        stackView.addArrangedSubview(createSpacingView(height: 24))
-        stackView.addArrangedSubview(categoriesButton)
-        stackView.addArrangedSubview(separatorView)
-        stackView.addArrangedSubview(scheduleButton)
-        stackView.addArrangedSubview(createSpacingView(height: 32))
-        stackView.addArrangedSubview(emojiLabel)
-        stackView.addArrangedSubview(createSpacingView(height: 16))
-        stackView.addArrangedSubview(emojiCollectionView)
-        stackView.addArrangedSubview(createSpacingView(height: 16))
-        stackView.addArrangedSubview(colorLabel)
-        stackView.addArrangedSubview(createSpacingView(height: 16))
-        stackView.addArrangedSubview(colorCollectionView)
-        stackView.addArrangedSubview(stackViewButtom)
-        stackViewButtom.addArrangedSubview(cancelButton)
-        stackViewButtom.addArrangedSubview(saveButton)
+        [stackView].forEach {
+            scrollView.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        [cancelButton, saveButton].forEach {
+            stackViewButtom.addArrangedSubview($0)
+        }
+        
+        let arrangedSubviews: [UIView] = [
+            titleLabel,
+            createSpacingView(height: 24),
+            nameTextField,
+            createSpacingView(height: 24),
+            categoriesButton,
+            separatorView,
+            scheduleButton,
+            createSpacingView(height: 32),
+            emojiLabel,
+            createSpacingView(height: 16),
+            emojiCollectionView,
+            createSpacingView(height: 16),
+            colorLabel,
+            createSpacingView(height: 16),
+            colorCollectionView,
+            stackViewButtom]
+        arrangedSubviews.forEach { stackView.addArrangedSubview($0) }
         
         stackView.axis = .vertical
         stackView.distribution = .fill
         stackView.alignment = .fill
-        
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

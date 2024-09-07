@@ -17,7 +17,7 @@ final class ColorCell: UICollectionViewCell {
     
     // MARK: - Private Properties
     
-    private let contentContainer: UIView = {
+    private lazy var contentContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 8
