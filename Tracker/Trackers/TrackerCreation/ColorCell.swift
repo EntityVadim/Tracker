@@ -7,16 +7,25 @@
 
 import UIKit
 
+// MARK: - EmojiCell
+
 final class ColorCell: UICollectionViewCell {
+    
+    // MARK: - Identifier
+    
     static let reuseIdentifier = "colorCell"
     
-    private let contentContainer: UIView = {
+    // MARK: - Private Properties
+    
+    private lazy var contentContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 8
         view.clipsToBounds = true
         return view
     }()
+    
+    // MARK: - Initialization
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,6 +40,16 @@ final class ColorCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Public Methods
+    
+    func configure(with color: UIColor, isSelected: Bool) {
+        contentContainer.backgroundColor = color
+        contentView.layer.borderWidth = isSelected ? 2 : 0
+        contentView.layer.borderColor = isSelected ? color.withSaturation(0.3)?.cgColor : UIColor.clear.cgColor
+    }
+    
+    // MARK: - Private Methods
+    
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             contentContainer.widthAnchor.constraint(equalToConstant: 40),
@@ -39,13 +58,9 @@ final class ColorCell: UICollectionViewCell {
             contentContainer.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
-    
-    func configure(with color: UIColor, isSelected: Bool) {
-        contentContainer.backgroundColor = color
-        contentView.layer.borderWidth = isSelected ? 2 : 0
-        contentView.layer.borderColor = isSelected ? color.withSaturation(0.3)?.cgColor : UIColor.clear.cgColor
-    }
 }
+
+// MARK: - UIColor
 
 private extension UIColor {
     func withSaturation(_ saturation: CGFloat) -> UIColor? {

@@ -17,7 +17,7 @@ final class TrackerCategoryCell: UITableViewCell {
     
     // MARK: - UI Elements
     
-    private let checkmarkImageView: UIImageView = {
+    private lazy var checkmarkImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "checkmark")
         imageView.tintColor = .ypBlue
@@ -30,11 +30,13 @@ final class TrackerCategoryCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
+        setupConstraints()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupUI()
+        setupConstraints()
     }
     
     // MARK: - Configuration
@@ -50,7 +52,9 @@ final class TrackerCategoryCell: UITableViewCell {
     private func setupUI() {
         contentView.addSubview(checkmarkImageView)
         checkmarkImageView.translatesAutoresizingMaskIntoConstraints = false
-        
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             checkmarkImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             checkmarkImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)

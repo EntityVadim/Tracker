@@ -8,13 +8,22 @@
 import CoreData
 import UIKit
 
+// MARK: - TrackerRecordModels
+
 struct TrackerRecord {
     let trackerId: UUID
     let date: String
 }
 
+// MARK: - TrackerRecordStore
+
 final class TrackerRecordStore {
+    
+    // MARK: - Private Properties
+    
     private let context = TrackerDataManager.shared.context
+    
+    // MARK: - Public Methods
     
     func addRecord(date: String, tracker: TrackerCoreData) {
         let recordObject = TrackerRecordCoreData(context: context)
@@ -39,6 +48,8 @@ final class TrackerRecordStore {
         saveContext()
     }
     
+    // MARK: - Private Methods
+    
     private func saveContext() {
         do {
             if context.hasChanges {
@@ -50,6 +61,8 @@ final class TrackerRecordStore {
         }
     }
 }
+
+// MARK: - TrackerRecord
 
 extension TrackerRecord {
     init(coreData: TrackerRecordCoreData) {

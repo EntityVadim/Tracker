@@ -32,25 +32,25 @@ final class TrackerCell: UICollectionViewCell {
     private var date: String = ""
     private var dataManager: TrackerDataManager?
     
-    private let cardView: UIView = {
+    private lazy var cardView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 16
         return view
     }()
     
-    private let emojiLabel: UILabel = {
+    private lazy var emojiLabel: UILabel = {
         let label = UILabel()
         return label
     }()
     
-    private let nameLabel: UILabel = {
+    private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         label.textColor = .ypWhite
         return label
     }()
     
-    private let quantityView: UIView = {
+    private lazy var quantityView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
         return view
@@ -67,7 +67,7 @@ final class TrackerCell: UICollectionViewCell {
         return button
     }()
     
-    private let countLabel: UILabel = {
+    private lazy var countLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textColor = .ypBlack
@@ -89,22 +89,23 @@ final class TrackerCell: UICollectionViewCell {
     // MARK: - UI Setup
     
     private func setupUI() {
-        contentView.addSubview(cardView)
-        cardView.addSubview(emojiLabel)
-        cardView.addSubview(nameLabel)
-        contentView.addSubview(quantityView)
-        quantityView.addSubview(completionButton)
-        quantityView.addSubview(countLabel)
+        [cardView, quantityView].forEach {
+            contentView.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        [emojiLabel, nameLabel].forEach {
+            cardView.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        [completionButton, countLabel].forEach {
+            quantityView.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
     }
     
     private func setupConstraints() {
-        cardView.translatesAutoresizingMaskIntoConstraints = false
-        emojiLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        quantityView.translatesAutoresizingMaskIntoConstraints = false
-        completionButton.translatesAutoresizingMaskIntoConstraints = false
-        countLabel.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             cardView.heightAnchor.constraint(equalToConstant: 90),
             cardView.topAnchor.constraint(equalTo: contentView.topAnchor),

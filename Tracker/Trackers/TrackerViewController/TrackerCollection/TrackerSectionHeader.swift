@@ -29,11 +29,13 @@ final class TrackerSectionHeader: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        setupConstraints()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupUI()
+        setupConstraints()
     }
     
     // MARK: - UI Setup
@@ -41,7 +43,9 @@ final class TrackerSectionHeader: UICollectionReusableView {
     private func setupUI() {
         addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
         ])

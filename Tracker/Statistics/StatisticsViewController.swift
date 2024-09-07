@@ -13,20 +13,19 @@ final class StatisticsViewController: UIViewController {
     
     // MARK: - UI Elements
     
-    private let titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Статистика"
         label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         return label
     }()
     
-    private let errorImageView: UIImageView = {
+    private lazy var errorImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "ErrorStat"))
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    private let placeholderLabel: UILabel = {
+    private lazy var placeholderLabel: UILabel = {
         let label = UILabel()
         label.text = "Анализировать пока нечего"
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
@@ -39,6 +38,7 @@ final class StatisticsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupConstraints()
         setupAppearance()
     }
     
@@ -50,17 +50,13 @@ final class StatisticsViewController: UIViewController {
     // MARK: - Setup UI
     
     private func setupUI() {
-        setupConstraints()
-    }
-    
-    private func setupConstraints() {
-        [titleLabel,
-         errorImageView,
-         placeholderLabel].forEach {
+        [titleLabel, errorImageView, placeholderLabel].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-        
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 88),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),

@@ -12,10 +12,17 @@ import UIKit
 
 final class TrackerDataManager {
     
-    // MARK: - Private Properties
+    // MARK: - Public Properties
     
     static let shared = TrackerDataManager()
     let context: NSManagedObjectContext
+    
+    // MARK: - Private Properties
+    
+    private(set) var categories: [TrackerCategory] = []
+    private(set) var completedTrackers: [TrackerRecord] = []
+    
+    // MARK: - Initialization
     
     private init() {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -26,9 +33,6 @@ final class TrackerDataManager {
     init(context: NSManagedObjectContext) {
         self.context = context
     }
-    
-    private(set) var categories: [TrackerCategory] = []
-    private(set) var completedTrackers: [TrackerRecord] = []
     
     // MARK: - Public Methods
     
@@ -210,6 +214,8 @@ final class TrackerDataManager {
         }
     }
 }
+
+// MARK: - TrackerDataManager
 
 extension TrackerDataManager {
     func loadCategories() {

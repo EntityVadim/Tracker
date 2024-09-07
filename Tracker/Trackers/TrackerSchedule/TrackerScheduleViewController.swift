@@ -45,7 +45,7 @@ final class TrackerScheduleViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private let titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Расписание"
         label.textAlignment = .center
@@ -73,19 +73,20 @@ final class TrackerScheduleViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupConstraints()
         view.backgroundColor = .ypWhite
     }
     
     // MARK: - Setup UI
     
     private func setupUI() {
-        [titleLabel,
-         tableView,
-         saveButton].forEach {
+        [titleLabel, tableView, saveButton].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-        
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 38),

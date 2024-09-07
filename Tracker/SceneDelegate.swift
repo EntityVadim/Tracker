@@ -23,7 +23,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let rootViewController = MainTabBarController()
             window?.rootViewController = rootViewController
         } else {
-            let onboardingViewController = OnboardingViewController()
+            let onboardingViewController = OnboardingPageViewController()
             window?.rootViewController = onboardingViewController
         }
         window?.makeKeyAndVisible()
