@@ -1,5 +1,5 @@
 //
-//  OnboardingViewController.swift
+//  OnboardingContentViewController.swift
 //  Tracker
 //
 //  Created by Вадим on 29.07.2024.
@@ -13,30 +13,42 @@ final class OnboardingContentViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private let imageView: UIImageView
-    private let textLabel: UILabel
-    private let actionButton: UIButton
+    private let imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
+    private let textLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    private lazy var actionButton: UIButton = {
+        let button = UIButton()
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.backgroundColor = .black
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 16
+        button.layer.masksToBounds = true
+        button.addTarget(
+            self,
+            action: #selector(didTapActionButton),
+            for: .touchUpInside)
+        return button
+    }()
     
     // MARK: - Initialization
     
     init(imageName: String, text: String, buttonTitle: String) {
-        self.imageView = UIImageView(image: UIImage(named: imageName))
-        self.textLabel = UILabel()
-        self.actionButton = UIButton()
         super.init(nibName: nil, bundle: nil)
+        self.imageView.image = UIImage(named: imageName)
         self.textLabel.text = text
-        self.textLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-        self.textLabel.textAlignment = .center
-        self.textLabel.numberOfLines = 0
         self.actionButton.setTitle(buttonTitle, for: .normal)
-        self.actionButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        self.actionButton.backgroundColor = .black
-        self.actionButton.setTitleColor(.white, for: .normal)
-        self.actionButton.layer.cornerRadius = 16
-        self.actionButton.layer.masksToBounds = true
-        self.actionButton.addTarget(self, action: #selector(didTapActionButton), for: .touchUpInside)
-        self.imageView.contentMode = .scaleAspectFill
-        self.imageView.clipsToBounds = true
     }
     
     required init?(coder: NSCoder) {
