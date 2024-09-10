@@ -48,14 +48,18 @@ final class TrackerViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Трекеры"
+        label.text = NSLocalizedString(
+            "tracker_title",
+            comment: "Заголовок экрана трекеров")
         label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         return label
     }()
     
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.placeholder = "Поиск"
+        searchBar.placeholder = NSLocalizedString(
+            "search_placeholder",
+            comment: "Подсказка для поиска трекеров")
         searchBar.backgroundImage = UIImage()
         return searchBar
     }()
@@ -67,7 +71,9 @@ final class TrackerViewController: UIViewController {
     
     private lazy var trackingLabel: UILabel = {
         let label = UILabel()
-        label.text = "Что будем отслеживать?"
+        label.text = NSLocalizedString(
+            "error_tracking",
+            comment: "Текст-заполнитель, если нет трекеров для отслеживания")
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textAlignment = .center
         return label

@@ -15,7 +15,9 @@ final class StatisticsViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Статистика"
+        label.text = NSLocalizedString(
+            "statistics_title",
+            comment: "Заголовок экрана статистики")
         label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         return label
     }()
@@ -27,7 +29,9 @@ final class StatisticsViewController: UIViewController {
     
     private lazy var placeholderLabel: UILabel = {
         let label = UILabel()
-        label.text = "Анализировать пока нечего"
+        label.text = NSLocalizedString(
+            "statistics_placeholder",
+            comment: "Текст-заполнитель, когда нет данных для анализа")
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textAlignment = .center
         return label

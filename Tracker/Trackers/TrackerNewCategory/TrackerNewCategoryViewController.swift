@@ -19,7 +19,9 @@ final class TrackerNewCategoryViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Новая категория"
+        label.text = NSLocalizedString(
+            "title_label_text_new_category",
+            comment: "Заголовок для новой категории")
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
@@ -27,7 +29,9 @@ final class TrackerNewCategoryViewController: UIViewController {
     
     private lazy var categoryNameTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название категории"
+        textField.placeholder = NSLocalizedString(
+            "category_name_textfield_placeholder",
+            comment: "Placeholder для ввода названия категории")
         textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         textField.backgroundColor = .ypBackgroundDay
         textField.layer.cornerRadius = 16
@@ -45,7 +49,9 @@ final class TrackerNewCategoryViewController: UIViewController {
     
     private lazy var saveCategoryButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(NSLocalizedString(
+            "save_category_button_title",
+            comment: "Кнопка для сохранения новой категории"), for: .normal)
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypGrey

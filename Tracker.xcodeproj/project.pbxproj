@@ -31,6 +31,8 @@
 		DD973E262C6E1D3800A289FB /* ExtensionTrackerSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD973E252C6E1D3800A289FB /* ExtensionTrackerSchedule.swift */; };
 		DDA2C4B92C64F8310055241D /* TrackerCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA2C4B82C64F8310055241D /* TrackerCategoryViewController.swift */; };
 		DDA2C4BB2C64FE340055241D /* TrackerNewCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA2C4BA2C64FE340055241D /* TrackerNewCategoryViewController.swift */; };
+		DDA371632C904ED00001596F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DDA371612C904ED00001596F /* Localizable.strings */; };
+		DDA371682C9053AA0001596F /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = DDA371662C9053AA0001596F /* Localizable.stringsdict */; };
 		DDA9CFC72C6914DD0035B64D /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA9CFC62C6914DD0035B64D /* TrackerCategoryStore.swift */; };
 		DDA9CFC92C6914F40035B64D /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA9CFC82C6914F40035B64D /* TrackerRecordStore.swift */; };
 		DDB2ADD92C65E8360005D216 /* TrackerCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB2ADD82C65E8350005D216 /* TrackerCategoryCell.swift */; };
@@ -66,6 +68,8 @@
 		DD973E252C6E1D3800A289FB /* ExtensionTrackerSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionTrackerSchedule.swift; sourceTree = "<group>"; };
 		DDA2C4B82C64F8310055241D /* TrackerCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryViewController.swift; sourceTree = "<group>"; };
 		DDA2C4BA2C64FE340055241D /* TrackerNewCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerNewCategoryViewController.swift; sourceTree = "<group>"; };
+		DDA371622C904ED00001596F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		DDA371672C9053AA0001596F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		DDA9CFC62C6914DD0035B64D /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
 		DDA9CFC82C6914F40035B64D /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
 		DDB2ADD82C65E8350005D216 /* TrackerCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryCell.swift; sourceTree = "<group>"; };
@@ -106,6 +110,7 @@
 			children = (
 				DD0D6E7A2C5780EE0036B9E0 /* AppDelegate.swift */,
 				DD0D6E7C2C5780EE0036B9E0 /* SceneDelegate.swift */,
+				DDA371652C904F0C0001596F /* Localizable */,
 				DD41746F2C8F5039006229EA /* CoreData */,
 				DD6291B82C5A957200E683F4 /* Onboarding */,
 				DD6291B92C5A957800E683F4 /* MainTabBar */,
@@ -234,6 +239,15 @@
 			path = TrackerViewController;
 			sourceTree = "<group>";
 		};
+		DDA371652C904F0C0001596F /* Localizable */ = {
+			isa = PBXGroup;
+			children = (
+				DDA371612C904ED00001596F /* Localizable.strings */,
+				DDA371662C9053AA0001596F /* Localizable.stringsdict */,
+			);
+			path = Localizable;
+			sourceTree = "<group>";
+		};
 		DDD533382C67C4DE00E49485 /* TrackerCollection */ = {
 			isa = PBXGroup;
 			children = (
@@ -302,6 +316,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD38DBE22C8742C400BE2BC3 /* Launch Screen.storyboard in Resources */,
+				DDA371682C9053AA0001596F /* Localizable.stringsdict in Resources */,
+				DDA371632C904ED00001596F /* Localizable.strings in Resources */,
 				DD0D6E842C5780F00036B9E0 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -345,6 +361,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		DDA371612C904ED00001596F /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DDA371622C904ED00001596F /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		DDA371662C9053AA0001596F /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DDA371672C9053AA0001596F /* en */,
+			);
+			name = Localizable.stringsdict;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		DD0D6E892C5780F00036B9E0 /* Debug */ = {

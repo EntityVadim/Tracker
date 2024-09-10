@@ -59,7 +59,9 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     private lazy var colorLabel: UILabel = {
         let label = UILabel()
-        label.text = "Цвет"
+        label.text = NSLocalizedString(
+            "color_label_text",
+            comment: "Метка для выбора цвета")
         label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
         label.textColor = .ypBlack
         return label
@@ -76,7 +78,9 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Новая привычка"
+        label.text = NSLocalizedString(
+            "title_label_text",
+            comment: "Заголовок для новой привычки")
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
@@ -84,7 +88,9 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     private lazy var nameTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = NSLocalizedString(
+            "name_text_field_placeholder",
+            comment: "Заполнитель для ввода названия трекера")
         textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         textField.backgroundColor = .ypBackgroundDay
         textField.layer.cornerRadius = 16
@@ -98,7 +104,9 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     private lazy var cancelButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(NSLocalizedString(
+            "cancel_button_title",
+            comment: "Кнопка отмены"), for: .normal)
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.borderWidth = 1
@@ -115,7 +123,9 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Сохранить", for: .normal)
+        button.setTitle(NSLocalizedString(
+            "save_button_title",
+            comment: "Кнопка сохранения"), for: .normal)
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypGrey
@@ -129,12 +139,13 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     }()
     
     private lazy var categoriesButton: UIButton = {
-        let button = createRoundedButton (
-            title: "Категория",
+        let button = createRoundedButton(
+            title: NSLocalizedString(
+                "categories_button_title",
+                comment: "Кнопка выбора категории"),
             action: #selector(categoriesButtonTapped),
             corners: [.topLeft, .topRight],
-            radius: 16
-        )
+            radius: 16)
         button.titleLabel?.numberOfLines = 0
         button.titleLabel?.textAlignment = .left
         button.contentHorizontalAlignment = .left
@@ -143,11 +154,12 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     private lazy var scheduleButton: UIButton = {
         let button = createRoundedButton(
-            title: "Расписание",
+            title: NSLocalizedString(
+                "schedule_button_title",
+                comment: "Кнопка выбора расписания"),
             action: #selector(scheduleButtonTapped),
             corners: [.bottomLeft, .bottomRight],
-            radius: 16
-        )
+            radius: 16)
         button.titleLabel?.numberOfLines = 0
         button.titleLabel?.textAlignment = .left
         button.contentHorizontalAlignment = .left
@@ -382,10 +394,11 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     }
     
     private func updateCategoriesButtonTitle() {
-        let titleText = NSMutableAttributedString(string: "Категория\n", attributes: [
-            .font: UIFont.systemFont(ofSize: 17, weight: .regular),
-            .foregroundColor: UIColor.ypBlack
-        ])
+        let titleText = NSMutableAttributedString(string: NSLocalizedString(
+            "categories_button_mutable",
+            comment: "Категория\n"), attributes: [
+                .font: UIFont.systemFont(ofSize: 17, weight: .regular),
+                .foregroundColor: UIColor.ypBlack])
         if let categoryText = selectedCategory {
             let categoryAttributedText = NSAttributedString(string: categoryText, attributes: [
                 .font: UIFont.systemFont(ofSize: 17, weight: .regular),
@@ -397,14 +410,24 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     }
     
     private func updateScheduleButtonTitle() {
-        let weekDayShortNames = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
-        let titleText = NSMutableAttributedString(string: "Расписание\n", attributes: [
-            .font: UIFont.systemFont(ofSize: 17, weight: .regular),
-            .foregroundColor: UIColor.ypBlack
-        ])
+        let weekDayShortNames = [
+            NSLocalizedString("monday_short", comment: "Сокращенное название дня недели Понедельник"),
+            NSLocalizedString("tuesday_short", comment: "Сокращенное название дня недели Вторник"),
+            NSLocalizedString("wednesday_short", comment: "Сокращенное название дня недели Среда"),
+            NSLocalizedString("thursday_short", comment: "Сокращенное название дня недели Четверг"),
+            NSLocalizedString("friday_short", comment: "Сокращенное название дня недели Пятница"),
+            NSLocalizedString("saturday_short", comment: "Сокращенное название дня недели Суббота"),
+            NSLocalizedString("sunday_short", comment: "Сокращенное название дня недели Воскресенье")]
+        let titleText = NSMutableAttributedString(string: NSLocalizedString(
+            "schedule_button_mutable",
+            comment: "Расписание\n"), attributes: [
+                .font: UIFont.systemFont(ofSize: 17, weight: .regular),
+                .foregroundColor: UIColor.ypBlack])
         var daysText: String
         if selectedDays.count == WeekDay.allCases.count {
-            daysText = "Каждый день"
+            daysText = NSLocalizedString(
+                "every_day_text",
+                comment: "Текст для каждого дня")
         } else {
             let shortNames = selectedDays.map { weekDayShortNames[WeekDay.allCases.firstIndex(of: $0)!] }
             daysText = shortNames.joined(separator: ", ")
@@ -459,8 +482,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             name: name,
             color: selectedColor,
             emoji: selectedEmoji,
-            schedule: schedule
-        )
+            schedule: schedule)
         dataManager.addNewTracker(to: selectedCategory, tracker: newTracker)
         delegate?.didCreateTracker(newTracker, inCategory: selectedCategory)
         dismiss(animated: true, completion: nil)

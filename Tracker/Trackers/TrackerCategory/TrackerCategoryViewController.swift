@@ -20,7 +20,9 @@ final class TrackerCategoryViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Категория"
+        label.text = NSLocalizedString(
+            "title_label_text",
+            comment: "Заголовок для выбора категории")
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
@@ -36,7 +38,9 @@ final class TrackerCategoryViewController: UIViewController {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 4
         let attributedString = NSAttributedString(
-            string: "Привычки и события можно\n объединить по смыслу",
+            string: NSLocalizedString(
+                "placeholder_text",
+                comment: "Текст плейсхолдера для категории"),
             attributes: [
                 .font: UIFont.systemFont(ofSize: 12, weight: .medium),
                 .paragraphStyle: paragraphStyle])
@@ -48,7 +52,9 @@ final class TrackerCategoryViewController: UIViewController {
     
     private lazy var addCategoryButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Добавить категорию", for: .normal)
+        button.setTitle(NSLocalizedString(
+            "add_category_button_title",
+            comment: "Текст кнопки добавления категории"), for: .normal)
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypBlack

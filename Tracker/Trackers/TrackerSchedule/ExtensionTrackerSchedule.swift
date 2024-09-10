@@ -23,7 +23,7 @@ extension TrackerScheduleViewController: UITableViewDataSource {
                 withIdentifier: TrackerScheduleViewController.cellIdentifier,
                 for: indexPath)
             let day = WeekDay.allCases[indexPath.row]
-            cell.textLabel?.text = day.rawValue
+            cell.textLabel?.text = day.localizedString()
             let switchView = UISwitch()
             switchView.isOn = selectedDays.contains(day)
             switchView.addTarget(self, action: #selector(switchChanged(sender:)), for: .valueChanged)

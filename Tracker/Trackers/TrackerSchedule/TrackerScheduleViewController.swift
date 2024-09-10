@@ -10,13 +10,32 @@ import UIKit
 // MARK: - Enum
 
 enum WeekDay: String, CaseIterable {
-    case monday = "Понедельник"
-    case tuesday = "Вторник"
-    case wednesday = "Среда"
-    case thursday = "Четверг"
-    case friday = "Пятница"
-    case saturday = "Суббота"
-    case sunday = "Воскресенье"
+    case monday = "Monday"
+    case tuesday = "Tuesday"
+    case wednesday = "Wednesday"
+    case thursday = "Thursday"
+    case friday = "Friday"
+    case saturday = "Saturday"
+    case sunday = "Sunday"
+    
+    func localizedString() -> String {
+        switch self {
+        case .monday:
+            return NSLocalizedString("week_day_monday", comment: "Понедельник")
+        case .tuesday:
+            return NSLocalizedString("week_day_tuesday", comment: "Вторник")
+        case .wednesday:
+            return NSLocalizedString("week_day_wednesday", comment: "Среда")
+        case .thursday:
+            return NSLocalizedString("week_day_thursday", comment: "Четверг")
+        case .friday:
+            return NSLocalizedString("week_day_friday", comment: "Пятница")
+        case .saturday:
+            return NSLocalizedString("week_day_saturday", comment: "Суббота")
+        case .sunday:
+            return NSLocalizedString("week_day_sunday", comment: "Воскресенье")
+        }
+    }
 }
 
 // MARK: - TrackerSchedule
@@ -47,7 +66,9 @@ final class TrackerScheduleViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Расписание"
+        label.text = NSLocalizedString(
+            "title_label_text_schedule",
+            comment: "Заголовок для расписания")
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
@@ -55,7 +76,9 @@ final class TrackerScheduleViewController: UIViewController {
     
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(NSLocalizedString(
+            "save_button_title",
+            comment: "Кнопка для сохранения расписания"), for: .normal)
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypBlack
