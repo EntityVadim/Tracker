@@ -39,8 +39,7 @@ final class TrackerCategoryViewController: UIViewController {
             string: "Привычки и события можно\n объединить по смыслу",
             attributes: [
                 .font: UIFont.systemFont(ofSize: 12, weight: .medium),
-                .paragraphStyle: paragraphStyle]
-        )
+                .paragraphStyle: paragraphStyle])
         label.attributedText = attributedString
         label.textAlignment = .center
         label.numberOfLines = 0

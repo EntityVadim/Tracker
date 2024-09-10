@@ -104,9 +104,9 @@
 		DD0D6E792C5780EE0036B9E0 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
-				DDE7D63E2C74FF8C00F57814 /* Tracker.xcdatamodeld */,
 				DD0D6E7A2C5780EE0036B9E0 /* AppDelegate.swift */,
 				DD0D6E7C2C5780EE0036B9E0 /* SceneDelegate.swift */,
+				DD41746F2C8F5039006229EA /* CoreData */,
 				DD6291B82C5A957200E683F4 /* Onboarding */,
 				DD6291B92C5A957800E683F4 /* MainTabBar */,
 				DD6291BA2C5A95BA00E683F4 /* Trackers */,
@@ -116,6 +116,14 @@
 				DD0D6E882C5780F00036B9E0 /* Info.plist */,
 			);
 			path = Tracker;
+			sourceTree = "<group>";
+		};
+		DD41746F2C8F5039006229EA /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				DDE7D63E2C74FF8C00F57814 /* Tracker.xcdatamodeld */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 		DD6291B82C5A957200E683F4 /* Onboarding */ = {
