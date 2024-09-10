@@ -6,24 +6,31 @@
  
  */
 
+// MARK: - OnboardingPage
+
 "onboarding_text_first_page" = "Отслеживайте только\n то, что хотите";
 "onboarding_button_first_page" = "Вот это технологии!";
 "onboarding_text_second_page" = "Даже если это\n не литры воды и йога";
 "onboarding_button_second_page" = "Вот это технологии!";
 
+// MARK: - MainTabBar
+
 "tab_title_trackers" = "Трекеры";
 "tab_title_statistics" = "Статистика";
 
-"statistics_title" = "Статистика";
-"statistics_placeholder" = "Анализировать пока нечего";
+// MARK: - TrackerViewController
 
 "tracker_title" = "Трекеры";
 "search_placeholder" = "Поиск";
 "error_tracking" = "Что будем отслеживать?";
 
+// MARK: - TrackerTypeSelection
+
 "tracker_creation_title" = "Создание трекера";
 "habit_button_title" = "Привычка";
 "irregular_event_button_title" = "Нерегулярное событие";
+
+// MARK: - TrackerCreation
 
 "color_label_text" = "Цвет";
 "title_label_text" = "Новая привычка";
@@ -43,13 +50,19 @@
 "saturday_short" = "Сб";
 "sunday_short" = "Вс";
 
+// MARK: - TrackerCategory
+
 "title_label_text" = "Категория";
 "placeholder_text" = "Привычки и события можно\n объединить по смыслу";
 "add_category_button_title" = "Добавить категорию";
 
+// MARK: - TrackerNewCategory
+
 "title_label_text_new_category" = "Новая категория";
 "category_name_textfield_placeholder" = "Введите название категории";
 "save_category_button_title" = "Готово";
+
+// MARK: - TrackerSchedule
 
 "title_label_text_schedule" = "Расписание";
 "save_button_title" = "Готово";
@@ -60,3 +73,8 @@
 "week_day_friday" = "Пятница";
 "week_day_saturday" = "Суббота";
 "week_day_sunday" = "Воскресенье";
+
+// MARK: - StatisticsViewController
+
+"statistics_title" = "Статистика";
+"statistics_placeholder" = "Анализировать пока нечего";
