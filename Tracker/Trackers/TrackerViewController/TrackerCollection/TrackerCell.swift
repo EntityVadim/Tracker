@@ -162,16 +162,10 @@ final class TrackerCell: UICollectionViewCell {
             updateCompletionButtonSaturation(forCompletedState: isCompletedForToday())
             let uniqueDates = Set(completedTrackers.map { $0.date })
             let countDays = uniqueDates.count
-            let day: String
-            switch countDays {
-            case 1:
-                day = "День"
-            case 2...4:
-                day = "Дня"
-            default:
-                day = "Дней"
-            }
-            countLabel.text = "\(countDays) \(day)"
+            let localizedDays = String.localizedStringWithFormat(
+                NSLocalizedString("days_count", comment: ""),
+                countDays)
+            countLabel.text = localizedDays
             let configuration = UIImage.SymbolConfiguration(pointSize: 10, weight: .bold)
             let iconName = isCompletedForToday() ? "checkmark" : "plus"
             let iconImage = UIImage(systemName: iconName, withConfiguration: configuration)
