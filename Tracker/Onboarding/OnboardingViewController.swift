@@ -25,6 +25,7 @@ final class OnboardingContentViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.textColor = .black
         return label
     }()
     

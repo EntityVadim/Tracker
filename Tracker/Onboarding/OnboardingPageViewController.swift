@@ -46,7 +46,7 @@ final class OnboardingPageViewController: UIPageViewController {
     
     private lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl()
-        pageControl.currentPageIndicatorTintColor = .ypBlack
+        pageControl.currentPageIndicatorTintColor = .black
         pageControl.pageIndicatorTintColor = .ypGrey
         pageControl.numberOfPages = 2
         pageControl.addTarget(
