@@ -54,6 +54,7 @@ final class TrackerScheduleViewController: UIViewController {
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.layer.cornerRadius = 16
+        tableView.separatorColor = .ypGrey
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(

@@ -83,6 +83,7 @@ final class TrackerViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .ypWhite
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(
