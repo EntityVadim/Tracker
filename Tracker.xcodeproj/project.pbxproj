@@ -110,8 +110,8 @@
 			children = (
 				DD0D6E7A2C5780EE0036B9E0 /* AppDelegate.swift */,
 				DD0D6E7C2C5780EE0036B9E0 /* SceneDelegate.swift */,
-				DDA371652C904F0C0001596F /* Localizable */,
 				DD41746F2C8F5039006229EA /* CoreData */,
+				DDA371652C904F0C0001596F /* Localizable */,
 				DD6291B82C5A957200E683F4 /* Onboarding */,
 				DD6291B92C5A957800E683F4 /* MainTabBar */,
 				DD6291BA2C5A95BA00E683F4 /* Trackers */,

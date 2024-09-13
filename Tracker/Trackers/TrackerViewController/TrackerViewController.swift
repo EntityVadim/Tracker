@@ -30,7 +30,7 @@ final class TrackerViewController: UIViewController {
             style: .plain,
             target: self,
             action: #selector(addTracker))
-        button.tintColor = .black
+        button.tintColor = .ypBlack
         return button
     }()
     
@@ -99,16 +99,11 @@ final class TrackerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .ypWhite
         setupUI()
         setupConstraints()
         setupNavigationBar()
-        setupAppearance()
         updateTrackersView()
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        setupAppearance()
     }
     
     // MARK: - Public Methods
@@ -167,15 +162,6 @@ final class TrackerViewController: UIViewController {
     private func setupNavigationBar() {
         navigationItem.leftBarButtonItems = [addButton]
         navigationItem.rightBarButtonItems = [datePicker]
-    }
-    
-    private func setupAppearance() {
-        let isDarkMode = traitCollection.userInterfaceStyle == .dark
-        view.backgroundColor = isDarkMode ? .ypBlack : .ypWhite
-        titleLabel.textColor = isDarkMode ? .ypWhite : .ypBlack
-        trackingLabel.textColor = isDarkMode ? .ypWhite : .ypBlack
-        searchBar.barTintColor = isDarkMode ? .ypBlack : .ypWhite
-        addButton.tintColor = isDarkMode ? .ypWhite : .ypBlack
     }
     
     // MARK: - Actions

@@ -95,9 +95,9 @@ final class TrackerScheduleViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .ypWhite
         setupUI()
         setupConstraints()
-        view.backgroundColor = .ypWhite
     }
     
     // MARK: - Setup UI
@@ -113,13 +113,14 @@ final class TrackerScheduleViewController: UIViewController {
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 38),
+            titleLabel.heightAnchor.constraint(equalToConstant: 22),
             
             saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
             
-            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
-            tableView.bottomAnchor.constraint(equalTo: saveButton.topAnchor, constant: -38),
+            tableView.heightAnchor.constraint(equalToConstant: 525),
+            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 50),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])

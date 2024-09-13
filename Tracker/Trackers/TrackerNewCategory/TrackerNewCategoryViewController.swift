@@ -69,9 +69,9 @@ final class TrackerNewCategoryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .ypWhite
         setupUI()
         setupConstraints()
-        view.backgroundColor = .ypWhite
     }
     
     // MARK: - Setup UI

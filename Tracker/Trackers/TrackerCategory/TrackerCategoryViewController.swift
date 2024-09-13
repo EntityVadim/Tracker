@@ -89,7 +89,7 @@ final class TrackerCategoryViewController: UIViewController {
         bindViewModel()
     }
     
-    // MARK: - Setup UI
+    // MARK: - Private Methods
     
     private func setupUI() {
         [titleLabel, errorImageView, placeholderLabel, addCategoryButton, tableView].forEach {
@@ -123,8 +123,6 @@ final class TrackerCategoryViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: addCategoryButton.topAnchor, constant: -20)
         ])
     }
-    
-    // MARK: - Private Methods
     
     private func bindViewModel() {
         viewModel.updateUI = { [weak self] in

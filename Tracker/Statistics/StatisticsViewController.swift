@@ -41,14 +41,9 @@ final class StatisticsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .ypWhite
         setupUI()
         setupConstraints()
-        setupAppearance()
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        setupAppearance()
     }
     
     // MARK: - Setup UI
@@ -76,12 +71,5 @@ final class StatisticsViewController: UIViewController {
             placeholderLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             placeholderLabel.heightAnchor.constraint(equalToConstant: 18)
         ])
-    }
-    
-    private func setupAppearance() {
-        let isDarkMode = traitCollection.userInterfaceStyle == .dark
-        view.backgroundColor = isDarkMode ? .ypBlack : .ypWhite
-        titleLabel.textColor = isDarkMode ? .ypWhite : .ypBlack
-        placeholderLabel.textColor = isDarkMode ? .ypWhite : .ypBlack
     }
 }

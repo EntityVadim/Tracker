@@ -169,7 +169,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     private lazy var separatorView: UIView = {
         let view = UIView()
         view.backgroundColor = .ypLightGray
-        view.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
         return view
     }()
     

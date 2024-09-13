@@ -45,6 +45,8 @@ final class TrackerTypeSelectionViewController: UIViewController {
         button.setTitle(NSLocalizedString(
             "habit_button_title",
             comment: "Кнопка создания привычки"), for: .normal)
+        button.setTitleColor(.ypWhite, for: .normal)
+        button.backgroundColor = .ypBlack
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.heightAnchor.constraint(equalToConstant: 60).isActive = true
@@ -60,6 +62,8 @@ final class TrackerTypeSelectionViewController: UIViewController {
         button.setTitle(NSLocalizedString(
             "irregular_event_button_title",
             comment: "Кнопка создания нерегулярного события"), for: .normal)
+        button.setTitleColor(.ypWhite, for: .normal)
+        button.backgroundColor = .ypBlack
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.heightAnchor.constraint(equalToConstant: 60).isActive = true
@@ -74,13 +78,9 @@ final class TrackerTypeSelectionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .ypWhite
         setupUI()
         setupConstraints()
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        setupAppearance()
     }
     
     // MARK: - Setup Methods
