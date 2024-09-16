@@ -71,6 +71,7 @@ final class TrackerCategoryViewController: UIViewController {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.backgroundColor = .ypWhite
         tableView.register(TrackerCategoryCell.self, forCellReuseIdentifier: TrackerCategoryCell.identifier)
         tableView.separatorStyle = .singleLine
         tableView.separatorColor = UIColor.ypGrey

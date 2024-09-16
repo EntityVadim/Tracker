@@ -57,6 +57,7 @@ final class TrackerScheduleViewController: UIViewController {
         tableView.separatorColor = .ypGrey
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.backgroundColor = .ypWhite
         tableView.register(
             UITableViewCell.self,
             forCellReuseIdentifier: TrackerScheduleViewController.cellIdentifier)

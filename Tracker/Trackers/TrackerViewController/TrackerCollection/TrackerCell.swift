@@ -46,7 +46,7 @@ final class TrackerCell: UICollectionViewCell {
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        label.textColor = .ypWhite
+        label.textColor = .white
         return label
     }()
     
