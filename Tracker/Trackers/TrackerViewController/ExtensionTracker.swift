@@ -36,13 +36,13 @@ extension TrackerViewController: TrackerCreationDelegate {
 
 extension TrackerViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        dataManager.categories.count
+        return visibleCategories.count
     }
     
     func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int) -> Int {
-            let category = dataManager.categories[section]
+            let category = visibleCategories[section]
             let trackers = category.trackers.filter {
                 dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
             }
@@ -57,7 +57,7 @@ extension TrackerViewController: UICollectionViewDataSource {
                 for: indexPath) as? TrackerCell else {
                 return UICollectionViewCell()
             }
-            let category = dataManager.categories[indexPath.section]
+            let category = visibleCategories[indexPath.section]
             let trackers = category.trackers.filter {
                 dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
             }
@@ -88,7 +88,7 @@ extension TrackerViewController: UICollectionViewDelegate {
                 ) as? TrackerSectionHeader else {
                     return UICollectionReusableView()
                 }
-                let category = dataManager.categories[indexPath.section]
+                let category = visibleCategories[indexPath.section]
                 headerView.titleLabel.text = category.title
                 return headerView
             }
@@ -123,5 +123,11 @@ extension TrackerViewController: TrackerCellDelegate {
         for tracker: Tracker
     ) {
         updateTrackersView()
+    }
+}
+
+extension TrackerViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filterTrackers(by: searchText)
     }
 }

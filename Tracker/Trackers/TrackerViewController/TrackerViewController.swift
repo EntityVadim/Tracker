@@ -24,6 +24,8 @@ final class TrackerViewController: UIViewController {
     
     // MARK: - Private Properties
     
+    private(set) var visibleCategories: [TrackerCategory] = []
+    
     private lazy var addButton: UIBarButtonItem = {
         let button = UIBarButtonItem(
             image: UIImage(named: "Plus"),
@@ -105,6 +107,8 @@ final class TrackerViewController: UIViewController {
         setupConstraints()
         setupNavigationBar()
         updateTrackersView()
+        visibleCategories = dataManager.categories
+        searchBar.delegate = self
     }
     
     // MARK: - Public Methods
@@ -115,10 +119,29 @@ final class TrackerViewController: UIViewController {
         let filteredTrackers = trackers.filter {
             dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
         }
+        if let searchText = searchBar.text, !searchText.isEmpty {
+            filterTrackers(by: searchText)
+        } else {
+            visibleCategories = dataManager.categories
+        }
         let hasTrackers = !filteredTrackers.isEmpty
         errorImageView.isHidden = hasTrackers
         trackingLabel.isHidden = hasTrackers
         collectionView.isHidden = !hasTrackers
+        collectionView.reloadData()
+    }
+    
+    func filterTrackers(by searchText: String) {
+        if searchText.isEmpty {
+            visibleCategories = dataManager.categories
+        } else {
+            visibleCategories = dataManager.categories.map { category in
+                let filteredTrackers = category.trackers.filter { tracker in
+                    return tracker.name.lowercased().contains(searchText.lowercased())
+                }
+                return TrackerCategory(title: category.title, trackers: filteredTrackers)
+            }.filter { !$0.trackers.isEmpty }
+        }
         collectionView.reloadData()
     }
     
@@ -176,5 +199,6 @@ final class TrackerViewController: UIViewController {
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         selectedDate = sender.date
         updateTrackersView()
+        filterTrackers(by: searchBar.text ?? "")
     }
 }

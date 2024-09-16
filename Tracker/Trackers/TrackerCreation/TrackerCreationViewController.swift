@@ -40,7 +40,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.backgroundColor = .clear
+        collectionView.backgroundColor = .ypWhite
         return collectionView
     }()
     
@@ -53,6 +53,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         let label = UILabel()
         label.text = "Emoji"
         label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+        label.backgroundColor = .ypWhite
         label.textColor = .ypBlack
         return label
     }()
@@ -63,6 +64,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             "color_label_text",
             comment: "Метка для выбора цвета")
         label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+        label.backgroundColor = .ypWhite
         label.textColor = .ypBlack
         return label
     }()
@@ -72,7 +74,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.backgroundColor = .clear
+        collectionView.backgroundColor = .ypWhite
         return collectionView
     }()
     

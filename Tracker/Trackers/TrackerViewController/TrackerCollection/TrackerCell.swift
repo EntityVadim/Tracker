@@ -60,7 +60,7 @@ final class TrackerCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         let plusImage = UIImage(systemName: "plus")
         button.setImage(plusImage, for: .normal)
-        button.tintColor = .white
+        button.tintColor = .ypWhite
         button.backgroundColor = cardView.backgroundColor
         button.layer.cornerRadius = 17
         button.addTarget(self, action: #selector(completionButtonTapped), for: .touchUpInside)
