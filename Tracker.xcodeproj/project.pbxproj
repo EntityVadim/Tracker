@@ -171,6 +171,15 @@
 			path = Statistics;
 			sourceTree = "<group>";
 		};
+		DD78BA462C99DA8100135D02 /* TrackerCreationCollection */ = {
+			isa = PBXGroup;
+			children = (
+				DD7646672C6F4AAB00AF9A22 /* EmojiCell.swift */,
+				DD7646692C6F4ADF00AF9A22 /* ColorCell.swift */,
+			);
+			path = TrackerCreationCollection;
+			sourceTree = "<group>";
+		};
 		DD80453B2C6E20A300E234BB /* TrackerCategory */ = {
 			isa = PBXGroup;
 			children = (
@@ -195,8 +204,7 @@
 			children = (
 				DD0E4D152C636ED4004C3A1D /* TrackerCreationViewController.swift */,
 				DD76466B2C6F7A3600AF9A22 /* ExtensionTrackerCreation.swift */,
-				DD7646672C6F4AAB00AF9A22 /* EmojiCell.swift */,
-				DD7646692C6F4ADF00AF9A22 /* ColorCell.swift */,
+				DD78BA462C99DA8100135D02 /* TrackerCreationCollection */,
 			);
 			path = TrackerCreation;
 			sourceTree = "<group>";
