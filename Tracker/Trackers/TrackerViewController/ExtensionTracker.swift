@@ -126,6 +126,8 @@ extension TrackerViewController: TrackerCellDelegate {
     }
 }
 
+// MARK: - UISearchBarDelegate
+
 extension TrackerViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filterTrackers(by: searchText)
