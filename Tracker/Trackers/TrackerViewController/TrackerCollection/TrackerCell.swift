@@ -74,6 +74,14 @@ final class TrackerCell: UICollectionViewCell {
         return label
     }()
     
+    private lazy var pinView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "pin.fill")
+        imageView.tintColor = .white
+        imageView.isHidden = true
+        return imageView
+    }()
+    
     // MARK: - Initialization
     
     override init(frame: CGRect) {
@@ -86,7 +94,39 @@ final class TrackerCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - UI Setup
+    // MARK: - Public Methods
+    
+    func configure(
+        with tracker: Tracker,
+        completedTrackers: [TrackerRecord],
+        dataManager: TrackerDataManager,
+        date: String) {
+            self.tracker = tracker
+            self.completedTrackers = completedTrackers
+            self.dataManager = dataManager
+            self.date = date
+            cardView.backgroundColor = tracker.color
+            emojiLabel.text = tracker.emoji
+            nameLabel.text = tracker.name
+            updateCompletionButtonSaturation(forCompletedState: isCompletedForToday())
+            updatePinVisibility()
+            let uniqueDates = Set(completedTrackers.map { $0.date })
+            let countDays = uniqueDates.count
+            let localizedDays = String.localizedStringWithFormat(
+                NSLocalizedString("days_count", comment: ""),
+                countDays)
+            countLabel.text = localizedDays
+            let configuration = UIImage.SymbolConfiguration(pointSize: 10, weight: .bold)
+            let iconName = isCompletedForToday() ? "checkmark" : "plus"
+            let iconImage = UIImage(systemName: iconName, withConfiguration: configuration)
+            completionButton.setImage(iconImage, for: .normal)
+        }
+    
+    func isCompletedForToday() -> Bool {
+        return completedTrackers.contains { $0.trackerId == tracker?.id && $0.date == date }
+    }
+    
+    // MARK: - Private Methods
     
     private func setupUI() {
         [cardView, quantityView].forEach {
@@ -94,7 +134,7 @@ final class TrackerCell: UICollectionViewCell {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [emojiLabel, nameLabel].forEach {
+        [emojiLabel, nameLabel, pinView].forEach {
             cardView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -133,7 +173,12 @@ final class TrackerCell: UICollectionViewCell {
             
             countLabel.heightAnchor.constraint(equalToConstant: 18),
             countLabel.topAnchor.constraint(equalTo: quantityView.topAnchor, constant: 16),
-            countLabel.leadingAnchor.constraint(equalTo: quantityView.leadingAnchor, constant: 12)
+            countLabel.leadingAnchor.constraint(equalTo: quantityView.leadingAnchor, constant: 12),
+            
+            pinView.widthAnchor.constraint(equalToConstant: 12),
+            pinView.heightAnchor.constraint(equalToConstant: 12),
+            pinView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 18),
+            pinView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
         ])
     }
     
@@ -145,37 +190,13 @@ final class TrackerCell: UICollectionViewCell {
         }
     }
     
-    // MARK: - Configuration
-    
-    func configure(
-        with tracker: Tracker,
-        completedTrackers: [TrackerRecord],
-        dataManager: TrackerDataManager,
-        date: String) {
-            self.tracker = tracker
-            self.completedTrackers = completedTrackers
-            self.dataManager = dataManager
-            self.date = date
-            cardView.backgroundColor = tracker.color
-            emojiLabel.text = tracker.emoji
-            nameLabel.text = tracker.name
-            updateCompletionButtonSaturation(forCompletedState: isCompletedForToday())
-            let uniqueDates = Set(completedTrackers.map { $0.date })
-            let countDays = uniqueDates.count
-            let localizedDays = String.localizedStringWithFormat(
-                NSLocalizedString("days_count", comment: ""),
-                countDays)
-            countLabel.text = localizedDays
-            let configuration = UIImage.SymbolConfiguration(pointSize: 10, weight: .bold)
-            let iconName = isCompletedForToday() ? "checkmark" : "plus"
-            let iconImage = UIImage(systemName: iconName, withConfiguration: configuration)
-            completionButton.setImage(iconImage, for: .normal)
-        }
-    
-    // MARK: - Helper Methods
-    
-    func isCompletedForToday() -> Bool {
-        return completedTrackers.contains { $0.trackerId == tracker?.id && $0.date == date }
+    private func updatePinVisibility() {
+        pinView.isHidden = !isTrackerPinned()
+    }
+
+    private func isTrackerPinned() -> Bool {
+        guard let tracker = tracker else { return false }
+        return dataManager?.isTrackerPinned(tracker) ?? false
     }
     
     // MARK: - Action
@@ -194,5 +215,11 @@ final class TrackerCell: UICollectionViewCell {
         }
         updateCompletionButtonSaturation(forCompletedState: !isCompletedForToday())
         delegate?.trackerCellDidToggleCompletion(self, for: tracker)
+        if isTrackerPinned() {
+            dataManager?.unpinTracker(tracker)
+        } else {
+            dataManager?.pinTracker(tracker)
+        }
+        updatePinVisibility()
     }
 }
