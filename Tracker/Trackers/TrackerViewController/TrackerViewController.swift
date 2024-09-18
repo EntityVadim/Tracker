@@ -129,8 +129,24 @@ final class TrackerViewController: UIViewController {
     }
     
     func handleDeleteTracker(_ tracker: Tracker) {
-        dataManager.deleteTracker(withId: tracker.id)
-        updateTrackersView()
+        let alertController = UIAlertController(
+            title: nil,
+            message: "Уверены что хотите удалить трекер?",
+            preferredStyle: .actionSheet)
+        let deleteAction = UIAlertAction(
+            title: "Удалить",
+            style: .destructive
+        ) { _ in
+            self.dataManager.deleteTracker(withId: tracker.id)
+            self.updateTrackersView()
+        }
+        let cancelAction = UIAlertAction(
+            title: "Отменить",
+            style: .cancel,
+            handler: nil)
+        alertController.addAction(deleteAction)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: nil)
     }
     
     func updateTrackersView() {
@@ -193,6 +209,8 @@ final class TrackerViewController: UIViewController {
         navigationItem.leftBarButtonItems = [addButton]
         navigationItem.rightBarButtonItems = [datePicker]
     }
+    
+
     
     // MARK: - Actions
     
