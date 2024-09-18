@@ -113,35 +113,41 @@ final class TrackerViewController: UIViewController {
     
     // MARK: - Public Methods
     
+    func filterTrackers(by searchText: String, from categories: [TrackerCategory]) -> [TrackerCategory] {
+        return categories.map { category in
+            let filteredTrackers = category.trackers.filter { tracker in
+                return tracker.name.lowercased().contains(searchText.lowercased())
+            }
+            return TrackerCategory(title: category.title, trackers: filteredTrackers)
+        }.filter { !$0.trackers.isEmpty }
+    }
+    
+    func presentEditTrackerViewController(for tracker: Tracker) {
+        let editTrackerVC = TrackerCreationViewController()
+        editTrackerVC.trackerToEdit = tracker
+        present(editTrackerVC, animated: true, completion: nil)
+    }
+    
+    func handleDeleteTracker(_ tracker: Tracker) {
+        dataManager.deleteTracker(withId: tracker.id)
+        updateTrackersView()
+    }
+    
     func updateTrackersView() {
         dataManager.loadCategories()
         let trackers = dataManager.categories.flatMap { $0.trackers }
-        let filteredTrackers = trackers.filter {
+        _ = trackers.filter {
             dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
         }
         if let searchText = searchBar.text, !searchText.isEmpty {
-            filterTrackers(by: searchText)
+            visibleCategories = filterTrackers(by: searchText, from: dataManager.categories)
         } else {
             visibleCategories = dataManager.categories
         }
-        let hasTrackers = !filteredTrackers.isEmpty
+        let hasTrackers = !visibleCategories.flatMap { $0.trackers }.isEmpty
         errorImageView.isHidden = hasTrackers
         trackingLabel.isHidden = hasTrackers
         collectionView.isHidden = !hasTrackers
-        collectionView.reloadData()
-    }
-    
-    func filterTrackers(by searchText: String) {
-        if searchText.isEmpty {
-            visibleCategories = dataManager.categories
-        } else {
-            visibleCategories = dataManager.categories.map { category in
-                let filteredTrackers = category.trackers.filter { tracker in
-                    return tracker.name.lowercased().contains(searchText.lowercased())
-                }
-                return TrackerCategory(title: category.title, trackers: filteredTrackers)
-            }.filter { !$0.trackers.isEmpty }
-        }
         collectionView.reloadData()
     }
     
@@ -199,6 +205,5 @@ final class TrackerViewController: UIViewController {
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         selectedDate = sender.date
         updateTrackersView()
-        filterTrackers(by: searchBar.text ?? "")
     }
 }

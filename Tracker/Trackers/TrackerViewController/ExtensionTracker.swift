@@ -94,6 +94,41 @@ extension TrackerViewController: UICollectionViewDelegate {
             }
             return UICollectionReusableView()
         }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        contextMenuConfigurationForItemAt indexPath: IndexPath,
+        point: CGPoint) -> UIContextMenuConfiguration? {
+            let category = visibleCategories[indexPath.section]
+            let trackers = category.trackers.filter {
+                dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
+            }
+            let tracker = trackers[indexPath.item]
+            let isPinned = dataManager.isTrackerPinned(tracker)
+            let pinActionTitle = isPinned ?
+            NSLocalizedString("Открепить", comment: "Unpin") :
+            NSLocalizedString("Закрепить", comment: "Pin")
+            let pinAction = UIAction(title: pinActionTitle, image: UIImage(systemName: "pin")) { _ in
+                if isPinned {
+                    self.dataManager.unpinTracker(tracker)
+                } else {
+                    self.dataManager.pinTracker(tracker)
+                }
+                self.updateTrackersView()
+            }
+            let editAction = UIAction(
+                title: NSLocalizedString("Редактировать", comment: "Edit")) { _ in
+                    self.presentEditTrackerViewController(for: tracker)
+                }
+            let deleteAction = UIAction(
+                title: NSLocalizedString("Удалить", comment: "Delete"),
+                attributes: .destructive) { _ in
+                    self.handleDeleteTracker(tracker)
+                }
+            return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+                UIMenu(title: "", children: [pinAction, editAction, deleteAction])
+            }
+        }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -129,7 +164,10 @@ extension TrackerViewController: TrackerCellDelegate {
 // MARK: - UISearchBarDelegate
 
 extension TrackerViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        filterTrackers(by: searchText)
+    func searchBar(
+        _ searchBar: UISearchBar,
+        textDidChange searchText: String
+    ) {
+        updateTrackersView()
     }
 }

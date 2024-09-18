@@ -21,6 +21,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     weak var delegate: TrackerCreationDelegate?
     var trackerType: TrackerType?
+    var trackerToEdit: Tracker?
     var selectedCategory: String?
     var selectedEmoji: String?
     var selectedColor: UIColor?

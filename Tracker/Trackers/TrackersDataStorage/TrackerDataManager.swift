@@ -14,6 +14,7 @@ final class TrackerDataManager {
     
     // MARK: - Public Properties
     
+    @NSManaged public var isPinned: Bool
     static let shared = TrackerDataManager()
     let context: NSManagedObjectContext
     
@@ -21,6 +22,7 @@ final class TrackerDataManager {
     
     private(set) var categories: [TrackerCategory] = []
     private(set) var completedTrackers: [TrackerRecord] = []
+    private(set) var previousCategories: [UUID: TrackerCategoryCoreData] = [:]
     
     // MARK: - Initialization
     
@@ -180,7 +182,86 @@ final class TrackerDataManager {
             return false
         }
     
+    func pinTracker(_ tracker: Tracker) {
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+        do {
+            if let trackerToPin = try context.fetch(fetchRequest).first {
+                trackerToPin.isPinned = true
+                previousCategories[tracker.id] = trackerToPin.category
+                let pinnedCategory = fetchPinnedCategory()
+                trackerToPin.category = pinnedCategory
+                saveContext()
+            }
+        } catch {
+            print("Failed to pin tracker: \(error)")
+        }
+    }
+    
+    func unpinTracker(_ tracker: Tracker) {
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+        do {
+            if let trackerToUnpin = try context.fetch(fetchRequest).first {
+                trackerToUnpin.isPinned = false
+                if let previousCategory = previousCategories[tracker.id] {
+                    trackerToUnpin.category = previousCategory
+                } else {
+                    print("Previous category for tracker \(tracker.id) not found")
+                }
+                previousCategories[tracker.id] = nil
+                saveContext()
+            }
+        } catch {
+            print("Failed to unpin tracker: \(error)")
+        }
+    }
+    
+    func isTrackerPinned(_ tracker: Tracker) -> Bool {
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+        do {
+            if let fetchedTracker = try context.fetch(fetchRequest).first {
+                return fetchedTracker.isPinned
+            }
+        } catch {
+            print("Failed to check if tracker is pinned: \(error)")
+        }
+        return false
+    }
+    
+    func deleteTracker(withId id: UUID) {
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        do {
+            let trackers = try context.fetch(fetchRequest)
+            if let trackerToDelete = trackers.first {
+                TrackerStore().deleteTracker(trackerToDelete)
+                loadCategories()
+            }
+        } catch {
+            print("Failed to fetch or delete tracker: \(error)")
+        }
+    }
+    
     // MARK: - Private Methods
+    
+    func fetchPinnedCategory() -> TrackerCategoryCoreData {
+        let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "title == %@", "Закрепленные")
+        do {
+            if let pinnedCategory = try context.fetch(fetchRequest).first {
+                return pinnedCategory
+            } else {
+                let newPinnedCategory = TrackerCategoryCoreData(context: context)
+                newPinnedCategory.title = "Закрепленные"
+                saveContext()
+                return newPinnedCategory
+            }
+        } catch {
+            fatalError("Не удалось получить или создать категорию Закрепленные: \(error)")
+        }
+    }
     
     private func loadCompletedTrackers() {
         let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
@@ -235,6 +316,15 @@ extension TrackerDataManager {
                 return TrackerCategory(
                     title: categoryCoreData.title ?? "",
                     trackers: trackers)
+            }
+            self.categories.sort { category1, category2 in
+                if category1.title == "Закрепленные" {
+                    return true
+                } else if category2.title == "Закрепленные" {
+                    return false
+                } else {
+                    return category1.title < category2.title
+                }
             }
         } catch {
             print("Failed to fetch categories: \(error)")
