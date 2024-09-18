@@ -288,7 +288,6 @@ final class TrackerDataManager {
         do {
             if context.hasChanges {
                 try context.save()
-                print("Context successfully saved.")
             }
         } catch {
             print("Failed to save context: \(error.localizedDescription)")
@@ -303,7 +302,7 @@ extension TrackerDataManager {
         let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
         do {
             let fetchedCategories = try context.fetch(fetchRequest)
-            self.categories = fetchedCategories.map { categoryCoreData in
+            self.categories = fetchedCategories.compactMap { categoryCoreData in
                 let trackers = (categoryCoreData.trackers?.allObjects as? [TrackerCoreData])?.map {
                     trackerCoreData in
                     return Tracker(
@@ -313,7 +312,7 @@ extension TrackerDataManager {
                         emoji: trackerCoreData.emoji ?? "",
                         schedule: decodeSchedule(trackerCoreData.schedule))
                 } ?? []
-                return TrackerCategory(
+                return trackers.isEmpty ? nil : TrackerCategory(
                     title: categoryCoreData.title ?? "",
                     trackers: trackers)
             }
