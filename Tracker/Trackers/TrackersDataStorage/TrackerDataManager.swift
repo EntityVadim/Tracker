@@ -244,9 +244,35 @@ final class TrackerDataManager {
         }
     }
     
+    func updateTracker(_ updatedTracker: Tracker, inCategory categoryTitle: String) {
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", updatedTracker.id as CVarArg)
+        do {
+            if let trackerToUpdate = try context.fetch(fetchRequest).first {
+                trackerToUpdate.name = updatedTracker.name
+                trackerToUpdate.color = updatedTracker.color
+                trackerToUpdate.emoji = updatedTracker.emoji
+                if let jsonData = try? JSONEncoder().encode(updatedTracker.schedule) {
+                    trackerToUpdate.schedule = String(data: jsonData, encoding: .utf8)
+                } else {
+                    print("Failed to encode schedule to JSON.")
+                }
+                let categoryFetchRequest: 
+                NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+                categoryFetchRequest.predicate = NSPredicate(format: "title == %@", categoryTitle)
+                if let category = try context.fetch(categoryFetchRequest).first {
+                    trackerToUpdate.category = category
+                }
+                saveContext()
+            }
+        } catch {
+            print("Failed to update tracker: \(error)")
+        }
+    }
+    
     // MARK: - Private Methods
     
-    func fetchPinnedCategory() -> TrackerCategoryCoreData {
+    private func fetchPinnedCategory() -> TrackerCategoryCoreData {
         let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "title == %@", "Закрепленные")
         do {

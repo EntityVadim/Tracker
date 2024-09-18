@@ -215,6 +215,10 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         } else {
             updateCategoriesButtonCorners([.topLeft, .topRight], radius: 16)
         }
+        
+        if let tracker = trackerToEdit {
+            setupForEditing(tracker: tracker)
+        }
     }
     
     // MARK: - Public Methods
@@ -341,6 +345,21 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             saveButton.trailingAnchor.constraint(equalTo: stackViewButtom.trailingAnchor),
             saveButton.bottomAnchor.constraint(equalTo: stackViewButtom.bottomAnchor)
         ])
+    }
+    
+    private func setupForEditing(tracker: Tracker) {
+        titleLabel.text = "Редактирование привычки"
+        nameTextField.text = tracker.name
+        selectedEmoji = tracker.emoji
+        selectedColor = tracker.color
+        updateCategoriesButtonTitle()
+        updateScheduleButtonTitle()
+        updateSaveButtonState()
+        let completedDaysLabel = UILabel()
+        completedDaysLabel.text = "дней"
+        completedDaysLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        completedDaysLabel.textColor = .ypGrey
+        stackView.insertArrangedSubview(completedDaysLabel, at: 2)
     }
     
     private func createSpacingView(height: CGFloat) -> UIView {
@@ -480,14 +499,25 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         } else {
             schedule.append("habit")
         }
-        let newTracker = Tracker(
-            id: UUID(),
-            name: name,
-            color: selectedColor,
-            emoji: selectedEmoji,
-            schedule: schedule)
-        dataManager.addNewTracker(to: selectedCategory, tracker: newTracker)
-        delegate?.didCreateTracker(newTracker, inCategory: selectedCategory)
+        if let trackerToEdit = trackerToEdit {
+            let updatedTracker = Tracker(
+                id: trackerToEdit.id,
+                name: name,
+                color: selectedColor,
+                emoji: selectedEmoji,
+                schedule: schedule)
+            dataManager.updateTracker(updatedTracker, inCategory: selectedCategory)
+            delegate?.didCreateTracker(updatedTracker, inCategory: selectedCategory)
+        } else {
+            let newTracker = Tracker(
+                id: UUID(),
+                name: name,
+                color: selectedColor,
+                emoji: selectedEmoji,
+                schedule: schedule)
+            dataManager.addNewTracker(to: selectedCategory, tracker: newTracker)
+            delegate?.didCreateTracker(newTracker, inCategory: selectedCategory)
+        }
         dismiss(animated: true, completion: nil)
     }
     

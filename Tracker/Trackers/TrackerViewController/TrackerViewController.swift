@@ -125,6 +125,7 @@ final class TrackerViewController: UIViewController {
     func presentEditTrackerViewController(for tracker: Tracker) {
         let editTrackerVC = TrackerCreationViewController()
         editTrackerVC.trackerToEdit = tracker
+        editTrackerVC.delegate = self
         present(editTrackerVC, animated: true, completion: nil)
     }
     
@@ -209,8 +210,6 @@ final class TrackerViewController: UIViewController {
         navigationItem.leftBarButtonItems = [addButton]
         navigationItem.rightBarButtonItems = [datePicker]
     }
-    
-
     
     // MARK: - Actions
     
