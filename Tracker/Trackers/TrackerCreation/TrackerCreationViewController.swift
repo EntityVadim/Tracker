@@ -89,6 +89,17 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         return label
     }()
     
+    private lazy var completedDaysLabel: UILabel = {
+        let label = UILabel()
+        label.text = "0 дней"
+        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        label.textColor = .ypBlack
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.heightAnchor.constraint(equalToConstant: 38).isActive = true
+        return label
+    }()
+    
     private lazy var nameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = NSLocalizedString(
@@ -204,21 +215,15 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         setupConstraints()
         updateSaveButtonState()
         updateLayoutForTrackerType()
-        
+        updateButtonStates()
+
         emojiCollectionView.register(EmojiCell.self, forCellWithReuseIdentifier: EmojiCell.reuseIdentifier)
         colorCollectionView.register(ColorCell.self, forCellWithReuseIdentifier: ColorCell.reuseIdentifier)
-        
-        if trackerType == .irregularEvent {
-            scheduleButton.isHidden = true
-            separatorView.isHidden = true
-            updateCategoriesButtonCorners(.allCorners, radius: 16)
-        } else {
-            updateCategoriesButtonCorners([.topLeft, .topRight], radius: 16)
-        }
-        
-        if let tracker = trackerToEdit {
-            setupForEditing(tracker: tracker)
-        }
+
+            if let tracker = trackerToEdit,
+               let categoryTitle = TrackerDataManager.shared.getCategoryForTracker(trackerId: tracker.id) {
+                setupForEditing(tracker: tracker, category: categoryTitle)
+            }
     }
     
     // MARK: - Public Methods
@@ -347,19 +352,17 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         ])
     }
     
-    private func setupForEditing(tracker: Tracker) {
-        titleLabel.text = "Редактирование привычки"
+    private func setupForEditing(tracker: Tracker, category: String) {
         nameTextField.text = tracker.name
         selectedEmoji = tracker.emoji
         selectedColor = tracker.color
-        updateCategoriesButtonTitle()
+        selectedDays = tracker.schedule.compactMap { WeekDay(rawValue: $0) }
+        updateButtonStates()
+        updatePlainCategoriesButtonTitle(categoryTitle: category)
         updateScheduleButtonTitle()
         updateSaveButtonState()
-        let completedDaysLabel = UILabel()
-        completedDaysLabel.text = "дней"
-        completedDaysLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        completedDaysLabel.textColor = .ypGrey
         stackView.insertArrangedSubview(completedDaysLabel, at: 2)
+        completedDaysLabel.centerXAnchor.constraint(equalTo: stackView.centerXAnchor).isActive = true
     }
     
     private func createSpacingView(height: CGFloat) -> UIView {
@@ -431,6 +434,10 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         categoriesButton.setAttributedTitle(titleText, for: .normal)
     }
     
+    private func updatePlainCategoriesButtonTitle(categoryTitle: String) {
+        categoriesButton.setTitle(categoryTitle, for: .normal)
+    }
+    
     private func updateScheduleButtonTitle() {
         let weekDayShortNames = [
             NSLocalizedString("monday_short", comment: "Сокращенное название дня недели Понедельник"),
@@ -460,6 +467,25 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         ])
         titleText.append(daysAttributedText)
         scheduleButton.setAttributedTitle(titleText, for: .normal)
+    }
+    
+    private func updateButtonStates() {
+        if trackerType == .irregularEvent {
+            scheduleButton.isHidden = true
+            separatorView.isHidden = true
+            updateCategoriesButtonCorners(.allCorners, radius: 16)
+        } else {
+            updateCategoriesButtonCorners([.topLeft, .topRight], radius: 16)
+        }
+        if selectedDays.isEmpty {
+            scheduleButton.isHidden = true
+            separatorView.isHidden = true
+            updateCategoriesButtonCorners(.allCorners, radius: 16)
+        } else {
+            scheduleButton.isHidden = false
+            separatorView.isHidden = false
+            updateCategoriesButtonCorners([.topLeft, .topRight], radius: 16)
+        }
     }
     
     private func updateLayoutForTrackerType() {

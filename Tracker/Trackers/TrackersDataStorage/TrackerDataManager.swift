@@ -49,7 +49,6 @@ final class TrackerDataManager {
                 let records = try context.fetch(fetchRequest)
                 if records.isEmpty {
                     guard let tracker = fetchTracker(by: trackerId) else {
-                        print("Tracker not found with id: \(trackerId)")
                         return
                     }
                     let newRecord = TrackerRecordCoreData(context: context)
@@ -136,8 +135,7 @@ final class TrackerDataManager {
                 let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
                 fetchRequest.predicate = NSPredicate(
                     format: "tracker.id == %@ AND date == %@",
-                    tracker.id as CVarArg, dateFormatter.string(from: date)
-                )
+                    tracker.id as CVarArg, dateFormatter.string(from: date))
                 do {
                     let records = try context.fetch(fetchRequest)
                     if records.isEmpty {
@@ -257,7 +255,7 @@ final class TrackerDataManager {
                 } else {
                     print("Failed to encode schedule to JSON.")
                 }
-                let categoryFetchRequest: 
+                let categoryFetchRequest:
                 NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
                 categoryFetchRequest.predicate = NSPredicate(format: "title == %@", categoryTitle)
                 if let category = try context.fetch(categoryFetchRequest).first {
@@ -365,5 +363,14 @@ extension TrackerDataManager {
             print("Failed to decode schedule: \(error)")
             return []
         }
+    }
+}
+
+extension TrackerDataManager {
+    func getCategoryForTracker(trackerId: UUID) -> String? {
+        if let tracker = fetchTracker(by: trackerId) {
+            return tracker.category?.title
+        }
+        return nil
     }
 }

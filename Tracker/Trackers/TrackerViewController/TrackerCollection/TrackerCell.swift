@@ -215,11 +215,5 @@ final class TrackerCell: UICollectionViewCell {
         }
         updateCompletionButtonSaturation(forCompletedState: !isCompletedForToday())
         delegate?.trackerCellDidToggleCompletion(self, for: tracker)
-        if isTrackerPinned() {
-            dataManager?.unpinTracker(tracker)
-        } else {
-            dataManager?.pinTracker(tracker)
-        }
-        updatePinVisibility()
     }
 }
