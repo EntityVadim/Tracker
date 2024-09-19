@@ -113,8 +113,6 @@ final class TrackerViewController: UIViewController {
             for: .touchUpInside)
         return button
     }()
-
-
     
     // MARK: - Lifecycle
     

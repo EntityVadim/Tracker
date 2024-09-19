@@ -220,14 +220,14 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         updateSaveButtonState()
         updateLayoutForTrackerType()
         updateButtonStates()
-
+        
         emojiCollectionView.register(EmojiCell.self, forCellWithReuseIdentifier: EmojiCell.reuseIdentifier)
         colorCollectionView.register(ColorCell.self, forCellWithReuseIdentifier: ColorCell.reuseIdentifier)
-
-            if let tracker = trackerToEdit,
-               let categoryTitle = TrackerDataManager.shared.getCategoryForTracker(trackerId: tracker.id) {
-                setupForEditing(tracker: tracker, category: categoryTitle)
-            }
+        
+        if let tracker = trackerToEdit,
+           let categoryTitle = TrackerDataManager.shared.getCategoryForTracker(trackerId: tracker.id) {
+            setupForEditing(tracker: tracker, category: categoryTitle)
+        }
     }
     
     // MARK: - Public Methods

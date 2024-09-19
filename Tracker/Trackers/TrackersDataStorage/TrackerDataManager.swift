@@ -39,45 +39,45 @@ final class TrackerDataManager {
     // MARK: - Public Methods
     
     func markTrackerAsCompleted(trackerId: UUID, date: String) {
-            let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
-            fetchRequest.predicate = NSPredicate(
-                format: "tracker.id == %@ AND date == %@",
-                trackerId as CVarArg, date)
-            do {
-                let records = try context.fetch(fetchRequest)
-                if records.isEmpty {
-                    guard let tracker = fetchTracker(by: trackerId) else {
-                        return
-                    }
-                    let newRecord = TrackerRecordCoreData(context: context)
-                    newRecord.tracker = tracker
-                    newRecord.trackerId = tracker.id
-                    newRecord.date = date
-                    saveContext()
-                    let trackerRecord = TrackerRecord(coreData: newRecord)
-                    completedTrackers.append(trackerRecord)
+        let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(
+            format: "tracker.id == %@ AND date == %@",
+            trackerId as CVarArg, date)
+        do {
+            let records = try context.fetch(fetchRequest)
+            if records.isEmpty {
+                guard let tracker = fetchTracker(by: trackerId) else {
+                    return
                 }
-            } catch {
-                print("Failed to fetch records: \(error)")
+                let newRecord = TrackerRecordCoreData(context: context)
+                newRecord.tracker = tracker
+                newRecord.trackerId = tracker.id
+                newRecord.date = date
+                saveContext()
+                let trackerRecord = TrackerRecord(coreData: newRecord)
+                completedTrackers.append(trackerRecord)
             }
+        } catch {
+            print("Failed to fetch records: \(error)")
         }
+    }
     
     func unmarkTrackerAsCompleted(trackerId: UUID, date: String) {
-            let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
-            fetchRequest.predicate = NSPredicate(
-                format: "tracker.id == %@ AND date == %@",
-                trackerId as CVarArg, date)
-            do {
-                let records = try context.fetch(fetchRequest)
-                for record in records {
-                    context.delete(record)
-                }
-                saveContext()
-                completedTrackers.removeAll { $0.trackerId == trackerId && $0.date == date }
-            } catch {
-                print("Failed to fetch records: \(error)")
+        let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(
+            format: "tracker.id == %@ AND date == %@",
+            trackerId as CVarArg, date)
+        do {
+            let records = try context.fetch(fetchRequest)
+            for record in records {
+                context.delete(record)
             }
+            saveContext()
+            completedTrackers.removeAll { $0.trackerId == trackerId && $0.date == date }
+        } catch {
+            print("Failed to fetch records: \(error)")
         }
+    }
     
     func isIrregularEvent(tracker: TrackerCoreData) -> Bool {
         return tracker.schedule?.contains("irregularEvent") ?? false
@@ -149,55 +149,55 @@ final class TrackerDataManager {
     }
     
     func shouldDisplayTracker(_ tracker: Tracker, forDate date: Date, dateFormatter: DateFormatter) -> Bool {
-            let calendar = Calendar.current
-            if tracker.schedule.contains("irregularEvent") {
-                let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
-                fetchRequest.predicate = NSPredicate(
-                    format: "tracker.id == %@ AND date == %@",
-                    tracker.id as CVarArg, dateFormatter.string(from: date))
-                do {
-                    let records = try context.fetch(fetchRequest)
-                    if records.isEmpty {
-                        let trackerCreatedRecently = !completedTrackers.contains { $0.trackerId == tracker.id }
-                        return trackerCreatedRecently
-                    }
-                    return !records.isEmpty
-                } catch {
-                    print("Ошибка при запросе данных: \(error)")
-                    return false
-                }
-            }
-            let weekdayIndex = calendar.component(.weekday, from: date) - 1
-            let weekdaySymbols = calendar.weekdaySymbols
-            _ = weekdaySymbols[weekdayIndex]
-            let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
-            fetchRequest.predicate = NSPredicate(format: "id == %@", tracker.id as NSUUID)
+        let calendar = Calendar.current
+        if tracker.schedule.contains("irregularEvent") {
+            let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
+            fetchRequest.predicate = NSPredicate(
+                format: "tracker.id == %@ AND date == %@",
+                tracker.id as CVarArg, dateFormatter.string(from: date))
             do {
-                let trackers = try context.fetch(fetchRequest)
-                if let fetchedTracker = trackers.first {
-                    if isHabit(tracker: fetchedTracker) {
-                        let weekDay = calendar.component(.weekday, from: date)
-                        let selectDayWeek: WeekDay
-                        switch weekDay {
-                        case 1: selectDayWeek = .sunday
-                        case 2: selectDayWeek = .monday
-                        case 3: selectDayWeek = .tuesday
-                        case 4: selectDayWeek = .wednesday
-                        case 5: selectDayWeek = .thursday
-                        case 6: selectDayWeek = .friday
-                        case 7: selectDayWeek = .saturday
-                        default:
-                            fatalError("Неизвестный день недели")
-                        }
-                        let isScheduledToday = fetchedTracker.schedule?.contains(selectDayWeek.rawValue) ?? false
-                        return isScheduledToday
-                    }
+                let records = try context.fetch(fetchRequest)
+                if records.isEmpty {
+                    let trackerCreatedRecently = !completedTrackers.contains { $0.trackerId == tracker.id }
+                    return trackerCreatedRecently
                 }
+                return !records.isEmpty
             } catch {
                 print("Ошибка при запросе данных: \(error)")
+                return false
             }
-            return false
         }
+        let weekdayIndex = calendar.component(.weekday, from: date) - 1
+        let weekdaySymbols = calendar.weekdaySymbols
+        _ = weekdaySymbols[weekdayIndex]
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", tracker.id as NSUUID)
+        do {
+            let trackers = try context.fetch(fetchRequest)
+            if let fetchedTracker = trackers.first {
+                if isHabit(tracker: fetchedTracker) {
+                    let weekDay = calendar.component(.weekday, from: date)
+                    let selectDayWeek: WeekDay
+                    switch weekDay {
+                    case 1: selectDayWeek = .sunday
+                    case 2: selectDayWeek = .monday
+                    case 3: selectDayWeek = .tuesday
+                    case 4: selectDayWeek = .wednesday
+                    case 5: selectDayWeek = .thursday
+                    case 6: selectDayWeek = .friday
+                    case 7: selectDayWeek = .saturday
+                    default:
+                        fatalError("Неизвестный день недели")
+                    }
+                    let isScheduledToday = fetchedTracker.schedule?.contains(selectDayWeek.rawValue) ?? false
+                    return isScheduledToday
+                }
+            }
+        } catch {
+            print("Ошибка при запросе данных: \(error)")
+        }
+        return false
+    }
     
     func pinTracker(_ tracker: Tracker) {
         let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
