@@ -358,7 +358,17 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         selectedEmoji = tracker.emoji
         selectedColor = tracker.color
         selectedDays = tracker.schedule.compactMap { WeekDay(rawValue: $0) }
-        updateButtonStates()
+        if selectedDays.isEmpty {
+            trackerType = .irregularEvent
+            scheduleButton.isHidden = true
+            separatorView.isHidden = true
+            updateCategoriesButtonCorners(.allCorners, radius: 16)
+        } else {
+            trackerType = .habit
+            scheduleButton.isHidden = false
+            separatorView.isHidden = false
+            updateCategoriesButtonCorners([.topLeft, .topRight], radius: 16)
+        }
         updatePlainCategoriesButtonTitle(categoryTitle: category)
         updateScheduleButtonTitle()
         updateSaveButtonState()
@@ -477,17 +487,6 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             separatorView.isHidden = true
             updateCategoriesButtonCorners(.allCorners, radius: 16)
         } else {
-            updateCategoriesButtonCorners([.topLeft, .topRight], radius: 16)
-        }
-        if selectedDays.isEmpty {
-            trackerType = .irregularEvent
-            scheduleButton.isHidden = true
-            separatorView.isHidden = true
-            updateCategoriesButtonCorners(.allCorners, radius: 16)
-        } else {
-            trackerType = .habit
-            scheduleButton.isHidden = false
-            separatorView.isHidden = false
             updateCategoriesButtonCorners([.topLeft, .topRight], radius: 16)
         }
     }
