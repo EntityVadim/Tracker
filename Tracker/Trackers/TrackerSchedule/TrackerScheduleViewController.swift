@@ -79,7 +79,7 @@ final class TrackerScheduleViewController: UIViewController {
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(NSLocalizedString(
-            "save_button_title",
+            "saves_button_title",
             comment: "Кнопка для сохранения расписания"), for: .normal)
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)

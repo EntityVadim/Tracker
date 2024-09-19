@@ -23,6 +23,7 @@
 "tracker_title" = "Trackers";
 "search_placeholder" = "Search";
 "error_tracking" = "What shall we track?";
+"filters_button_title" = "Filters";
 
 // MARK: - TrackerFilterViewController
 
@@ -73,7 +74,7 @@
 // MARK: - TrackerSchedule
 
 "title_label_text_schedule" = "Schedule";
-"save_button_title" = "Done";
+"saves_button_title" = "Done";
 "week_day_monday" = "Monday";
 "week_day_tuesday" = "Tuesday";
 "week_day_wednesday" = "Wednesday";

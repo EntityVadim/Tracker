@@ -100,16 +100,20 @@ final class TrackerViewController: UIViewController {
     
     private lazy var filtersButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Фильтры", for: .normal)
-        button.backgroundColor = .ypBlue
+        button.setTitle(NSLocalizedString(
+            "filters_button_title",
+            comment: "Кнопка фильтров"), for: .normal)
         button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .ypBlue
         button.layer.cornerRadius = 16
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         button.addTarget(
             self,
             action: #selector(didTapFiltersButton),
             for: .touchUpInside)
         return button
     }()
+
 
     
     // MARK: - Lifecycle
