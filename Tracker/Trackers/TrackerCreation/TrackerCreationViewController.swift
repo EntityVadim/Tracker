@@ -372,6 +372,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         updateSaveButtonState()
         stackView.insertArrangedSubview(completedDaysLabel, at: 2)
         completedDaysLabel.centerXAnchor.constraint(equalTo: stackView.centerXAnchor).isActive = true
+        completedDaysLabel.bottomAnchor.constraint(equalTo: nameTextField.topAnchor, constant: -40).isActive = true
     }
     
     private func createSpacingView(height: CGFloat) -> UIView {
