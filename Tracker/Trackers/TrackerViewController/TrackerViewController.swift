@@ -131,7 +131,7 @@ final class TrackerViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let bottomInset = filtersButton.frame.height + 32 // Учитываем высоту кнопки и отступ
+        let bottomInset = filtersButton.frame.height + 32
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: bottomInset, right: 0)
         collectionView.scrollIndicatorInsets = collectionView.contentInset
     }

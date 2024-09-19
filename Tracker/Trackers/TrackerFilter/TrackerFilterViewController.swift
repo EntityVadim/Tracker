@@ -26,8 +26,6 @@ final class TrackerFilterViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    
-    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.layer.cornerRadius = 16
