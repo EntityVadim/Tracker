@@ -49,6 +49,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     private var selectedDays: [WeekDay] = []
     private let dataManager = TrackerDataManager.shared
+    private var recordDay = 0
     
     private lazy var emojiLabel: UILabel = {
         let label = UILabel()
@@ -91,7 +92,10 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     private lazy var completedDaysLabel: UILabel = {
         let label = UILabel()
-        label.text = "0 дней"
+        let localizedDays = String.localizedStringWithFormat(
+            NSLocalizedString("days_count", comment: ""),
+            recordDay)
+        label.text = localizedDays
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         label.textColor = .ypBlack
         label.textAlignment = .center
@@ -354,6 +358,9 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     private func setupForEditing(tracker: Tracker, category: String) {
         titleLabel.text = "Редактирование привычки"
+        let completedTrackers = dataManager.completedTrackers.filter { $0.trackerId == tracker.id }
+        let uniqueDates = Set(completedTrackers.map { $0.date })
+        recordDay = uniqueDates.count
         nameTextField.text = tracker.name
         selectedEmoji = tracker.emoji
         selectedColor = tracker.color
