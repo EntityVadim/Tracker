@@ -39,7 +39,7 @@ final class TrackerViewController: UIViewController {
     private lazy var datePicker: UIBarButtonItem = {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
-        datePicker.locale = Locale(identifier: "ru_RU")
+        datePicker.locale = Locale.current
         datePicker.preferredDatePickerStyle = .compact
         datePicker.addTarget(
             self,
