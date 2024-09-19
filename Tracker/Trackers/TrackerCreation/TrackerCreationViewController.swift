@@ -353,11 +353,20 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     }
     
     private func setupForEditing(tracker: Tracker, category: String) {
+        titleLabel.text = "Редактирование привычки"
         nameTextField.text = tracker.name
         selectedEmoji = tracker.emoji
         selectedColor = tracker.color
         selectedDays = tracker.schedule.compactMap { WeekDay(rawValue: $0) }
-        updateButtonStates()
+        if selectedDays.isEmpty {
+            scheduleButton.isHidden = true
+            separatorView.isHidden = true
+            updateCategoriesButtonCorners(.allCorners, radius: 16)
+        } else {
+            scheduleButton.isHidden = false
+            separatorView.isHidden = false
+            updateCategoriesButtonCorners([.topLeft, .topRight], radius: 16)
+        }
         updatePlainCategoriesButtonTitle(categoryTitle: category)
         updateScheduleButtonTitle()
         updateSaveButtonState()
@@ -475,15 +484,6 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             separatorView.isHidden = true
             updateCategoriesButtonCorners(.allCorners, radius: 16)
         } else {
-            updateCategoriesButtonCorners([.topLeft, .topRight], radius: 16)
-        }
-        if selectedDays.isEmpty {
-            scheduleButton.isHidden = true
-            separatorView.isHidden = true
-            updateCategoriesButtonCorners(.allCorners, radius: 16)
-        } else {
-            scheduleButton.isHidden = false
-            separatorView.isHidden = false
             updateCategoriesButtonCorners([.topLeft, .topRight], radius: 16)
         }
     }
