@@ -193,7 +193,7 @@ final class TrackerCell: UICollectionViewCell {
     private func updatePinVisibility() {
         pinView.isHidden = !isTrackerPinned()
     }
-
+    
     private func isTrackerPinned() -> Bool {
         guard let tracker = tracker else { return false }
         return dataManager?.isTrackerPinned(tracker) ?? false

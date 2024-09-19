@@ -38,9 +38,7 @@ final class TrackerDataManager {
     
     // MARK: - Public Methods
     
-    func markTrackerAsCompleted(
-        trackerId: UUID,
-        date: String) {
+    func markTrackerAsCompleted(trackerId: UUID, date: String) {
             let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
             fetchRequest.predicate = NSPredicate(
                 format: "tracker.id == %@ AND date == %@",
@@ -64,9 +62,7 @@ final class TrackerDataManager {
             }
         }
     
-    func unmarkTrackerAsCompleted(
-        trackerId: UUID,
-        date: String) {
+    func unmarkTrackerAsCompleted(trackerId: UUID, date: String) {
             let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
             fetchRequest.predicate = NSPredicate(
                 format: "tracker.id == %@ AND date == %@",
@@ -152,10 +148,7 @@ final class TrackerDataManager {
         }
     }
     
-    func shouldDisplayTracker(
-        _ tracker: Tracker,
-        forDate date: Date,
-        dateFormatter: DateFormatter) -> Bool {
+    func shouldDisplayTracker(_ tracker: Tracker, forDate date: Date, dateFormatter: DateFormatter) -> Bool {
             let calendar = Calendar.current
             if tracker.schedule.contains("irregularEvent") {
                 let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
