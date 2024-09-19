@@ -26,6 +26,7 @@
 
 // MARK: - TrackerFilterViewController
 
+"title_label_text_filters" = "Фильтры";
 "filter_all_trackers" = "Все трекеры";
 "filter_today_trackers" = "Трекеры на сегодня";
 "filter_completed_trackers" = "Завершенные";

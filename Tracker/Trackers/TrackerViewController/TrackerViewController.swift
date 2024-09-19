@@ -98,6 +98,20 @@ final class TrackerViewController: UIViewController {
         return collectionView
     }()
     
+    private lazy var filtersButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Фильтры", for: .normal)
+        button.backgroundColor = .ypBlue
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 16
+        button.addTarget(
+            self,
+            action: #selector(didTapFiltersButton),
+            for: .touchUpInside)
+        return button
+    }()
+
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -109,6 +123,13 @@ final class TrackerViewController: UIViewController {
         updateTrackersView()
         visibleCategories = dataManager.categories
         searchBar.delegate = self
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let bottomInset = filtersButton.frame.height + 32 // Учитываем высоту кнопки и отступ
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: bottomInset, right: 0)
+        collectionView.scrollIndicatorInsets = collectionView.contentInset
     }
     
     // MARK: - Public Methods
@@ -171,7 +192,7 @@ final class TrackerViewController: UIViewController {
     // MARK: - Private Methods
     
     private func setupUI() {
-        [titleLabel, searchBar, errorImageView, trackingLabel, collectionView].forEach {
+        [titleLabel, searchBar, errorImageView, trackingLabel, collectionView, filtersButton].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -202,7 +223,12 @@ final class TrackerViewController: UIViewController {
             collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 24),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: filtersButton.topAnchor, constant: -16),
+            
+            filtersButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            filtersButton.widthAnchor.constraint(equalToConstant: 114),
+            filtersButton.heightAnchor.constraint(equalToConstant: 50),
+            filtersButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
     }
     
@@ -222,5 +248,11 @@ final class TrackerViewController: UIViewController {
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         selectedDate = sender.date
         updateTrackersView()
+    }
+    
+    @objc private func didTapFiltersButton() {
+        let filterViewController = TrackerFilterViewController()
+        filterViewController.modalPresentationStyle = .formSheet
+        present(filterViewController, animated: true, completion: nil)
     }
 }

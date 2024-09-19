@@ -28,6 +28,7 @@
 		DD80453D2C6E20DE00E234BB /* ExtensionTrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD80453C2C6E20DE00E234BB /* ExtensionTrackerCategory.swift */; };
 		DD823D2D2C67975A00BD6C54 /* TrackerDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD823D2C2C67975A00BD6C54 /* TrackerDataManager.swift */; };
 		DD823D2F2C67A3AB00BD6C54 /* TrackerSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD823D2E2C67A3AB00BD6C54 /* TrackerSectionHeader.swift */; };
+		DD88A7242C9C49C80087B2E2 /* ExtensionTrackerFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD88A7232C9C49C80087B2E2 /* ExtensionTrackerFilter.swift */; };
 		DD973E232C6E1A2200A289FB /* ExtensionTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD973E222C6E1A2200A289FB /* ExtensionTracker.swift */; };
 		DD973E262C6E1D3800A289FB /* ExtensionTrackerSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD973E252C6E1D3800A289FB /* ExtensionTrackerSchedule.swift */; };
 		DDA2C4B92C64F8310055241D /* TrackerCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA2C4B82C64F8310055241D /* TrackerCategoryViewController.swift */; };
@@ -68,6 +69,7 @@
 		DD823D2E2C67A3AB00BD6C54 /* TrackerSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerSectionHeader.swift; sourceTree = "<group>"; };
 		DD88A7202C9C33C10087B2E2 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DD88A7212C9C33C10087B2E2 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		DD88A7232C9C49C80087B2E2 /* ExtensionTrackerFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionTrackerFilter.swift; sourceTree = "<group>"; };
 		DD973E222C6E1A2200A289FB /* ExtensionTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionTracker.swift; sourceTree = "<group>"; };
 		DD973E252C6E1D3800A289FB /* ExtensionTrackerSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionTrackerSchedule.swift; sourceTree = "<group>"; };
 		DDA2C4B82C64F8310055241D /* TrackerCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryViewController.swift; sourceTree = "<group>"; };
@@ -156,7 +158,6 @@
 		DD6291BA2C5A95BA00E683F4 /* Trackers */ = {
 			isa = PBXGroup;
 			children = (
-				DD4011852C9B03F3009308CA /* TrackerFilterViewController.swift */,
 				DD823D2B2C67956B00BD6C54 /* TrackersDataStorage */,
 				DD973E242C6E1C3800A289FB /* TrackerViewController */,
 				DD80453E2C6E21C300E234BB /* TrackerTypeSelection */,
@@ -164,6 +165,7 @@
 				DD80453B2C6E20A300E234BB /* TrackerCategory */,
 				DD8045402C6E224D00E234BB /* TrackerNewCategory */,
 				DD8045412C6E226800E234BB /* TrackerSchedule */,
+				DD88A7222C9C499B0087B2E2 /* TrackerFilter */,
 			);
 			path = Trackers;
 			sourceTree = "<group>";
@@ -240,6 +242,15 @@
 				DD823D2C2C67975A00BD6C54 /* TrackerDataManager.swift */,
 			);
 			path = TrackersDataStorage;
+			sourceTree = "<group>";
+		};
+		DD88A7222C9C499B0087B2E2 /* TrackerFilter */ = {
+			isa = PBXGroup;
+			children = (
+				DD4011852C9B03F3009308CA /* TrackerFilterViewController.swift */,
+				DD88A7232C9C49C80087B2E2 /* ExtensionTrackerFilter.swift */,
+			);
+			path = TrackerFilter;
 			sourceTree = "<group>";
 		};
 		DD973E242C6E1C3800A289FB /* TrackerViewController */ = {
@@ -363,6 +374,7 @@
 				DDDA9FF42C63684700499483 /* TrackerTypeSelectionViewController.swift in Sources */,
 				DDA9CFC72C6914DD0035B64D /* TrackerCategoryStore.swift in Sources */,
 				DDB2ADD92C65E8360005D216 /* TrackerCategoryCell.swift in Sources */,
+				DD88A7242C9C49C80087B2E2 /* ExtensionTrackerFilter.swift in Sources */,
 				DD76466A2C6F4ADF00AF9A22 /* ColorCell.swift in Sources */,
 				DD0D6E932C57B4170036B9E0 /* StatisticsViewController.swift in Sources */,
 				DDE7D6402C74FF8C00F57814 /* Tracker.xcdatamodeld in Sources */,

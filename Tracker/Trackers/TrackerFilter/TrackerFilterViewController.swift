@@ -15,12 +15,24 @@ final class TrackerFilterViewController: UIViewController {
     
     static let cellIdentifier = TrackerCategoryCell.identifier
     
-    // MARK: - UI Elements
+    // MARK: - Public Properties
     
-    lazy var tableView: UITableView = {
+    var selectedFilter: Int?
+    let filterOptions = [
+        NSLocalizedString("filter_all_trackers", comment: "Все трекеры"),
+        NSLocalizedString("filter_today_trackers", comment: "Трекеры на сегодня"),
+        NSLocalizedString("filter_completed_trackers", comment: "Завершенные"),
+        NSLocalizedString("filter_incomplete_trackers", comment: "Не завершенные")]
+    
+    // MARK: - Private Properties
+    
+    
+    
+    private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.layer.cornerRadius = 16
         tableView.separatorColor = .ypGrey
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = .ypWhite
@@ -40,17 +52,6 @@ final class TrackerFilterViewController: UIViewController {
         return label
     }()
     
-    // MARK: - Properties
-    
-    private let filterOptions = [
-        NSLocalizedString("filter_all_trackers", comment: "Все трекеры"),
-        NSLocalizedString("filter_today_trackers", comment: "Трекеры на сегодня"),
-        NSLocalizedString("filter_completed_trackers", comment: "Завершенные"),
-        NSLocalizedString("filter_incomplete_trackers", comment: "Не завершенные")
-    ]
-    
-    private var selectedFilter: Int? // Tracks the selected filter
-    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -60,7 +61,7 @@ final class TrackerFilterViewController: UIViewController {
         setupConstraints()
     }
     
-    // MARK: - Setup UI
+    // MARK: - Private Methods
     
     private func setupUI() {
         [titleLabel, tableView].forEach {
@@ -73,46 +74,11 @@ final class TrackerFilterViewController: UIViewController {
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 38),
-            titleLabel.heightAnchor.constraint(equalToConstant: 22),
             
-            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 50),
+            tableView.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 38),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20)
+            tableView.heightAnchor.constraint(equalToConstant: 300)
         ])
-    }
-}
-
-// MARK: - UITableViewDataSource
-
-extension TrackerFilterViewController: UITableViewDataSource {
-    func tableView(
-        _ tableView: UITableView,
-        numberOfRowsInSection section: Int
-    ) -> Int {
-        return filterOptions.count
-    }
-    
-    func tableView(
-        _ tableView: UITableView,
-        cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCell(
-                withIdentifier: TrackerFilterViewController.cellIdentifier,
-                for: indexPath) as! TrackerCategoryCell
-            let option = filterOptions[indexPath.row]
-            let isSelected = indexPath.row == selectedFilter
-            cell.configure(with: option, isSelected: isSelected)
-            return cell
-        }
-}
-
-// MARK: - UITableViewDelegate
-
-extension TrackerFilterViewController: UITableViewDelegate {
-    func tableView(
-        _ tableView: UITableView,
-        didSelectRowAt indexPath: IndexPath) {
-            selectedFilter = indexPath.row
-            tableView.reloadData()
     }
 }
