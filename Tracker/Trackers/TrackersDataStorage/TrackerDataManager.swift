@@ -227,6 +227,11 @@ final class TrackerDataManager {
                     print("Previous category for tracker \(tracker.id) not found")
                 }
                 previousCategories[tracker.id] = nil
+                let pinnedCategory = fetchPinnedCategory()
+                let trackersInPinnedCategory = pinnedCategory.trackers?.allObjects as? [TrackerCoreData] ?? []
+                if trackersInPinnedCategory.isEmpty {
+                    context.delete(pinnedCategory)
+                }
                 saveContext()
             }
         } catch {
