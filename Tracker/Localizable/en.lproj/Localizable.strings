@@ -23,6 +23,7 @@
 "tracker_title" = "Trackers";
 "search_placeholder" = "Search";
 "error_tracking" = "What shall we track?";
+"filter_no_results" = "Nothing found";
 "filters_button_title" = "Filters";
 
 // MARK: - TrackerFilterViewController
