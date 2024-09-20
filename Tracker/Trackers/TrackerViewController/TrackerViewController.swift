@@ -186,9 +186,11 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
     
     func filterTrackers(to categories: [TrackerCategory]) {
         visibleCategories = categories
+        let allTrackers = dataManager.categories.flatMap { $0.trackers }
+        let hasCreatedTrackers = !allTrackers.isEmpty
         let hasTrackers = !visibleCategories.flatMap { $0.trackers }.isEmpty
-        errorFilterImageView.isHidden = hasTrackers
-        filterLabel.isHidden = hasTrackers
+        errorFilterImageView.isHidden = hasTrackers || !hasCreatedTrackers
+        filterLabel.isHidden = hasTrackers || !hasCreatedTrackers
         collectionView.isHidden = !hasTrackers
         collectionView.reloadData()
     }
