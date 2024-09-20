@@ -13,7 +13,7 @@ extension TrackerFilterViewController: UITableViewDataSource {
     func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int) -> Int {
-            return filterOptions.count
+            return TrackerFilterType.allCases.count
         }
     
     func tableView(
@@ -22,10 +22,10 @@ extension TrackerFilterViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(
                 withIdentifier: TrackerFilterViewController.cellIdentifier,
                 for: indexPath) as! TrackerCategoryCell
-            let option = filterOptions[indexPath.row]
+            let option = TrackerFilterType.allCases[indexPath.row]
             let isSelected = indexPath.row == selectedFilter
             cell.backgroundColor = UIColor.ypBackgroundDay
-            cell.configure(with: option, isSelected: isSelected)
+            cell.configure(with: option.rawValue, isSelected: isSelected)
             return cell
         }
 }
@@ -51,6 +51,9 @@ extension TrackerFilterViewController: UITableViewDelegate {
             rowsToReload.append(previousIndexPath)
         }
         tableView.reloadRows(at: rowsToReload, with: .none)
+        let selectedFilterType = TrackerFilterType.allCases[indexPath.row]
+        switchFilter(to: selectedFilterType)
+        dismiss(animated: true, completion: nil)
     }
     
     func tableView(
@@ -58,7 +61,7 @@ extension TrackerFilterViewController: UITableViewDelegate {
         willDisplay cell: UITableViewCell,
         forRowAt indexPath: IndexPath
     ) {
-        if indexPath.row == filterOptions.count - 1 {
+        if indexPath.row == TrackerFilterType.allCases.count - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         } else {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)

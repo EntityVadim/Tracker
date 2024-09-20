@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - Tracker
 
-final class TrackerViewController: UIViewController {
+final class TrackerViewController: UIViewController, TrackerFilterViewControllerDelegate {
     
     // MARK: - Public Properties
     
@@ -136,13 +136,36 @@ final class TrackerViewController: UIViewController {
     
     // MARK: - Public Methods
     
-    func filterTrackers(by searchText: String, from categories: [TrackerCategory]) -> [TrackerCategory] {
+    func updateTrackersView() {
+        dataManager.loadCategories()
+        let trackers = dataManager.categories.flatMap { $0.trackers }
+        _ = trackers.filter {
+            dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
+        }
+        if let searchText = searchBar.text, !searchText.isEmpty {
+            visibleCategories = filterTrackersSearchBar(by: searchText, from: dataManager.categories)
+        } else {
+            visibleCategories = dataManager.categories
+        }
+        let hasTrackers = !visibleCategories.flatMap { $0.trackers }.isEmpty
+        errorImageView.isHidden = hasTrackers
+        trackingLabel.isHidden = hasTrackers
+        collectionView.isHidden = !hasTrackers
+        collectionView.reloadData()
+    }
+    
+    func filterTrackersSearchBar(by searchText: String, from categories: [TrackerCategory]) -> [TrackerCategory] {
         return categories.map { category in
             let filteredTrackers = category.trackers.filter { tracker in
                 return tracker.name.lowercased().contains(searchText.lowercased())
             }
             return TrackerCategory(title: category.title, trackers: filteredTrackers)
         }.filter { !$0.trackers.isEmpty }
+    }
+    
+    func filterTrackers(to categories: [TrackerCategory]) {
+        visibleCategories = categories
+        collectionView.reloadData()
     }
     
     func presentEditTrackerViewController(for tracker: Tracker) {
@@ -171,24 +194,6 @@ final class TrackerViewController: UIViewController {
         alertController.addAction(deleteAction)
         alertController.addAction(cancelAction)
         present(alertController, animated: true, completion: nil)
-    }
-    
-    func updateTrackersView() {
-        dataManager.loadCategories()
-        let trackers = dataManager.categories.flatMap { $0.trackers }
-        _ = trackers.filter {
-            dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
-        }
-        if let searchText = searchBar.text, !searchText.isEmpty {
-            visibleCategories = filterTrackers(by: searchText, from: dataManager.categories)
-        } else {
-            visibleCategories = dataManager.categories
-        }
-        let hasTrackers = !visibleCategories.flatMap { $0.trackers }.isEmpty
-        errorImageView.isHidden = hasTrackers
-        trackingLabel.isHidden = hasTrackers
-        collectionView.isHidden = !hasTrackers
-        collectionView.reloadData()
     }
     
     // MARK: - Private Methods
@@ -255,6 +260,7 @@ final class TrackerViewController: UIViewController {
     @objc private func didTapFiltersButton() {
         let filterViewController = TrackerFilterViewController()
         filterViewController.modalPresentationStyle = .formSheet
+        filterViewController.delegate = self
         present(filterViewController, animated: true, completion: nil)
     }
 }

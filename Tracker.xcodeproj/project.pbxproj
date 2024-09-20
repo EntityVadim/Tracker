@@ -159,13 +159,13 @@
 			isa = PBXGroup;
 			children = (
 				DD823D2B2C67956B00BD6C54 /* TrackersDataStorage */,
+				DD88A7222C9C499B0087B2E2 /* TrackerFilter */,
 				DD973E242C6E1C3800A289FB /* TrackerViewController */,
 				DD80453E2C6E21C300E234BB /* TrackerTypeSelection */,
 				DD80453F2C6E220C00E234BB /* TrackerCreation */,
 				DD80453B2C6E20A300E234BB /* TrackerCategory */,
 				DD8045402C6E224D00E234BB /* TrackerNewCategory */,
 				DD8045412C6E226800E234BB /* TrackerSchedule */,
-				DD88A7222C9C499B0087B2E2 /* TrackerFilter */,
 			);
 			path = Trackers;
 			sourceTree = "<group>";
