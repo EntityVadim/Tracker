@@ -124,6 +124,17 @@ extension TrackerViewController: UISearchBarDelegate {
     ) {
         updateTrackersView()
     }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        updateTrackersView()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = nil
+        searchBar.resignFirstResponder()
+        updateTrackersView()
+    }
 }
 
 // MARK: - TrackerCellDelegate
