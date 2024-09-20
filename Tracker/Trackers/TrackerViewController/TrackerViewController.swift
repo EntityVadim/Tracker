@@ -13,6 +13,7 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
     
     // MARK: - Public Properties
     
+    var trackerFilterViewController = TrackerFilterViewController()
     var selectedDate: Date = Date()
     let dataManager = TrackerDataManager.shared
     
@@ -257,6 +258,8 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         selectedDate = sender.date
         updateTrackersView()
+        trackerFilterViewController.delegate = self
+        trackerFilterViewController.changeDate(to: sender.date)
     }
     
     @objc private func didTapFiltersButton() {

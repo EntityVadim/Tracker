@@ -45,6 +45,7 @@ extension TrackerFilterViewController: UITableViewDelegate {
     ) {
         let previousSelectedFilter = selectedFilter
         selectedFilter = indexPath.row
+        saveSelectedFilter(index: indexPath.row)
         var rowsToReload = [indexPath]
         if let previousIndex = previousSelectedFilter {
             let previousIndexPath = IndexPath(row: previousIndex, section: 0)

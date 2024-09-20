@@ -42,16 +42,18 @@ final class TrackerFilterViewController: UIViewController {
     // MARK: - Identifier
     
     static let cellIdentifier = TrackerCategoryCell.identifier
+    static let selectedFilterKey = "selectedFilterKey"
     
     // MARK: - Public Properties
     
     weak var delegate: TrackerFilterViewControllerDelegate?
-    let dataManager = TrackerDataManager.shared
     var selectedFilter: Int?
     var filteredTrackers: [Tracker] = []
     var selectedDate = Date()
+    var filterType: TrackerFilterType = .all
     
-    var dateFormatter: DateFormatter = {
+    let dataManager = TrackerDataManager.shared
+    let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yyyy"
         return formatter
@@ -59,7 +61,6 @@ final class TrackerFilterViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private var filterType: TrackerFilterType = .all
     private let calendar = Calendar.current
     private var dateLabel: UILabel?
     
@@ -94,6 +95,14 @@ final class TrackerFilterViewController: UIViewController {
         view.backgroundColor = .ypWhite
         setupUI()
         setupConstraints()
+        loadTrackers()
+        loadFilter()
+    }
+    
+    // MARK: - Public Methods
+    
+    func saveSelectedFilter(index: Int) {
+        UserDefaults.standard.set(index, forKey: TrackerFilterViewController.selectedFilterKey)
     }
     
     // MARK: - Private Methods
@@ -158,6 +167,18 @@ final class TrackerFilterViewController: UIViewController {
         }
     }
     
+    private func loadFilter() {
+        if let savedFilterIndex = loadSelectedFilter() {
+            selectedFilter = savedFilterIndex
+            filterType = TrackerFilterType.allCases[savedFilterIndex]
+            switchFilter(to: filterType)
+        }
+    }
+    
+    private func loadSelectedFilter() -> Int? {
+        return UserDefaults.standard.object(forKey: TrackerFilterViewController.selectedFilterKey) as? Int
+    }
+    
     // MARK: - Actions
     
     func switchFilter(to newFilter: TrackerFilterType) {
@@ -183,12 +204,15 @@ final class TrackerFilterViewController: UIViewController {
                 title: category.title,
                 trackers: filteredTrackers)
         }
+        if let filterIndex = TrackerFilterType.allCases.firstIndex(of: newFilter) {
+            saveSelectedFilter(index: filterIndex)
+        }
         delegate?.filterTrackers(to: filteredCategories)
     }
     
     func changeDate(to newDate: Date) {
         selectedDate = newDate
         dateLabel?.text = dateFormatter.string(from: newDate)
-        loadTrackers()
+        loadFilter()
     }
 }
