@@ -136,7 +136,7 @@ extension TrackerViewController: TrackerCellDelegate {
     func trackerCellDidRequestEdit(_ cell: TrackerCell, for tracker: Tracker) {
         presentEditTrackerViewController(for: tracker)
     }
-
+    
     func trackerCellDidRequestDelete(_ cell: TrackerCell, for tracker: Tracker) {
         handleDeleteTracker(tracker)
     }

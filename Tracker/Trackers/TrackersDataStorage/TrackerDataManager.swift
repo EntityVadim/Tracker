@@ -252,14 +252,14 @@ final class TrackerDataManager {
         return false
     }
     
-    func deleteTracker(withId id: UUID) {
+    func deleteTracker(withId id: UUID, for date: Date, dateFormatter: DateFormatter) {
         let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         do {
             let trackers = try context.fetch(fetchRequest)
             if let trackerToDelete = trackers.first {
                 TrackerStore().deleteTracker(trackerToDelete)
-                loadCategories()
+                loadCategories(for: date, dateFormatter: dateFormatter)
             }
         } catch {
             print("Failed to fetch or delete tracker: \(error)")
@@ -320,20 +320,24 @@ final class TrackerDataManager {
 // MARK: - TrackerDataManager
 
 extension TrackerDataManager {
-    func loadCategories() {
+    func loadCategories(for date: Date, dateFormatter: DateFormatter) {
         let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
         do {
             let fetchedCategories = try context.fetch(fetchRequest)
             self.categories = fetchedCategories.compactMap { categoryCoreData in
-                let trackers = (categoryCoreData.trackers?.allObjects as? [TrackerCoreData])?.map {
+                let trackers = (categoryCoreData.trackers?.allObjects as? [TrackerCoreData])?.compactMap {
                     trackerCoreData in
-                    return Tracker(
+                    let tracker = Tracker(
                         id: trackerCoreData.id ?? UUID(),
                         name: trackerCoreData.name ?? "",
                         color: trackerCoreData.color as! UIColor,
                         emoji: trackerCoreData.emoji ?? "",
                         schedule: decodeSchedule(trackerCoreData.schedule))
-                } ?? []
+                    return shouldDisplayTracker(
+                        tracker,
+                        forDate: date,
+                        dateFormatter: dateFormatter) ? tracker : nil
+                } ?? [] as [Tracker]
                 return trackers.isEmpty ? nil : TrackerCategory(
                     title: categoryCoreData.title ?? "",
                     trackers: trackers)
@@ -351,16 +355,16 @@ extension TrackerDataManager {
             print("Failed to fetch categories: \(error)")
         }
     }
-}
-
-private func decodeSchedule(_ scheduleString: String?) -> [String] {
-    guard let data = scheduleString?.data(using: .utf8) else { return [] }
-    do {
-        let schedule = try JSONDecoder().decode([String].self, from: data)
-        return schedule
-    } catch {
-        print("Failed to decode schedule: \(error)")
-        return []
+    
+    private func decodeSchedule(_ scheduleString: String?) -> [String] {
+        guard let data = scheduleString?.data(using: .utf8) else { return [] }
+        do {
+            let schedule = try JSONDecoder().decode([String].self, from: data)
+            return schedule
+        } catch {
+            print("Failed to decode schedule: \(error)")
+            return []
+        }
     }
 }
 

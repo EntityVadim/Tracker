@@ -52,10 +52,10 @@ final class TrackerFilterViewController: UIViewController {
     var selectedDate = Date()
     
     var dateFormatter: DateFormatter = {
-       let formatter = DateFormatter()
-       formatter.dateFormat = "dd.MM.yyyy"
-       return formatter
-   }()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yyyy"
+        return formatter
+    }()
     
     // MARK: - Private Properties
     
@@ -133,7 +133,7 @@ final class TrackerFilterViewController: UIViewController {
     
     private func getAllTrackers(for date: Date) -> [Tracker] {
         var allTrackers: [Tracker] = []
-        dataManager.loadCategories()
+        dataManager.loadCategories(for: date, dateFormatter: dateFormatter)
         for category in dataManager.categories {
             allTrackers.append(contentsOf: category.trackers)
         }

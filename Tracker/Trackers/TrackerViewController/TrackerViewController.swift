@@ -137,7 +137,7 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
     // MARK: - Public Methods
     
     func updateTrackersView() {
-        dataManager.loadCategories()
+        dataManager.loadCategories(for: selectedDate, dateFormatter: dateFormatter)
         let trackers = dataManager.categories.flatMap { $0.trackers }
         _ = trackers.filter {
             dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
@@ -184,7 +184,9 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
             title: "Удалить",
             style: .destructive
         ) { _ in
-            self.dataManager.deleteTracker(withId: tracker.id)
+            let currentDate = self.selectedDate
+            let dateFormatter = self.dateFormatter
+            self.dataManager.deleteTracker(withId: tracker.id, for: currentDate, dateFormatter: dateFormatter)
             self.updateTrackersView()
         }
         let cancelAction = UIAlertAction(
