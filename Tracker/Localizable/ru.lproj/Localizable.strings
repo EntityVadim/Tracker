@@ -23,6 +23,7 @@
 "tracker_title" = "Трекеры";
 "search_placeholder" = "Поиск";
 "error_tracking" = "Что будем отслеживать?";
+"filter_no_results" = "Ничего не найдено";
 "filters_button_title" = "Фильтры";
 
 // MARK: - TrackerFilterViewController

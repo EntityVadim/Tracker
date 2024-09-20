@@ -82,6 +82,22 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
         return label
     }()
     
+    private lazy var errorFilterImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "ErrorFillter"))
+        return imageView
+    }()
+    
+    private lazy var filterLabel: UILabel = {
+        let label = UILabel()
+        label.text = NSLocalizedString(
+            "filter_no_results",
+            comment: "Сообщение о том, что ничего не найдено")
+        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -149,6 +165,7 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
             visibleCategories = dataManager.categories
         }
         let hasTrackers = !visibleCategories.flatMap { $0.trackers }.isEmpty
+        filtersButton.isHidden = !hasTrackers
         errorImageView.isHidden = hasTrackers
         trackingLabel.isHidden = hasTrackers
         collectionView.isHidden = !hasTrackers
@@ -202,7 +219,8 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
     // MARK: - Private Methods
     
     private func setupUI() {
-        [titleLabel, searchBar, errorImageView, trackingLabel, collectionView, filtersButton].forEach {
+        [titleLabel, searchBar, errorImageView, trackingLabel,
+         errorFilterImageView, filterLabel, collectionView, filtersButton].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -229,6 +247,17 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
             trackingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             trackingLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             trackingLabel.heightAnchor.constraint(equalToConstant: 18),
+            
+            errorFilterImageView.widthAnchor.constraint(equalToConstant: 80),
+            errorFilterImageView.heightAnchor.constraint(equalToConstant: 80),
+            errorFilterImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 402),
+            errorFilterImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            filterLabel.topAnchor.constraint(equalTo: errorFilterImageView.bottomAnchor, constant: 8),
+            filterLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            filterLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            filterLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            filterLabel.heightAnchor.constraint(equalToConstant: 40),
             
             collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 24),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
