@@ -351,16 +351,16 @@ extension TrackerDataManager {
             print("Failed to fetch categories: \(error)")
         }
     }
-    
-    private func decodeSchedule(_ scheduleString: String?) -> [String] {
-        guard let data = scheduleString?.data(using: .utf8) else { return [] }
-        do {
-            let schedule = try JSONDecoder().decode([String].self, from: data)
-            return schedule
-        } catch {
-            print("Failed to decode schedule: \(error)")
-            return []
-        }
+}
+
+private func decodeSchedule(_ scheduleString: String?) -> [String] {
+    guard let data = scheduleString?.data(using: .utf8) else { return [] }
+    do {
+        let schedule = try JSONDecoder().decode([String].self, from: data)
+        return schedule
+    } catch {
+        print("Failed to decode schedule: \(error)")
+        return []
     }
 }
 
