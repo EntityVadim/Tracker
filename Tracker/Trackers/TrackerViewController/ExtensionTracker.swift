@@ -94,41 +94,6 @@ extension TrackerViewController: UICollectionViewDelegate {
             }
             return UICollectionReusableView()
         }
-    
-    func collectionView(
-        _ collectionView: UICollectionView,
-        contextMenuConfigurationForItemAt indexPath: IndexPath,
-        point: CGPoint) -> UIContextMenuConfiguration? {
-            let category = visibleCategories[indexPath.section]
-            let trackers = category.trackers.filter {
-                dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
-            }
-            let tracker = trackers[indexPath.item]
-            let isPinned = dataManager.isTrackerPinned(tracker)
-            let pinActionTitle = isPinned ?
-            NSLocalizedString("Открепить", comment: "Unpin") :
-            NSLocalizedString("Закрепить", comment: "Pin")
-            let pinAction = UIAction(title: pinActionTitle, image: UIImage(systemName: "pin")) { _ in
-                if isPinned {
-                    self.dataManager.unpinTracker(tracker)
-                } else {
-                    self.dataManager.pinTracker(tracker)
-                }
-                self.updateTrackersView()
-            }
-            let editAction = UIAction(
-                title: NSLocalizedString("Редактировать", comment: "Edit")) { _ in
-                    self.presentEditTrackerViewController(for: tracker)
-                }
-            let deleteAction = UIAction(
-                title: NSLocalizedString("Удалить", comment: "Delete"),
-                attributes: .destructive) { _ in
-                    self.handleDeleteTracker(tracker)
-                }
-            return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
-                UIMenu(title: "", children: [pinAction, editAction, deleteAction])
-            }
-        }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -150,17 +115,6 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
         }
 }
 
-// MARK: - TrackerCellDelegate
-
-extension TrackerViewController: TrackerCellDelegate {
-    func trackerCellDidToggleCompletion(
-        _ cell: TrackerCell,
-        for tracker: Tracker
-    ) {
-        updateTrackersView()
-    }
-}
-
 // MARK: - UISearchBarDelegate
 
 extension TrackerViewController: UISearchBarDelegate {
@@ -169,5 +123,21 @@ extension TrackerViewController: UISearchBarDelegate {
         textDidChange searchText: String
     ) {
         updateTrackersView()
+    }
+}
+
+// MARK: - TrackerCellDelegate
+
+extension TrackerViewController: TrackerCellDelegate {
+    func trackerCellDidToggleCompletion(_ cell: TrackerCell, for tracker: Tracker) {
+        updateTrackersView()
+    }
+    
+    func trackerCellDidRequestEdit(_ cell: TrackerCell, for tracker: Tracker) {
+        presentEditTrackerViewController(for: tracker)
+    }
+
+    func trackerCellDidRequestDelete(_ cell: TrackerCell, for tracker: Tracker) {
+        handleDeleteTracker(tracker)
     }
 }

@@ -11,6 +11,8 @@ import UIKit
 
 protocol TrackerCellDelegate: AnyObject {
     func trackerCellDidToggleCompletion(_ cell: TrackerCell, for tracker: Tracker)
+    func trackerCellDidRequestEdit(_ cell: TrackerCell, for tracker: Tracker)
+    func trackerCellDidRequestDelete(_ cell: TrackerCell, for tracker: Tracker)
 }
 
 // MARK: - TrackerCell
@@ -88,6 +90,14 @@ final class TrackerCell: UICollectionViewCell {
         super.init(frame: frame)
         setupUI()
         setupConstraints()
+        
+        let interaction = UIContextMenuInteraction(delegate: self)
+        cardView.addInteraction(interaction)
+        
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(
+            target: self,
+            action: #selector(presentContextMenu))
+        cardView.addGestureRecognizer(longPressGestureRecognizer)
     }
     
     required init?(coder: NSCoder) {
@@ -100,27 +110,28 @@ final class TrackerCell: UICollectionViewCell {
         with tracker: Tracker,
         completedTrackers: [TrackerRecord],
         dataManager: TrackerDataManager,
-        date: String) {
-            self.tracker = tracker
-            self.completedTrackers = completedTrackers
-            self.dataManager = dataManager
-            self.date = date
-            cardView.backgroundColor = tracker.color
-            emojiLabel.text = tracker.emoji
-            nameLabel.text = tracker.name
-            updateCompletionButtonSaturation(forCompletedState: isCompletedForToday())
-            updatePinVisibility()
-            let uniqueDates = Set(completedTrackers.map { $0.date })
-            let countDays = uniqueDates.count
-            let localizedDays = String.localizedStringWithFormat(
-                NSLocalizedString("days_count", comment: ""),
-                countDays)
-            countLabel.text = localizedDays
-            let configuration = UIImage.SymbolConfiguration(pointSize: 10, weight: .bold)
-            let iconName = isCompletedForToday() ? "checkmark" : "plus"
-            let iconImage = UIImage(systemName: iconName, withConfiguration: configuration)
-            completionButton.setImage(iconImage, for: .normal)
-        }
+        date: String
+    ) {
+        self.tracker = tracker
+        self.completedTrackers = completedTrackers
+        self.dataManager = dataManager
+        self.date = date
+        cardView.backgroundColor = tracker.color
+        emojiLabel.text = tracker.emoji
+        nameLabel.text = tracker.name
+        updateCompletionButtonSaturation(forCompletedState: isCompletedForToday())
+        updatePinVisibility()
+        let uniqueDates = Set(completedTrackers.map { $0.date })
+        let countDays = uniqueDates.count
+        let localizedDays = String.localizedStringWithFormat(
+            NSLocalizedString("days_count", comment: ""),
+            countDays)
+        countLabel.text = localizedDays
+        let configuration = UIImage.SymbolConfiguration(pointSize: 10, weight: .bold)
+        let iconName = isCompletedForToday() ? "checkmark" : "plus"
+        let iconImage = UIImage(systemName: iconName, withConfiguration: configuration)
+        completionButton.setImage(iconImage, for: .normal)
+    }
     
     func isCompletedForToday() -> Bool {
         return completedTrackers.contains { $0.trackerId == tracker?.id && $0.date == date }
@@ -215,5 +226,41 @@ final class TrackerCell: UICollectionViewCell {
         }
         updateCompletionButtonSaturation(forCompletedState: !isCompletedForToday())
         delegate?.trackerCellDidToggleCompletion(self, for: tracker)
+    }
+    
+    @objc func presentContextMenu() {
+        cardView.becomeFirstResponder()
+    }
+}
+
+extension TrackerCell: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+            guard let tracker = tracker else { return nil }
+            let isPinned = dataManager?.isTrackerPinned(tracker) ?? false
+            let pinActionTitle = isPinned ? 
+            NSLocalizedString("Открепить", comment: "Unpin") :
+            NSLocalizedString("Закрепить", comment: "Pin")
+            let pinAction = UIAction(title: pinActionTitle, image: UIImage(systemName: "pin")) { _ in
+                if isPinned {
+                    self.dataManager?.unpinTracker(tracker)
+                } else {
+                    self.dataManager?.pinTracker(tracker)
+                }
+                self.delegate?.trackerCellDidToggleCompletion(self, for: tracker)
+            }
+            let editAction = UIAction(
+                title: NSLocalizedString("Редактировать", comment: "Edit")) { _ in
+                self.delegate?.trackerCellDidRequestEdit(self, for: tracker)
+            }
+            let deleteAction = UIAction(
+                title: NSLocalizedString("Удалить",comment: "Delete"),
+                attributes: .destructive) { _ in
+                self.delegate?.trackerCellDidRequestDelete(self, for: tracker)
+            }
+            return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+                UIMenu(title: "", children: [pinAction, editAction, deleteAction])
+            }
     }
 }
