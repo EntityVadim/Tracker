@@ -13,7 +13,7 @@ final class StatisticsViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private var completedTrackersCount: Int = 0
+    private var completedTrackersCount: Int
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -103,13 +103,13 @@ final class StatisticsViewController: UIViewController {
         view.backgroundColor = .ypWhite
         setupUI()
         setupConstraints()
-        updateLabel()
+        updateLabels()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         completedTrackersCount = TrackerDataManager.shared.getCompletedTrackersCount()
-        updateLabel()
+        updateLabels()
     }
     
     // MARK: - Private Methods
@@ -153,7 +153,20 @@ final class StatisticsViewController: UIViewController {
         ])
     }
     
-    private func updateLabel() {
-        counterLabel.text = "\(completedTrackersCount)"
+    private func updateLabels() {
+        if completedTrackersCount > 0 {
+            gradientView.isHidden = false
+            counterLabel.text = "\(completedTrackersCount)"
+            completedLabel.isHidden = false
+            errorImageView.isHidden = true
+            placeholderLabel.isHidden = true
+            counterLabel.isHidden = false
+        } else {
+            gradientView.isHidden = true
+            errorImageView.isHidden = false
+            placeholderLabel.isHidden = false
+            counterLabel.isHidden = true
+            completedLabel.isHidden = true
+        }
     }
 }
