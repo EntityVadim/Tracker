@@ -233,6 +233,8 @@ final class TrackerCell: UICollectionViewCell {
     }
 }
 
+// MARK: - UIContextMenuInteractionDelegate
+
 extension TrackerCell: UIContextMenuInteractionDelegate {
     func contextMenuInteraction(
         _ interaction: UIContextMenuInteraction,

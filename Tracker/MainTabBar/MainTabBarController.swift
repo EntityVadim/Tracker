@@ -35,14 +35,14 @@ final class MainTabBarController: UITabBarController {
             image: UIImage(named: "Trackers"),
             selectedImage: nil)
         
-        let statisticsViewController = StatisticsViewController()
+        let statisticsViewController = StatisticsViewController(
+            completedTrackersCount: TrackerDataManager.shared.getCompletedTrackersCount())
         statisticsViewController.tabBarItem = UITabBarItem(
             title: NSLocalizedString(
                 "tab_title_statistics",
                 comment: "Название вкладки для статистики"),
             image: UIImage(named: "Statistics"),
             selectedImage: nil)
-        
         viewControllers = [trackersViewController, statisticsViewController]
     }
     

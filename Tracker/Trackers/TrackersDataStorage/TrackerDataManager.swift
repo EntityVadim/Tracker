@@ -356,6 +356,17 @@ extension TrackerDataManager {
         }
     }
     
+    func getCategoryForTracker(trackerId: UUID) -> String? {
+        if let tracker = fetchTracker(by: trackerId) {
+            return tracker.category?.title
+        }
+        return nil
+    }
+    
+    func getCompletedTrackersCount() -> Int {
+        return completedTrackers.count
+    }
+    
     private func decodeSchedule(_ scheduleString: String?) -> [String] {
         guard let data = scheduleString?.data(using: .utf8) else { return [] }
         do {
@@ -365,14 +376,5 @@ extension TrackerDataManager {
             print("Failed to decode schedule: \(error)")
             return []
         }
-    }
-}
-
-extension TrackerDataManager {
-    func getCategoryForTracker(trackerId: UUID) -> String? {
-        if let tracker = fetchTracker(by: trackerId) {
-            return tracker.category?.title
-        }
-        return nil
     }
 }

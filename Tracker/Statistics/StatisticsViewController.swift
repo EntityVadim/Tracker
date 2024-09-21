@@ -11,7 +11,9 @@ import UIKit
 
 final class StatisticsViewController: UIViewController {
     
-    // MARK: - UI Elements
+    // MARK: - Private Properties
+    
+    private var completedTrackersCount: Int = 0
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -52,15 +54,15 @@ final class StatisticsViewController: UIViewController {
         return view
     }()
     
-    private lazy var firstLabel: UILabel = {
+    private lazy var counterLabel: UILabel = {
         let label = UILabel()
-        label.text = "5"
+        label.text = ""
         label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         label.textColor = .ypBlack
         return label
     }()
     
-    private lazy var secondLabel: UILabel = {
+    private lazy var completedLabel: UILabel = {
         let label = UILabel()
         label.text = "Трекеров завершено"
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
@@ -83,6 +85,17 @@ final class StatisticsViewController: UIViewController {
         return label
     }()
     
+    // MARK: - Initialization
+    
+    init(completedTrackersCount: Int) {
+        self.completedTrackersCount = completedTrackersCount
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -90,12 +103,19 @@ final class StatisticsViewController: UIViewController {
         view.backgroundColor = .ypWhite
         setupUI()
         setupConstraints()
+        updateLabel()
     }
     
-    // MARK: - Setup UI
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        completedTrackersCount = TrackerDataManager.shared.getCompletedTrackersCount()
+        updateLabel()
+    }
+    
+    // MARK: - Private Methods
     
     private func setupUI() {
-        [titleLabel, gradientView, firstLabel, secondLabel, errorImageView, placeholderLabel].forEach {
+        [titleLabel, gradientView, counterLabel, completedLabel, errorImageView, placeholderLabel].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -111,14 +131,14 @@ final class StatisticsViewController: UIViewController {
             gradientView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             gradientView.heightAnchor.constraint(equalToConstant: 90),
             
-            firstLabel.topAnchor.constraint(equalTo: gradientView.topAnchor, constant: 12),
-            firstLabel.leadingAnchor.constraint(equalTo: gradientView.leadingAnchor, constant: 12),
-            firstLabel.trailingAnchor.constraint(equalTo: gradientView.trailingAnchor, constant: -12),
+            counterLabel.topAnchor.constraint(equalTo: gradientView.topAnchor, constant: 12),
+            counterLabel.leadingAnchor.constraint(equalTo: gradientView.leadingAnchor, constant: 12),
+            counterLabel.trailingAnchor.constraint(equalTo: gradientView.trailingAnchor, constant: -12),
             
-            secondLabel.topAnchor.constraint(equalTo: firstLabel.bottomAnchor),
-            secondLabel.leadingAnchor.constraint(equalTo: gradientView.leadingAnchor, constant: 12),
-            secondLabel.trailingAnchor.constraint(equalTo: gradientView.trailingAnchor, constant: -12),
-            secondLabel.bottomAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: -12),
+            completedLabel.topAnchor.constraint(equalTo: counterLabel.bottomAnchor),
+            completedLabel.leadingAnchor.constraint(equalTo: gradientView.leadingAnchor, constant: 12),
+            completedLabel.trailingAnchor.constraint(equalTo: gradientView.trailingAnchor, constant: -12),
+            completedLabel.bottomAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: -12),
             
             errorImageView.widthAnchor.constraint(equalToConstant: 80),
             errorImageView.heightAnchor.constraint(equalToConstant: 80),
@@ -131,5 +151,9 @@ final class StatisticsViewController: UIViewController {
             placeholderLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             placeholderLabel.heightAnchor.constraint(equalToConstant: 18)
         ])
+    }
+    
+    private func updateLabel() {
+        counterLabel.text = "\(completedTrackersCount)"
     }
 }
