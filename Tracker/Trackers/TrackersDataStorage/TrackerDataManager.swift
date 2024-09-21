@@ -258,7 +258,15 @@ final class TrackerDataManager {
         do {
             let trackers = try context.fetch(fetchRequest)
             if let trackerToDelete = trackers.first {
-                TrackerStore().deleteTracker(trackerToDelete)
+                let recordFetchRequest:
+                NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
+                recordFetchRequest.predicate = NSPredicate(format: "tracker.id == %@", id as CVarArg)
+                let records = try context.fetch(recordFetchRequest)
+                for record in records {
+                    context.delete(record)
+                }
+                context.delete(trackerToDelete)
+                saveContext()
                 loadCategories(for: date, dateFormatter: dateFormatter)
             }
         } catch {
@@ -364,6 +372,7 @@ extension TrackerDataManager {
     }
     
     func getCompletedTrackersCount() -> Int {
+        loadCompletedTrackers()
         return completedTrackers.count
     }
     
