@@ -15,8 +15,8 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
     
     var trackerFilterViewController = TrackerFilterViewController()
     var selectedDate: Date = Date()
-    let dataManager = TrackerDataManager.shared
     
+    let dataManager = TrackerDataManager.shared
     let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yy"
@@ -26,6 +26,15 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
     // MARK: - Private Properties
     
     private(set) var visibleCategories: [TrackerCategory] = []
+    
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = NSLocalizedString(
+            "tracker_title",
+            comment: "Заголовок экрана трекеров")
+        label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
+        return label
+    }()
     
     private lazy var addButton: UIBarButtonItem = {
         let button = UIBarButtonItem(
@@ -49,19 +58,10 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
         return UIBarButtonItem(customView: datePicker)
     }()
     
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = NSLocalizedString(
-            "tracker_title",
-            comment: "Заголовок экрана трекеров")
-        label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
-        return label
-    }()
-    
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = NSLocalizedString(
-            "search_placeholder",
+            "tracker_search_placeholder",
             comment: "Подсказка для поиска трекеров")
         searchBar.backgroundImage = UIImage()
         return searchBar
@@ -75,7 +75,7 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
     private lazy var trackingLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString(
-            "error_tracking",
+            "tracker_error",
             comment: "Текст-заполнитель, если нет трекеров для отслеживания")
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textAlignment = .center
@@ -90,7 +90,7 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
     private lazy var filterLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString(
-            "filter_no_results",
+            "tracker_filter_no_results",
             comment: "Сообщение о том, что ничего не найдено")
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         label.textAlignment = .center
@@ -118,7 +118,7 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
     private lazy var filtersButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(NSLocalizedString(
-            "filters_button_title",
+            "tracker_filters_button_title",
             comment: "Кнопка фильтров"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .ypBlue

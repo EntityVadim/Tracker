@@ -21,14 +21,21 @@
 // MARK: - TrackerViewController
 
 "tracker_title" = "Trackers";
-"search_placeholder" = "Search";
-"error_tracking" = "What shall we track?";
-"filter_no_results" = "Nothing found";
-"filters_button_title" = "Filters";
+"tracker_search_placeholder" = "Search";
+"tracker_error" = "What shall we track?";
+"tracker_filter_no_results" = "Nothing found";
+"tracker_filters_button_title" = "Filters";
+
+// MARK: - TrackerCell
+
+"Unpin" = "Unpin";
+"Pin" = "Pin";
+"Edit" = "Edit";
+"Delete" = "Delete";
 
 // MARK: - TrackerFilterViewController
 
-"title_label_text_filters" = "Filters";
+"filter_title_label_text" = "Filters";
 "filter_all_trackers" = "All trackers";
 "filter_today_trackers" = "Trackers for today";
 "filter_completed_trackers" = "Completed";
@@ -36,22 +43,23 @@
 
 // MARK: - TrackerTypeSelection
 
-"tracker_creation_title" = "Tracker creation";
-"habit_button_title" = "Habit";
-"irregular_event_button_title" = "Irregular event";
+"type_selection_creation_title" = "Tracker creation";
+"type_selection_habit_button_title" = "Habit";
+"type_selection_irregular_event_button_title" = "Irregular event";
 
 // MARK: - TrackerCreation
 
-"color_label_text" = "Color";
-"title_label_text" = "New habit";
-"name_text_field_placeholder" = "Enter tracker name";
-"cancel_button_title" = "Cancel";
-"save_button_title" = "Save";
-"categories_button_title" = "Category";
-"schedule_button_title" = "Schedule";
-"categories_button_mutable" = "Category\n";
-"schedule_button_mutable" = "Schedule\n";
-"every_day_text" = "Every day";
+"creation_title_label_text" = "New habit";
+"creation_edit_habit_title" = "Edit Habit";
+"creation_color_label_text" = "Color";
+"creation_name_text_field_placeholder" = "Enter tracker name";
+"creation_cancel_button_title" = "Cancel";
+"creation_save_button_title" = "Save";
+"creation_categories_button_title" = "Category";
+"creation_schedule_button_title" = "Schedule";
+"creation_categories_button_mutable" = "Category\n";
+"creation_schedule_button_mutable" = "Schedule\n";
+"creation_every_day_text" = "Every day";
 "monday_short" = "Mon";
 "tuesday_short" = "Tue";
 "wednesday_short" = "Wed";
@@ -62,20 +70,20 @@
 
 // MARK: - TrackerCategory
 
-"title_label_text" = "Category";
-"placeholder_text" = "Habits and events can be\n grouped by meaning";
-"add_category_button_title" = "Add category";
+"category_title_label_text" = "Category";
+"category_placeholder_text" = "Habits and events can be\n grouped by meaning";
+"category_add_button_title" = "Add category";
 
 // MARK: - TrackerNewCategory
 
-"title_label_text_new_category" = "New category";
-"category_name_textfield_placeholder" = "Enter category name";
-"save_category_button_title" = "Done";
+"new_category_title_label_text" = "New category";
+"new_category_name_textfield_placeholder" = "Enter category name";
+"new_category_save_button_title" = "Done";
 
 // MARK: - TrackerSchedule
 
-"title_label_text_schedule" = "Schedule";
-"saves_button_title" = "Done";
+"schedule_title_label_text" = "Schedule";
+"schedule_saves_button_title" = "Done";
 "week_day_monday" = "Monday";
 "week_day_tuesday" = "Tuesday";
 "week_day_wednesday" = "Wednesday";

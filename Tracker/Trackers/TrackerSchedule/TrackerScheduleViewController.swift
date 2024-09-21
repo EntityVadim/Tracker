@@ -69,7 +69,7 @@ final class TrackerScheduleViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString(
-            "title_label_text_schedule",
+            "schedule_title_label_text",
             comment: "Заголовок для расписания")
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -79,7 +79,7 @@ final class TrackerScheduleViewController: UIViewController {
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(NSLocalizedString(
-            "saves_button_title",
+            "schedule_saves_button_title",
             comment: "Кнопка для сохранения расписания"), for: .normal)
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)

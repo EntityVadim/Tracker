@@ -64,6 +64,16 @@ final class TrackerFilterViewController: UIViewController {
     private let calendar = Calendar.current
     private var dateLabel: UILabel?
     
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = NSLocalizedString(
+            "filter_title_label_text",
+            comment: "Заголовок для фильтров")
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        return label
+    }()
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.layer.cornerRadius = 16
@@ -76,16 +86,6 @@ final class TrackerFilterViewController: UIViewController {
             TrackerCategoryCell.self,
             forCellReuseIdentifier: TrackerFilterViewController.cellIdentifier)
         return tableView
-    }()
-    
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = NSLocalizedString(
-            "title_label_text_filters",
-            comment: "Заголовок для фильтров")
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        return label
     }()
     
     // MARK: - Lifecycle

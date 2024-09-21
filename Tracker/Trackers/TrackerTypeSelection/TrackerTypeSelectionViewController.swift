@@ -33,7 +33,7 @@ final class TrackerTypeSelectionViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString(
-            "tracker_creation_title",
+            "type_selection_creation_title",
             comment: "Заголовок экрана создания трекера")
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -43,7 +43,7 @@ final class TrackerTypeSelectionViewController: UIViewController {
     private lazy var habitButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(NSLocalizedString(
-            "habit_button_title",
+            "type_selection_habit_button_title",
             comment: "Кнопка создания привычки"), for: .normal)
         button.setTitleColor(.ypWhite, for: .normal)
         button.backgroundColor = .ypBlack
@@ -60,7 +60,7 @@ final class TrackerTypeSelectionViewController: UIViewController {
     private lazy var irregularEventButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(NSLocalizedString(
-            "irregular_event_button_title",
+            "type_selection_irregular_event_button_title",
             comment: "Кнопка создания нерегулярного события"), for: .normal)
         button.setTitleColor(.ypWhite, for: .normal)
         button.backgroundColor = .ypBlack

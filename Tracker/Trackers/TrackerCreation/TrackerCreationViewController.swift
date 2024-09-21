@@ -51,39 +51,10 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     private let dataManager = TrackerDataManager.shared
     private var recordDay = 0
     
-    private lazy var emojiLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Emoji"
-        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
-        label.backgroundColor = .ypWhite
-        label.textColor = .ypBlack
-        return label
-    }()
-    
-    private lazy var colorLabel: UILabel = {
-        let label = UILabel()
-        label.text = NSLocalizedString(
-            "color_label_text",
-            comment: "Метка для выбора цвета")
-        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
-        label.backgroundColor = .ypWhite
-        label.textColor = .ypBlack
-        return label
-    }()
-    
-    private lazy var colorCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.backgroundColor = .ypWhite
-        return collectionView
-    }()
-    
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString(
-            "title_label_text",
+            "creation_title_label_text",
             comment: "Заголовок для новой привычки")
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -107,7 +78,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     private lazy var nameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = NSLocalizedString(
-            "name_text_field_placeholder",
+            "creation_name_text_field_placeholder",
             comment: "Заполнитель для ввода названия трекера")
         textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         textField.backgroundColor = .ypBackgroundDay
@@ -120,10 +91,74 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
         return textField
     }()
     
+    private lazy var categoriesButton: UIButton = {
+        let button = createRoundedButton(
+            title: NSLocalizedString(
+                "creation_categories_button_title",
+                comment: "Кнопка выбора категории"),
+            action: #selector(categoriesButtonTapped),
+            corners: [.topLeft, .topRight],
+            radius: 16)
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.textAlignment = .left
+        button.contentHorizontalAlignment = .left
+        return button
+    }()
+    
+    private lazy var scheduleButton: UIButton = {
+        let button = createRoundedButton(
+            title: NSLocalizedString(
+                "creation_schedule_button_title",
+                comment: "Кнопка выбора расписания"),
+            action: #selector(scheduleButtonTapped),
+            corners: [.bottomLeft, .bottomRight],
+            radius: 16)
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.textAlignment = .left
+        button.contentHorizontalAlignment = .left
+        return button
+    }()
+    
+    private lazy var separatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .ypGrey
+        view.heightAnchor.constraint(equalToConstant: 0.2).isActive = true
+        return view
+    }()
+    
+    private lazy var emojiLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Emoji"
+        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+        label.backgroundColor = .ypWhite
+        label.textColor = .ypBlack
+        return label
+    }()
+    
+    private lazy var colorLabel: UILabel = {
+        let label = UILabel()
+        label.text = NSLocalizedString(
+            "creation_color_label_text",
+            comment: "Метка для выбора цвета")
+        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+        label.backgroundColor = .ypWhite
+        label.textColor = .ypBlack
+        return label
+    }()
+    
+    private lazy var colorCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.backgroundColor = .ypWhite
+        return collectionView
+    }()
+    
     private lazy var cancelButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(NSLocalizedString(
-            "cancel_button_title",
+            "creation_cancel_button_title",
             comment: "Кнопка отмены"), for: .normal)
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -142,7 +177,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(NSLocalizedString(
-            "save_button_title",
+            "creation_save_button_title",
             comment: "Кнопка сохранения"), for: .normal)
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -154,41 +189,6 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
             action: #selector(saveButtonTapped),
             for: .touchUpInside)
         return button
-    }()
-    
-    private lazy var categoriesButton: UIButton = {
-        let button = createRoundedButton(
-            title: NSLocalizedString(
-                "categories_button_title",
-                comment: "Кнопка выбора категории"),
-            action: #selector(categoriesButtonTapped),
-            corners: [.topLeft, .topRight],
-            radius: 16)
-        button.titleLabel?.numberOfLines = 0
-        button.titleLabel?.textAlignment = .left
-        button.contentHorizontalAlignment = .left
-        return button
-    }()
-    
-    private lazy var scheduleButton: UIButton = {
-        let button = createRoundedButton(
-            title: NSLocalizedString(
-                "schedule_button_title",
-                comment: "Кнопка выбора расписания"),
-            action: #selector(scheduleButtonTapped),
-            corners: [.bottomLeft, .bottomRight],
-            radius: 16)
-        button.titleLabel?.numberOfLines = 0
-        button.titleLabel?.textAlignment = .left
-        button.contentHorizontalAlignment = .left
-        return button
-    }()
-    
-    private lazy var separatorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .ypGrey
-        view.heightAnchor.constraint(equalToConstant: 0.2).isActive = true
-        return view
     }()
     
     private lazy var scrollView: UIScrollView = {
@@ -357,7 +357,9 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     }
     
     private func setupForEditing(tracker: Tracker, category: String) {
-        titleLabel.text = "Редактирование привычки"
+        titleLabel.text = NSLocalizedString(
+            "creation_edit_habit_title",
+            comment: "Заголовок для редактирования привычки")
         let completedTrackers = dataManager.completedTrackers.filter { $0.trackerId == tracker.id }
         let uniqueDates = Set(completedTrackers.map { $0.date })
         recordDay = uniqueDates.count
@@ -439,7 +441,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     private func updateCategoriesButtonTitle() {
         let titleText = NSMutableAttributedString(string: NSLocalizedString(
-            "categories_button_mutable",
+            "creation_categories_button_mutable",
             comment: "Категория\n"), attributes: [
                 .font: UIFont.systemFont(ofSize: 17, weight: .regular),
                 .foregroundColor: UIColor.ypBlack])
@@ -459,22 +461,22 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     
     private func updateScheduleButtonTitle() {
         let weekDayShortNames = [
-            NSLocalizedString("monday_short", comment: "Сокращенное название дня недели Понедельник"),
-            NSLocalizedString("tuesday_short", comment: "Сокращенное название дня недели Вторник"),
-            NSLocalizedString("wednesday_short", comment: "Сокращенное название дня недели Среда"),
-            NSLocalizedString("thursday_short", comment: "Сокращенное название дня недели Четверг"),
-            NSLocalizedString("friday_short", comment: "Сокращенное название дня недели Пятница"),
-            NSLocalizedString("saturday_short", comment: "Сокращенное название дня недели Суббота"),
-            NSLocalizedString("sunday_short", comment: "Сокращенное название дня недели Воскресенье")]
+            NSLocalizedString("monday_short", comment: "Пн"),
+            NSLocalizedString("tuesday_short", comment: "Вт"),
+            NSLocalizedString("wednesday_short", comment: "Ср"),
+            NSLocalizedString("thursday_short", comment: "Чт"),
+            NSLocalizedString("friday_short", comment: "Пт"),
+            NSLocalizedString("saturday_short", comment: "Сб"),
+            NSLocalizedString("sunday_short", comment: "Вс")]
         let titleText = NSMutableAttributedString(string: NSLocalizedString(
-            "schedule_button_mutable",
+            "creation_schedule_button_mutable",
             comment: "Расписание\n"), attributes: [
                 .font: UIFont.systemFont(ofSize: 17, weight: .regular),
                 .foregroundColor: UIColor.ypBlack])
         var daysText: String
         if selectedDays.count == WeekDay.allCases.count {
             daysText = NSLocalizedString(
-                "every_day_text",
+                "creation_every_day_text",
                 comment: "Текст для каждого дня")
         } else {
             let shortNames = selectedDays.map { weekDayShortNames[WeekDay.allCases.firstIndex(of: $0)!] }
