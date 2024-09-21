@@ -49,27 +49,21 @@ final class StatisticsViewController: UIViewController {
         maskLayer.path = outerPath.cgPath
         maskLayer.fillRule = .evenOdd
         view.layer.mask = maskLayer
-        [firstLabel, secondLabel].forEach {
-            view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
         return view
     }()
     
     private lazy var firstLabel: UILabel = {
         let label = UILabel()
-        label.text = "50"
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        label.textAlignment = .center
+        label.text = "5"
+        label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         label.textColor = .ypBlack
         return label
     }()
     
     private lazy var secondLabel: UILabel = {
         let label = UILabel()
-        label.text = "10"
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        label.textAlignment = .center
+        label.text = "Трекеров завершено"
+        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textColor = .ypBlack
         return label
     }()
@@ -101,7 +95,7 @@ final class StatisticsViewController: UIViewController {
     // MARK: - Setup UI
     
     private func setupUI() {
-        [titleLabel, gradientView, errorImageView, placeholderLabel].forEach {
+        [titleLabel, gradientView, firstLabel, secondLabel, errorImageView, placeholderLabel].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
