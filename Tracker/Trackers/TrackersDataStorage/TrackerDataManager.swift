@@ -23,6 +23,7 @@ final class TrackerDataManager {
     private(set) var categories: [TrackerCategory] = []
     private(set) var completedTrackers: [TrackerRecord] = []
     private(set) var previousCategories: [UUID: TrackerCategoryCoreData] = [:]
+    private(set) var pinnedTrackers: [TrackerCoreData] = []
     
     // MARK: - Initialization
     
@@ -205,9 +206,8 @@ final class TrackerDataManager {
         do {
             if let trackerToPin = try context.fetch(fetchRequest).first {
                 trackerToPin.isPinned = true
+                pinnedTrackers.append(trackerToPin)
                 previousCategories[tracker.id] = trackerToPin.category
-                let pinnedCategory = fetchPinnedCategory()
-                trackerToPin.category = pinnedCategory
                 saveContext()
             }
         } catch {
@@ -223,15 +223,9 @@ final class TrackerDataManager {
                 trackerToUnpin.isPinned = false
                 if let previousCategory = previousCategories[tracker.id] {
                     trackerToUnpin.category = previousCategory
-                } else {
-                    print("Previous category for tracker \(tracker.id) not found")
                 }
+                pinnedTrackers.removeAll { $0.id == trackerToUnpin.id }
                 previousCategories[tracker.id] = nil
-                let pinnedCategory = fetchPinnedCategory()
-                let trackersInPinnedCategory = pinnedCategory.trackers?.allObjects as? [TrackerCoreData] ?? []
-                if trackersInPinnedCategory.isEmpty {
-                    context.delete(pinnedCategory)
-                }
                 saveContext()
             }
         } catch {
@@ -276,23 +270,6 @@ final class TrackerDataManager {
     
     // MARK: - Private Methods
     
-    private func fetchPinnedCategory() -> TrackerCategoryCoreData {
-        let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "title == %@", "Закрепленные")
-        do {
-            if let pinnedCategory = try context.fetch(fetchRequest).first {
-                return pinnedCategory
-            } else {
-                let newPinnedCategory = TrackerCategoryCoreData(context: context)
-                newPinnedCategory.title = "Закрепленные"
-                saveContext()
-                return newPinnedCategory
-            }
-        } catch {
-            fatalError("Не удалось получить или создать категорию Закрепленные: \(error)")
-        }
-    }
-    
     private func loadCompletedTrackers() {
         let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
         do {
@@ -332,6 +309,7 @@ extension TrackerDataManager {
         let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
         do {
             let fetchedCategories = try context.fetch(fetchRequest)
+            let pinnedTrackerIds = Set(pinnedTrackers.compactMap { $0.id })
             self.categories = fetchedCategories.compactMap { categoryCoreData in
                 let trackers = (categoryCoreData.trackers?.allObjects as? [TrackerCoreData])?.compactMap {
                     trackerCoreData in
@@ -341,9 +319,11 @@ extension TrackerDataManager {
                         color: trackerCoreData.color as! UIColor,
                         emoji: trackerCoreData.emoji ?? "",
                         schedule: decodeSchedule(trackerCoreData.schedule))
+                    if pinnedTrackerIds.contains(tracker.id) {
+                        return nil
+                    }
                     return shouldDisplayTracker(
-                        tracker,
-                        forDate: date,
+                        tracker, forDate: date,
                         dateFormatter: dateFormatter) ? tracker : nil
                 } ?? [] as [Tracker]
                 return trackers.isEmpty ? nil : TrackerCategory(
@@ -358,6 +338,19 @@ extension TrackerDataManager {
                 } else {
                     return category1.title < category2.title
                 }
+            }
+            if !pinnedTrackers.isEmpty {
+                let pinnedCategory = TrackerCategory(
+                    title: "Закрепленные",
+                    trackers: pinnedTrackers.map { trackerCoreData in
+                        Tracker(
+                            id: trackerCoreData.id ?? UUID(),
+                            name: trackerCoreData.name ?? "",
+                            color: trackerCoreData.color as! UIColor,
+                            emoji: trackerCoreData.emoji ?? "",
+                            schedule: decodeSchedule(trackerCoreData.schedule))
+                    })
+                self.categories.insert(pinnedCategory, at: 0)
             }
         } catch {
             print("Failed to fetch categories: \(error)")
