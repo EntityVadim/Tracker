@@ -29,6 +29,8 @@ final class TrackerCell: UICollectionViewCell {
     
     // MARK: - Private Properties
     
+    private let appMetricaCore = AppMetricaCore()
+    
     private var tracker: Tracker?
     private var completedTrackers: [TrackerRecord] = []
     private var date: String = ""
@@ -213,6 +215,7 @@ final class TrackerCell: UICollectionViewCell {
     // MARK: - Action
     
     @objc func completionButtonTapped() {
+        appMetricaCore.sendEvent(event: .click, screen: .Main, item: .track)
         guard let tracker = tracker else { return }
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yy"

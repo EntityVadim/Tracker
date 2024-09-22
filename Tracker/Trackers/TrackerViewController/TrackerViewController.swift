@@ -25,6 +25,8 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
     
     // MARK: - Private Properties
     
+    private let appMetricaCore = AppMetricaCore()
+    
     private(set) var visibleCategories: [TrackerCategory] = []
     
     private lazy var titleLabel: UILabel = {
@@ -144,6 +146,16 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
         searchBar.delegate = self
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        appMetricaCore.sendEvent(event: .open, screen: .Main, item: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        appMetricaCore.sendEvent(event: .close, screen: .Main, item: nil)
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         let bottomInset = filtersButton.frame.height + 32
@@ -196,6 +208,7 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
     }
     
     func presentEditTrackerViewController(for tracker: Tracker) {
+        appMetricaCore.sendEvent(event: .click, screen: .Main, item: .edit)
         let editTrackerVC = TrackerCreationViewController()
         editTrackerVC.trackerToEdit = tracker
         editTrackerVC.delegate = self
@@ -203,6 +216,7 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
     }
     
     func handleDeleteTracker(_ tracker: Tracker) {
+        appMetricaCore.sendEvent(event: .click, screen: .Main, item: .delete)
         let alertController = UIAlertController(
             title: nil,
             message: "Уверены что хотите удалить трекер?",
@@ -288,6 +302,7 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
     // MARK: - Actions
     
     @objc private func addTracker() {
+        appMetricaCore.sendEvent(event: .click, screen: .Main, item: .addTrack)
         let trackerTypeSelectionVC = TrackerTypeSelectionViewController()
         trackerTypeSelectionVC.delegate = self
         present(trackerTypeSelectionVC, animated: true, completion: nil)
@@ -301,6 +316,7 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
     }
     
     @objc private func didTapFiltersButton() {
+        appMetricaCore.sendEvent(event: .click, screen: .Main, item: .filter)
         let filterViewController = TrackerFilterViewController()
         filterViewController.modalPresentationStyle = .formSheet
         filterViewController.delegate = self
