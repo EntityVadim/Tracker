@@ -115,14 +115,14 @@ extension TrackerDataManager {
     }
     
     func loadCompletedTrackers() {
-       let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
-       do {
-           let records = try context.fetch(fetchRequest)
-           self.completedTrackers = records.map { TrackerRecord(coreData: $0) }
-       } catch {
-           print("Failed to fetch completed trackers: \(error)")
-       }
-   }
+        let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
+        do {
+            let records = try context.fetch(fetchRequest)
+            self.completedTrackers = records.map { TrackerRecord(coreData: $0) }
+        } catch {
+            print("Failed to fetch completed trackers: \(error)")
+        }
+    }
     
     func getCategoryForTracker(trackerId: UUID) -> String? {
         if let tracker = fetchTracker(by: trackerId) {
