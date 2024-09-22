@@ -20,6 +20,7 @@ final class TrackerCreationViewController: UIViewController, UITextFieldDelegate
     // MARK: - Public Properties
     
     weak var delegate: TrackerCreationDelegate?
+    
     var trackerType: TrackerType?
     var trackerToEdit: Tracker?
     var selectedCategory: String?

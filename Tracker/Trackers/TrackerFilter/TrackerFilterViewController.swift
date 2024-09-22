@@ -47,6 +47,7 @@ final class TrackerFilterViewController: UIViewController {
     // MARK: - Public Properties
     
     weak var delegate: TrackerFilterViewControllerDelegate?
+    
     var selectedFilter: Int?
     var filteredTrackers: [Tracker] = []
     var selectedDate = Date()

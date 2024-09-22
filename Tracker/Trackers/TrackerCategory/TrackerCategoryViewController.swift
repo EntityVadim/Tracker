@@ -14,6 +14,7 @@ final class TrackerCategoryViewController: UIViewController {
     // MARK: - Public Properties
     
     let viewModel = TrackerCategoryViewModel()
+    
     var categorySelectionHandler: ((TrackerCategory) -> Void)?
     
     // MARK: - Private Properties
