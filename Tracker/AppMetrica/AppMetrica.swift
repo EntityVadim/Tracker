@@ -5,16 +5,22 @@
 //  Created by Вадим on 22.09.2024.
 //
 
-import Foundation
 import AppMetricaCore
+import Foundation
+
+// MARK: - Event
 
 enum Event: String {
     case open, close, click
 }
 
+// MARK: - Screen
+
 enum Screen: String {
     case Main, Creation, Category
 }
+
+// MARK: - Item
 
 enum Item: String {
     case addTrack = "add_track"
@@ -23,6 +29,8 @@ enum Item: String {
     case edit = "edit"
     case delete = "delete"
 }
+
+// MARK: - AppMetricaCore
 
 struct AppMetricaCore {
     static func activate() {

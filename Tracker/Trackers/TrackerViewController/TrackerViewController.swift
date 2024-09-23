@@ -197,6 +197,7 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
     }
     
     func filterTrackers(to categories: [TrackerCategory]) {
+        dataManager.loadCategories(for: selectedDate, dateFormatter: dateFormatter)
         visibleCategories = categories
         let allTrackers = dataManager.categories.flatMap { $0.trackers }
         let hasCreatedTrackers = !allTrackers.isEmpty
