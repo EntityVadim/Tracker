@@ -36,13 +36,13 @@ extension TrackerViewController: TrackerCreationDelegate {
 
 extension TrackerViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        dataManager.categories.count
+        return visibleCategories.count
     }
     
     func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int) -> Int {
-            let category = dataManager.categories[section]
+            let category = visibleCategories[section]
             let trackers = category.trackers.filter {
                 dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
             }
@@ -57,7 +57,7 @@ extension TrackerViewController: UICollectionViewDataSource {
                 for: indexPath) as? TrackerCell else {
                 return UICollectionViewCell()
             }
-            let category = dataManager.categories[indexPath.section]
+            let category = visibleCategories[indexPath.section]
             let trackers = category.trackers.filter {
                 dataManager.shouldDisplayTracker($0, forDate: selectedDate, dateFormatter: dateFormatter)
             }
@@ -88,7 +88,7 @@ extension TrackerViewController: UICollectionViewDelegate {
                 ) as? TrackerSectionHeader else {
                     return UICollectionReusableView()
                 }
-                let category = dataManager.categories[indexPath.section]
+                let category = visibleCategories[indexPath.section]
                 headerView.titleLabel.text = category.title
                 return headerView
             }
@@ -115,13 +115,47 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
         }
 }
 
+// MARK: - UISearchBarDelegate
+
+extension TrackerViewController: UISearchBarDelegate {
+    func searchBar(
+        _ searchBar: UISearchBar,
+        textDidChange searchText: String
+    ) {
+        updateTrackersView()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+         searchBar.resignFirstResponder()
+         updateTrackersView()
+     }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = nil
+        searchBar.resignFirstResponder()
+        updateTrackersView()
+    }
+}
+
 // MARK: - TrackerCellDelegate
 
 extension TrackerViewController: TrackerCellDelegate {
-    func trackerCellDidToggleCompletion(
-        _ cell: TrackerCell,
-        for tracker: Tracker
-    ) {
+    func trackerCellDidToggleCompletion(_ cell: TrackerCell, for tracker: Tracker) {
         updateTrackersView()
+    }
+    
+    func trackerCellDidRequestEdit(_ cell: TrackerCell, for tracker: Tracker) {
+        presentEditTrackerViewController(for: tracker)
+    }
+    
+    func trackerCellDidRequestDelete(_ cell: TrackerCell, for tracker: Tracker) {
+        handleDeleteTracker(tracker)
+    }
+}
+
+extension TrackerViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

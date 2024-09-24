@@ -32,7 +32,9 @@ final class TrackerTypeSelectionViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Создание трекера"
+        label.text = NSLocalizedString(
+            "type_selection_creation_title",
+            comment: "Заголовок экрана создания трекера")
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
@@ -40,7 +42,11 @@ final class TrackerTypeSelectionViewController: UIViewController {
     
     private lazy var habitButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Привычка", for: .normal)
+        button.setTitle(NSLocalizedString(
+            "type_selection_habit_button_title",
+            comment: "Кнопка создания привычки"), for: .normal)
+        button.setTitleColor(.ypWhite, for: .normal)
+        button.backgroundColor = .ypBlack
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.heightAnchor.constraint(equalToConstant: 60).isActive = true
@@ -53,7 +59,11 @@ final class TrackerTypeSelectionViewController: UIViewController {
     
     private lazy var irregularEventButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Нерегулярное событие", for: .normal)
+        button.setTitle(NSLocalizedString(
+            "type_selection_irregular_event_button_title",
+            comment: "Кнопка создания нерегулярного события"), for: .normal)
+        button.setTitleColor(.ypWhite, for: .normal)
+        button.backgroundColor = .ypBlack
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.heightAnchor.constraint(equalToConstant: 60).isActive = true
@@ -68,13 +78,9 @@ final class TrackerTypeSelectionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .ypWhite
         setupUI()
         setupConstraints()
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        setupAppearance()
     }
     
     // MARK: - Setup Methods

@@ -21,15 +21,10 @@ final class TrackerCategoryViewModel {
     var saveCategory: (() -> Void)?
     
     var categories: [TrackerCategory] = [] {
-        didSet {
-            updateUI?()
-        }
+        didSet { updateUI?() }
     }
-    
     var selectedCategory: TrackerCategory? {
-        didSet {
-            saveCategory?()
-        }
+        didSet { saveCategory?() }
     }
     
     // MARK: - Private Properties

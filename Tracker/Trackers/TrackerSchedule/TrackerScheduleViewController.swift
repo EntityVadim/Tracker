@@ -10,13 +10,32 @@ import UIKit
 // MARK: - Enum
 
 enum WeekDay: String, CaseIterable {
-    case monday = "Понедельник"
-    case tuesday = "Вторник"
-    case wednesday = "Среда"
-    case thursday = "Четверг"
-    case friday = "Пятница"
-    case saturday = "Суббота"
-    case sunday = "Воскресенье"
+    case monday = "Monday"
+    case tuesday = "Tuesday"
+    case wednesday = "Wednesday"
+    case thursday = "Thursday"
+    case friday = "Friday"
+    case saturday = "Saturday"
+    case sunday = "Sunday"
+    
+    func localizedString() -> String {
+        switch self {
+        case .monday:
+            return NSLocalizedString("week_day_monday", comment: "Понедельник")
+        case .tuesday:
+            return NSLocalizedString("week_day_tuesday", comment: "Вторник")
+        case .wednesday:
+            return NSLocalizedString("week_day_wednesday", comment: "Среда")
+        case .thursday:
+            return NSLocalizedString("week_day_thursday", comment: "Четверг")
+        case .friday:
+            return NSLocalizedString("week_day_friday", comment: "Пятница")
+        case .saturday:
+            return NSLocalizedString("week_day_saturday", comment: "Суббота")
+        case .sunday:
+            return NSLocalizedString("week_day_sunday", comment: "Воскресенье")
+        }
+    }
 }
 
 // MARK: - TrackerSchedule
@@ -35,8 +54,10 @@ final class TrackerScheduleViewController: UIViewController {
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.layer.cornerRadius = 16
+        tableView.separatorColor = .ypGrey
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.backgroundColor = .ypWhite
         tableView.register(
             UITableViewCell.self,
             forCellReuseIdentifier: TrackerScheduleViewController.cellIdentifier)
@@ -47,7 +68,9 @@ final class TrackerScheduleViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Расписание"
+        label.text = NSLocalizedString(
+            "schedule_title_label_text",
+            comment: "Заголовок для расписания")
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
@@ -55,7 +78,9 @@ final class TrackerScheduleViewController: UIViewController {
     
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(NSLocalizedString(
+            "schedule_saves_button_title",
+            comment: "Кнопка для сохранения расписания"), for: .normal)
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypBlack
@@ -72,9 +97,9 @@ final class TrackerScheduleViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .ypWhite
         setupUI()
         setupConstraints()
-        view.backgroundColor = .ypWhite
     }
     
     // MARK: - Setup UI
@@ -90,13 +115,14 @@ final class TrackerScheduleViewController: UIViewController {
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 38),
+            titleLabel.heightAnchor.constraint(equalToConstant: 22),
             
             saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
             
-            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
-            tableView.bottomAnchor.constraint(equalTo: saveButton.topAnchor, constant: -38),
+            tableView.heightAnchor.constraint(equalToConstant: 525),
+            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 50),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])

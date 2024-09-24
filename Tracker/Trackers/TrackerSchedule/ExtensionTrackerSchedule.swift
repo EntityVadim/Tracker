@@ -12,9 +12,10 @@ import UIKit
 extension TrackerScheduleViewController: UITableViewDataSource {
     func tableView(
         _ tableView: UITableView,
-        numberOfRowsInSection section: Int) -> Int {
-            return WeekDay.allCases.count
-        }
+        numberOfRowsInSection section: Int
+    ) -> Int {
+        return WeekDay.allCases.count
+    }
     
     func tableView(
         _ tableView: UITableView,
@@ -23,14 +24,18 @@ extension TrackerScheduleViewController: UITableViewDataSource {
                 withIdentifier: TrackerScheduleViewController.cellIdentifier,
                 for: indexPath)
             let day = WeekDay.allCases[indexPath.row]
-            cell.textLabel?.text = day.rawValue
+            cell.textLabel?.text = day.localizedString()
             let switchView = UISwitch()
             switchView.isOn = selectedDays.contains(day)
             switchView.addTarget(self, action: #selector(switchChanged(sender:)), for: .valueChanged)
             switchView.onTintColor = UIColor.ypBlue
             cell.backgroundColor = UIColor.ypBackgroundDay
             cell.accessoryView = switchView
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+            if indexPath.row == WeekDay.allCases.count - 1 {
+                cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+            } else {
+                cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+            }
             return cell
         }
 }

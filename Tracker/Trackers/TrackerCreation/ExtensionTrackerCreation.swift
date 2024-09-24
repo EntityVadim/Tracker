@@ -10,7 +10,6 @@ import UIKit
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegate
 
 extension TrackerCreationViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    
     func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int) -> Int {

@@ -29,16 +29,20 @@ final class MainTabBarController: UITabBarController {
     private func setupViewControllers() {
         let trackersViewController = UINavigationController(rootViewController: TrackerViewController())
         trackersViewController.tabBarItem = UITabBarItem(
-            title: "Трекеры",
+            title: NSLocalizedString(
+                "tab_title_trackers",
+                comment: "Название вкладки для трекеров"),
             image: UIImage(named: "Trackers"),
             selectedImage: nil)
         
-        let statisticsViewController = StatisticsViewController()
+        let statisticsViewController = StatisticsViewController(
+            completedTrackersCount: TrackerDataManager.shared.getCompletedTrackersCount())
         statisticsViewController.tabBarItem = UITabBarItem(
-            title: "Статистика",
+            title: NSLocalizedString(
+                "tab_title_statistics",
+                comment: "Название вкладки для статистики"),
             image: UIImage(named: "Statistics"),
             selectedImage: nil)
-        
         viewControllers = [trackersViewController, statisticsViewController]
     }
     

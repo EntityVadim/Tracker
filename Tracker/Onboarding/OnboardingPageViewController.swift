@@ -20,12 +20,20 @@ final class OnboardingPageViewController: UIPageViewController {
     let pages: [UIViewController] = {
         let firstPage = OnboardingContentViewController(
             imageName: "OnboardingBlue",
-            text: "Отслеживайте только\n то, что хотите",
-            buttonTitle: "Вот это технологии!")
+            text: NSLocalizedString(
+                "onboarding_text_first_page",
+                comment: "Текст для первой страницы онбординга"),
+            buttonTitle: NSLocalizedString(
+                "onboarding_button_first_page",
+                comment: "Текст кнопки для первой страницы онбординга"))
         let secondPage = OnboardingContentViewController(
             imageName: "OnboardingRed",
-            text: "Даже если это\n не литры воды и йога",
-            buttonTitle: "Вот это технологии!")
+            text: NSLocalizedString(
+                "onboarding_text_second_page",
+                comment: "Текст для второй страницы онбординга"),
+            buttonTitle: NSLocalizedString(
+                "onboarding_button_second_page",
+                comment: "Текст кнопки для второй страницы онбординга"))
         return [firstPage, secondPage]
     }()
     
@@ -38,7 +46,7 @@ final class OnboardingPageViewController: UIPageViewController {
     
     private lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl()
-        pageControl.currentPageIndicatorTintColor = .ypBlack
+        pageControl.currentPageIndicatorTintColor = .black
         pageControl.pageIndicatorTintColor = .ypGrey
         pageControl.numberOfPages = 2
         pageControl.addTarget(
