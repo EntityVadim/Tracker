@@ -24,18 +24,19 @@ enum Screen: String {
 
 enum Item: String {
     case addTrack = "add_track"
-    case track = "track"
-    case filter = "filter"
-    case edit = "edit"
-    case delete = "delete"
+    case track
+    case filter
+    case edit
+    case delete
 }
 
 // MARK: - AppMetricaCore
 
 struct AppMetricaCore {
+    private static let apiKey = "e04b57c6-b7ad-4740-b897-e5c90606bf1e"
+    
     static func activate() {
-        guard let configuration = AppMetricaConfiguration(apiKey: "e04b57c6-b7ad-4740-b897-e5c90606bf1e")
-        else { return }
+        guard let configuration = AppMetricaConfiguration(apiKey: apiKey) else { return }
         AppMetrica.activate(with: configuration)
     }
     
