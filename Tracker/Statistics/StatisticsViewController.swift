@@ -154,19 +154,12 @@ final class StatisticsViewController: UIViewController {
     }
     
     private func updateLabels() {
-        if completedTrackersCount > 0 {
-            gradientView.isHidden = false
-            counterLabel.text = "\(completedTrackersCount)"
-            completedLabel.isHidden = false
-            errorImageView.isHidden = true
-            placeholderLabel.isHidden = true
-            counterLabel.isHidden = false
-        } else {
-            gradientView.isHidden = true
-            errorImageView.isHidden = false
-            placeholderLabel.isHidden = false
-            counterLabel.isHidden = true
-            completedLabel.isHidden = true
-        }
+        let hasCompletedTrackers = completedTrackersCount > 0
+        gradientView.isHidden = !hasCompletedTrackers
+        counterLabel.text = hasCompletedTrackers ? "\(completedTrackersCount)" : nil
+        counterLabel.isHidden = !hasCompletedTrackers
+        completedLabel.isHidden = !hasCompletedTrackers
+        errorImageView.isHidden = hasCompletedTrackers
+        placeholderLabel.isHidden = hasCompletedTrackers
     }
 }
