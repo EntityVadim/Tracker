@@ -225,7 +225,8 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
         let deleteAction = UIAlertAction(
             title: "Удалить",
             style: .destructive
-        ) { _ in
+        ) { [weak self] _ in
+            guard let self = self else { return }
             let currentDate = self.selectedDate
             let dateFormatter = self.dateFormatter
             self.dataManager.deleteTracker(withId: tracker.id, for: currentDate, dateFormatter: dateFormatter)
