@@ -231,7 +231,7 @@ final class TrackerCell: UICollectionViewCell {
         delegate?.trackerCellDidToggleCompletion(self, for: tracker)
     }
     
-    @objc func presentContextMenu() {
+    @objc private func presentContextMenu() {
         cardView.becomeFirstResponder()
     }
 }
