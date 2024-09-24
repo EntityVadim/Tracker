@@ -25,7 +25,7 @@ extension TrackerFilterViewController: UITableViewDataSource {
             let option = TrackerFilterType.allCases[indexPath.row]
             let isSelected = indexPath.row == selectedFilter
             cell.backgroundColor = UIColor.ypBackgroundDay
-            cell.configure(with: option.rawValue, isSelected: isSelected)
+            cell.configure(with: option.localizedString(), isSelected: isSelected)
             return cell
         }
 }

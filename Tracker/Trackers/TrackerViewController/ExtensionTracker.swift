@@ -126,9 +126,9 @@ extension TrackerViewController: UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-        updateTrackersView()
-    }
+         searchBar.resignFirstResponder()
+         updateTrackersView()
+     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = nil
@@ -150,5 +150,12 @@ extension TrackerViewController: TrackerCellDelegate {
     
     func trackerCellDidRequestDelete(_ cell: TrackerCell, for tracker: Tracker) {
         handleDeleteTracker(tracker)
+    }
+}
+
+extension TrackerViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

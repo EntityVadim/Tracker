@@ -144,6 +144,9 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
         updateTrackersView()
         visibleCategories = dataManager.categories
         searchBar.delegate = self
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -323,5 +326,9 @@ final class TrackerViewController: UIViewController, TrackerFilterViewController
         filterViewController.modalPresentationStyle = .formSheet
         filterViewController.delegate = self
         present(filterViewController, animated: true, completion: nil)
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
