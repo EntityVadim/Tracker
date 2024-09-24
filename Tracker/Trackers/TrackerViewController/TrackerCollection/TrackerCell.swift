@@ -247,7 +247,8 @@ extension TrackerCell: UIContextMenuInteractionDelegate {
             let pinActionTitle = isPinned ?
             NSLocalizedString("Unpin", comment: "Открепить") :
             NSLocalizedString("Pin", comment: "Закрепить")
-            let pinAction = UIAction(title: pinActionTitle, image: UIImage(systemName: "pin")) { _ in
+            let pinAction = UIAction(title: pinActionTitle, image: UIImage(systemName: "pin")) { [weak self] _ in
+                guard let self = self else { return }
                 if isPinned {
                     self.dataManager?.unpinTracker(tracker)
                 } else {
@@ -256,14 +257,17 @@ extension TrackerCell: UIContextMenuInteractionDelegate {
                 self.delegate?.trackerCellDidToggleCompletion(self, for: tracker)
             }
             let editAction = UIAction(
-                title: NSLocalizedString("Edit", comment: "Редактировать")) { _ in
+                title: NSLocalizedString("Edit", comment: "Редактировать")) { [weak self] _ in
+                    guard let self = self else { return }
                     self.delegate?.trackerCellDidRequestEdit(self, for: tracker)
                 }
             let deleteAction = UIAction(
-                title: NSLocalizedString("Delete",comment: "Удалить"),
-                attributes: .destructive) { _ in
-                    self.delegate?.trackerCellDidRequestDelete(self, for: tracker)
-                }
+                title: NSLocalizedString("Delete", comment: "Удалить"),
+                attributes: .destructive
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.delegate?.trackerCellDidRequestDelete(self, for: tracker)
+            }
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
                 UIMenu(title: "", children: [pinAction, editAction, deleteAction])
             }
